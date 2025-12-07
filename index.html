@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Truth Hunters: A research-backed game for middle schoolers to develop epistemic skills, AI error detection, and confidence calibration.">
+  <meta name="theme-color" content="#0a0e1a">
+  <meta name="color-scheme" content="dark">
+  <title>Truth Hunters: The Calibration Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --bg-deep: #0a0e1a;
+      --bg-card: #111827;
+      --bg-elevated: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #8b9cb8;
+      --accent-cyan: #22d3ee;
+      --accent-amber: #fbbf24;
+      --accent-rose: #fb7185;
+      --accent-emerald: #34d399;
+      --accent-violet: #a78bfa;
+      --confidence-1: #3b82f6;
+      --confidence-2: #f59e0b;
+      --confidence-3: #ef4444;
+      --correct: #10b981;
+      --incorrect: #ef4444;
+      --border: #334155;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-serif: 'Source Serif 4', Georgia, serif;
+    }
+
+    html { font-size: 16px; }
+    
+    body {
+      font-family: var(--font-serif);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(ellipse at 20% 0%, rgba(34, 211, 238, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(167, 139, 250, 0.06) 0%, transparent 50%);
+    }
+
+    #root {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Utility Classes */
+    .mono { font-family: var(--font-mono); }
+    .serif { font-family: var(--font-serif); }
+    
+    /* Animations */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
+    }
+
+    @keyframes celebrate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .animate-in {
+      animation: fadeSlideIn 0.4s ease-out forwards;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .animate-shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    .animate-celebrate {
+      animation: celebrate 0.3s ease-out;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* Focus styles for accessibility */
+    button:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--accent-cyan);
+      outline-offset: 2px;
+    }
+
+    /* Print Styles */
+    @media print {
+      body { 
+        background: white !important; 
+        color: black !important; 
+        font-size: 12pt;
+      }
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      header, footer { display: none !important; }
+      * {
+        background: white !important;
+        color: black !important;
+        border-color: #ccc !important;
+      }
+    }
+    .print-only { display: none; }
+
+    /* Mobile responsiveness */
+    @media (max-width: 640px) {
+      html { font-size: 14px; }
+      .confidence-grid { flex-direction: column; }
+    }
+
+    /* Respect reduced motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; flex-direction: column; gap: 1rem;">
+      <div style="font-size: 3rem;">🔍</div>
+      <div style="font-family: monospace; color: #22d3ee; font-size: 1.25rem;">Loading Truth Hunters...</div>
+    </div>
+  </div>
+  
+  <noscript>
+    <div style="padding: 2rem; text-align: center; font-family: system-ui, sans-serif; background: #0a0e1a; color: #f1f5f9; min-height: 100vh;">
+      <h1>Truth Hunters: The Calibration Game</h1>
+      <p style="margin: 1rem 0;">This game requires JavaScript to run.</p>
+      <p>Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </noscript>
+
+  <script type="text/babel" data-type="module">
+    // ============================================================
+    // TRUTH HUNTERS: THE CALIBRATION GAME
+    // A research-backed epistemic training game for middle schoolers
+    // ============================================================
+    // Research Base:
+    // - Johnson & Johnson (2009): Cooperative learning structures
+    // - Wineburg et al. (2022): Lateral reading & web credibility
+    // - Barzilai & Chinn (2018): Epistemic education goals
+    // - Lichtenstein et al.: Calibration training
+    // ============================================================
+
+    const { useState, useEffect, useCallback, useMemo, useRef } = React;
+
+    // ============================================================
+    // TYPE DEFINITIONS (JSDoc for TypeScript-equivalent safety)
+    // ============================================================
+
+    /**
+     * @typedef {'TRUE' | 'FALSE' | 'MIXED'} Verdict
+     * @typedef {'ai-generated' | 'expert-sourced'} ClaimSource
+     * @typedef {1 | 2 | 3} ConfidenceLevel
+     * @typedef {'setup' | 'playing' | 'reveal' | 'discuss' | 'stake' | 'verdict' | 'result' | 'debrief'} GamePhase
+     */
+
+    /**
+     * @typedef {Object} Claim
+     * @property {string} id
+     * @property {string} text
+     * @property {Verdict} answer
+     * @property {ClaimSource} source
+     * @property {string} explanation
+     * @property {string} errorPattern
+     * @property {string} subject
+     */
+
+    /**
+     * @typedef {Object} RoundResult
+     * @property {number} round
+     * @property {string} claimId
+     * @property {Verdict | null} teamVerdict
+     * @property {ConfidenceLevel} confidence
+     * @property {boolean} correct
+     * @property {number} points
+     * @property {string} reasoning
+     */
+
+    /**
+     * @typedef {Object} TeamState
+     * @property {string} name
+     * @property {number} score
+     * @property {number} predictedScore
+     * @property {RoundResult[]} results
+     */
+
+    /**
+     * @typedef {Object} GameState
+     * @property {GamePhase} phase
+     * @property {number} currentRound
+     * @property {number} totalRounds
+     * @property {Claim[]} claims
+     * @property {Claim | null} currentClaim
+     * @property {TeamState} team
+     * @property {number} timer
+     * @property {boolean} timerActive
+     */
+
+    // ============================================================
+    // CLAIM DATABASE
+    // ============================================================
+
+    /** @type {Claim[]} */
+    const CLAIMS_DATABASE = [
+      {
+        id: 'claim-001',
+        text: 'The mitochondria converts glucose into ATP through a process called photosynthesis, which occurs in all animal cells.',
+        answer: 'FALSE',
+        source: 'ai-generated',
+        explanation: 'Mitochondria use cellular respiration, not photosynthesis. Photosynthesis occurs in chloroplasts in plant cells.',
+        errorPattern: 'Confident terminology swap',
+        subject: 'Biology'
+      },
+      {
+        id: 'claim-002',
+        text: 'Your brain uses about 20% of your body\'s total energy, even though it\'s only about 2% of your body weight.',
+        answer: 'TRUE',
+        source: 'expert-sourced',
+        explanation: 'Well-documented in neuroscience literature (Raichle & Gusnard, 2002). The brain\'s high metabolic demand reflects its computational complexity.',
+        errorPattern: 'N/A - Accurate',
+        subject: 'Neuroscience'
+      },
+      {
+        id: 'claim-003',
+        text: 'Isaac Newton discovered gravity in 1687 when an apple fell on his head at Cambridge University, leading him to immediately publish the Principia Mathematica that same day.',
+        answer: 'MIXED',
+        source: 'ai-generated',
+        explanation: 'Newton did publish Principia in 1687, but the apple story is likely apocryphal, and "same day" is fabricated.',
+        errorPattern: 'Timeline compression',
+        subject: 'History of Science'
+      },
+      {
+        id: 'claim-004',
+        text: 'Octopuses have three hearts and blue blood. Two hearts pump blood to the gills, while the third pumps it to the rest of the body.',
+        answer: 'TRUE',
+        source: 'expert-sourced',
+        explanation: 'Verified marine biology. Their blood contains copper-based hemocyanin instead of iron-based hemoglobin, giving it a blue color.',
+        errorPattern: 'N/A - Accurate',
+        subject: 'Marine Biology'
+      },
+      {
+        id: 'claim-005',
+        text: 'The Amazon River is the longest river in the world at 6,992 kilometers, flowing through Brazil, Peru, and Argentina.',
+        answer: 'FALSE',
+        source: 'ai-generated',
+        explanation: 'The Nile is generally considered the longest river. The Amazon doesn\'t flow through Argentina—it flows through Brazil, Peru, Colombia, and other countries.',
+        errorPattern: 'Geographic fabrication',
+        subject: 'Geography'
+      },
+      {
+        id: 'claim-006',
+        text: 'During the April 2024 solar eclipse, the moon\'s shadow traveled across North America at approximately 1,500 miles per hour, and the path of totality passed through Austin, Texas on April 8th.',
+        answer: 'MIXED',
+        source: 'ai-generated',
+        explanation: 'Date and Austin are correct, but shadow speed varies significantly (~1,000-5,000 mph depending on location). The specific number presented as fact without context is misleading.',
+        errorPattern: 'Confident specificity',
+        subject: 'Astronomy'
+      },
+      {
+        id: 'claim-007',
+        text: 'When you blush, the lining of your stomach also turns red.',
+        answer: 'TRUE',
+        source: 'expert-sourced',
+        explanation: 'The same adrenaline response that dilates facial blood vessels affects the stomach lining similarly.',
+        errorPattern: 'N/A - Accurate',
+        subject: 'Human Biology'
+      },
+      {
+        id: 'claim-008',
+        text: 'The Great Wall of China is the only human-made structure visible from space with the naked eye.',
+        answer: 'FALSE',
+        source: 'ai-generated',
+        explanation: 'This is a persistent myth. Astronauts confirm it\'s not visible without aid from low Earth orbit. Other structures like highways and cities are actually more visible.',
+        errorPattern: 'Myth perpetuation',
+        subject: 'Geography'
+      },
+      {
+        id: 'claim-009',
+        text: 'Sound travels faster through water than through air because water molecules are packed more closely together.',
+        answer: 'TRUE',
+        source: 'expert-sourced',
+        explanation: 'Sound travels about 4.3 times faster in water (~1,480 m/s) than in air (~343 m/s) due to water\'s higher density and elasticity.',
+        errorPattern: 'N/A - Accurate',
+        subject: 'Physics'
+      },
+      {
+        id: 'claim-010',
+        text: 'Albert Einstein failed mathematics in school, which proves that grades don\'t matter for future success.',
+        answer: 'FALSE',
+        source: 'ai-generated',
+        explanation: 'Einstein excelled at mathematics. This myth arose from confusion about Swiss grading scales. He mastered calculus by age 15.',
+        errorPattern: 'Myth perpetuation',
+        subject: 'History of Science'
+      },
+      {
+        id: 'claim-011',
+        text: 'Honey never spoils. Archaeologists have found 3,000-year-old honey in Egyptian tombs that was still edible.',
+        answer: 'TRUE',
+        source: 'expert-sourced',
+        explanation: 'Honey\'s low moisture content, acidic pH, and hydrogen peroxide production make it inhospitable to bacteria and microorganisms.',
+        errorPattern: 'N/A - Accurate',
+        subject: 'Chemistry'
+      },
+      {
+        id: 'claim-012',
+        text: 'The human body contains enough iron to make a 3-inch nail, enough carbon to make 900 pencils, and enough phosphorus to make 2,200 match heads.',
+        answer: 'MIXED',
+        source: 'ai-generated',
+        explanation: 'The iron claim is roughly accurate (~3-4g of iron). However, the pencil and match head numbers are exaggerated fabrications with false precision.',
+        errorPattern: 'Confident specificity',
+        subject: 'Chemistry'
+      }
+    ];
+
+    // ============================================================
+    // AI ERROR PATTERNS (for debrief)
+    // ============================================================
+
+    const AI_ERROR_PATTERNS = [
+      {
+        name: 'Confident Specificity',
+        description: 'Precise numbers, dates, or measurements that sound authoritative but are fabricated',
+        example: '"exactly 1,500 mph" or "2,200 match heads"'
+      },
+      {
+        name: 'Plausible Adjacency',
+        description: 'Almost-right terminology swaps that sound correct to non-experts',
+        example: '"photosynthesis" instead of "cellular respiration"'
+      },
+      {
+        name: 'Myth Perpetuation',
+        description: 'Repeating common misconceptions as if they were facts',
+        example: 'Great Wall visible from space, Einstein failed math'
+      },
+      {
+        name: 'Timeline Compression',
+        description: 'Events mashed together implausibly or with invented connections',
+        example: '"published that same day"'
+      },
+      {
+        name: 'Geographic/Factual Invention',
+        description: 'Made-up but plausible-sounding details about places, people, or events',
+        example: 'Amazon flowing through Argentina'
+      }
+    ];
+
+    // ============================================================
+    // SCORING UTILITIES
+    // ============================================================
+
+    /**
+     * Calculate points based on correctness and confidence
+     * @param {boolean} correct
+     * @param {ConfidenceLevel} confidence
+     * @returns {number}
+     */
+    const calculatePoints = (correct, confidence) => {
+      const pointsMatrix = {
+        1: { correct: 1, incorrect: -1 },
+        2: { correct: 3, incorrect: -3 },
+        3: { correct: 5, incorrect: -6 }
+      };
+      return pointsMatrix[confidence][correct ? 'correct' : 'incorrect'];
+    };
+
+    /**
+     * Shuffle array using Fisher-Yates
+     * @template T
+     * @param {T[]} array
+     * @returns {T[]}
+     */
+    const shuffleArray = (array) => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    // ============================================================
+    // ERROR BOUNDARY
+    // ============================================================
+
+    class ErrorBoundary extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { hasError: false, error: null };
+      }
+
+      static getDerivedStateFromError(error) {
+        return { hasError: true, error };
+      }
+
+      render() {
+        if (this.state.hasError) {
+          return React.createElement('div', {
+            style: {
+              padding: '2rem',
+              textAlign: 'center',
+              color: 'var(--text-primary)'
+            }
+          }, [
+            React.createElement('h2', { key: 'title', style: { color: 'var(--accent-rose)' } }, '⚠️ Something went wrong'),
+            React.createElement('p', { key: 'msg', style: { color: 'var(--text-secondary)', margin: '1rem 0' } }, 
+              'Please refresh the page to restart the game.'),
+            React.createElement('button', {
+              key: 'btn',
+              onClick: () => window.location.reload(),
+              style: {
+                padding: '0.75rem 1.5rem',
+                background: 'var(--accent-cyan)',
+                color: 'var(--bg-deep)',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: 600
+              }
+            }, 'Refresh Page')
+          ]);
+        }
+        return this.props.children;
+      }
+    }
+
+    // ============================================================
+    // CUSTOM HOOKS
+    // ============================================================
+
+    /**
+     * Timer hook with pause/resume and tab visibility handling
+     * @param {number} initialTime
+     * @param {() => void} onComplete
+     */
+    const useTimer = (initialTime, onComplete) => {
+      const [time, setTime] = useState(initialTime);
+      const [isActive, setIsActive] = useState(false);
+      const [isPaused, setIsPaused] = useState(false);
+      const callbackRef = useRef(onComplete);
+
+      useEffect(() => {
+        callbackRef.current = onComplete;
+      }, [onComplete]);
+
+      // Handle tab visibility - pause when hidden
+      useEffect(() => {
+        const handleVisibilityChange = () => {
+          if (document.hidden) {
+            setIsPaused(true);
+          } else {
+            setIsPaused(false);
+          }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+      }, []);
+
+      useEffect(() => {
+        if (!isActive || isPaused) return;
+        
+        const interval = setInterval(() => {
+          setTime(t => {
+            if (t <= 1) {
+              setIsActive(false);
+              callbackRef.current?.();
+              return 0;
+            }
+            return t - 1;
+          });
+        }, 1000);
+
+        return () => clearInterval(interval);
+      }, [isActive, isPaused]);
+
+      const start = useCallback(() => setIsActive(true), []);
+      const pause = useCallback(() => setIsActive(false), []);
+      const reset = useCallback((newTime) => {
+        setTime(newTime ?? initialTime);
+        setIsActive(false);
+      }, [initialTime]);
+
+      return { time, isActive, isPaused, start, pause, reset };
+    };
+
+    // ============================================================
+    // COMPONENTS
+    // ============================================================
+
+    /** Header Component */
+    const Header = ({ score, round, totalRounds, phase }) => (
+      <header 
+        role="banner"
+        aria-label="Game status"
+        style={{
+        padding: '1rem 1.5rem',
+        borderBottom: '1px solid var(--border)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        background: 'rgba(17, 24, 39, 0.8)',
+        backdropFilter: 'blur(8px)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <span style={{ fontSize: '1.5rem' }}>🔍</span>
+          <h1 className="mono" style={{ 
+            fontSize: '1.125rem', 
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            color: 'var(--accent-cyan)'
+          }}>
+            TRUTH HUNTERS
+          </h1>
+        </div>
+        
+        {phase !== 'setup' && phase !== 'debrief' && (
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+            <div className="mono" style={{ 
+              fontSize: '0.875rem',
+              color: 'var(--text-secondary)'
+            }}>
+              ROUND <span style={{ color: 'var(--accent-amber)', fontWeight: 700 }}>{round}</span>/{totalRounds}
+            </div>
+            <div className="mono" style={{
+              padding: '0.375rem 0.75rem',
+              background: score >= 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+              border: `1px solid ${score >= 0 ? 'var(--correct)' : 'var(--incorrect)'}`,
+              borderRadius: '4px',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              color: score >= 0 ? 'var(--correct)' : 'var(--incorrect)'
+            }}>
+              {score >= 0 ? '+' : ''}{score} PTS
+            </div>
+          </div>
+        )}
+      </header>
+    );
+
+    /** Timer Display Component */
+    const TimerDisplay = ({ time, isActive, isPaused, label }) => {
+      const isLow = time <= 10;
+      
+      return (
+        <div 
+          role="timer"
+          aria-live={isLow ? 'assertive' : 'polite'}
+          aria-label={`${label}: ${Math.floor(time / 60)} minutes ${time % 60} seconds remaining${isPaused ? ', paused' : ''}`}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.25rem'
+          }}
+        >
+          <span className="mono" style={{
+            fontSize: '0.75rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: isPaused ? 'var(--accent-amber)' : 'var(--text-muted)'
+          }}>
+            {isPaused ? '⏸ PAUSED' : label}
+          </span>
+          <div 
+            className={`mono ${isLow && isActive ? 'animate-pulse' : ''}`}
+            style={{
+              fontSize: '2rem',
+              fontWeight: 700,
+              color: isLow ? 'var(--accent-rose)' : 'var(--accent-cyan)',
+              textShadow: isLow ? '0 0 20px var(--accent-rose)' : 'none'
+            }}
+          >
+            {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}
+          </div>
+        </div>
+      );
+    };
+
+    /** Claim Card Component */
+    const ClaimCard = ({ claim, showAnswer = false }) => (
+      <div 
+        className="animate-in"
+        style={{
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border)',
+          borderRadius: '12px',
+          padding: '1.5rem',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '3px',
+          background: claim.source === 'ai-generated' 
+            ? 'linear-gradient(90deg, var(--accent-violet), var(--accent-rose))'
+            : 'linear-gradient(90deg, var(--accent-emerald), var(--accent-cyan))'
+        }} />
+        
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          marginBottom: '1rem' 
+        }}>
+          <span className="mono" style={{
+            fontSize: '0.75rem',
+            padding: '0.25rem 0.5rem',
+            background: 'var(--bg-elevated)',
+            borderRadius: '4px',
+            color: 'var(--text-secondary)'
+          }}>
+            {claim.subject}
+          </span>
+          
+          {showAnswer && (
+            <span className="mono" style={{
+              fontSize: '0.75rem',
+              padding: '0.25rem 0.5rem',
+              background: claim.source === 'ai-generated' 
+                ? 'rgba(167, 139, 250, 0.2)' 
+                : 'rgba(52, 211, 153, 0.2)',
+              color: claim.source === 'ai-generated' 
+                ? 'var(--accent-violet)' 
+                : 'var(--accent-emerald)',
+              borderRadius: '4px'
+            }}>
+              {claim.source === 'ai-generated' ? '🤖 AI-Generated' : '📚 Expert-Sourced'}
+            </span>
+          )}
+        </div>
+
+        <blockquote style={{
+          fontSize: '1.125rem',
+          lineHeight: 1.7,
+          color: 'var(--text-primary)',
+          fontStyle: 'italic',
+          borderLeft: '3px solid var(--accent-cyan)',
+          paddingLeft: '1rem',
+          margin: '1rem 0'
+        }}>
+          "{claim.text}"
+        </blockquote>
+
+        {showAnswer && (
+          <div className="animate-in" style={{ marginTop: '1.5rem' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              marginBottom: '0.75rem'
+            }}>
+              <span className="mono" style={{
+                fontSize: '0.875rem',
+                fontWeight: 700,
+                padding: '0.375rem 0.75rem',
+                borderRadius: '4px',
+                background: claim.answer === 'TRUE' 
+                  ? 'rgba(16, 185, 129, 0.2)' 
+                  : claim.answer === 'FALSE'
+                    ? 'rgba(239, 68, 68, 0.2)'
+                    : 'rgba(251, 191, 36, 0.2)',
+                color: claim.answer === 'TRUE' 
+                  ? 'var(--correct)' 
+                  : claim.answer === 'FALSE'
+                    ? 'var(--incorrect)'
+                    : 'var(--accent-amber)'
+              }}>
+                {claim.answer}
+              </span>
+              {claim.source === 'ai-generated' && (
+                <span className="mono" style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--accent-rose)'
+                }}>
+                  Error: {claim.errorPattern}
+                </span>
+              )}
+            </div>
+            <p style={{ 
+              color: 'var(--text-secondary)',
+              fontSize: '0.9375rem',
+              lineHeight: 1.6
+            }}>
+              {claim.explanation}
+            </p>
+          </div>
+        )}
+      </div>
+    );
+
+    /** Confidence Selector Component */
+    const ConfidenceSelector = ({ value, onChange, disabled }) => {
+      const levels = [
+        { value: 1, label: 'We think so', risk: '+1 / -1', color: 'var(--confidence-1)' },
+        { value: 2, label: 'Pretty sure', risk: '+3 / -3', color: 'var(--confidence-2)' },
+        { value: 3, label: 'Certain', risk: '+5 / -6', color: 'var(--confidence-3)' }
+      ];
+
+      const handleKeyDown = (e, levelValue) => {
+        if (disabled) return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          const next = Math.min(3, levelValue + 1);
+          onChange(next);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const prev = Math.max(1, levelValue - 1);
+          onChange(prev);
+        }
+      };
+
+      return (
+        <div role="radiogroup" aria-label="Confidence level" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {levels.map((level) => (
+            <button
+              key={level.value}
+              type="button"
+              role="radio"
+              aria-checked={value === level.value}
+              tabIndex={value === level.value ? 0 : -1}
+              onClick={() => onChange(level.value)}
+              onKeyDown={(e) => handleKeyDown(e, level.value)}
+              disabled={disabled}
+              style={{
+                flex: '1 1 auto',
+                minWidth: '140px',
+                padding: '1rem',
+                background: value === level.value 
+                  ? `${level.color}20` 
+                  : 'var(--bg-elevated)',
+                border: `2px solid ${value === level.value ? level.color : 'var(--border)'}`,
+                borderRadius: '8px',
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                opacity: disabled ? 0.5 : 1,
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <div className="mono" style={{
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                color: level.color,
+                marginBottom: '0.25rem'
+              }}>
+                {'●'.repeat(level.value)}{'○'.repeat(3 - level.value)}
+              </div>
+              <div style={{
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                color: 'var(--text-primary)',
+                marginBottom: '0.25rem'
+              }}>
+                {level.label}
+              </div>
+              <div className="mono" style={{
+                fontSize: '0.75rem',
+                color: 'var(--text-muted)'
+              }}>
+                {level.risk}
+              </div>
+            </button>
+          ))}
+        </div>
+      );
+    };
+
+    /** Verdict Selector Component */
+    const VerdictSelector = ({ value, onChange, disabled }) => {
+      const verdicts = [
+        { value: 'TRUE', emoji: '✓', color: 'var(--correct)' },
+        { value: 'MIXED', emoji: '◐', color: 'var(--accent-amber)' },
+        { value: 'FALSE', emoji: '✗', color: 'var(--incorrect)' }
+      ];
+
+      const handleKeyDown = (e, currentIndex) => {
+        if (disabled) return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          const next = (currentIndex + 1) % verdicts.length;
+          onChange(verdicts[next].value);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const prev = (currentIndex - 1 + verdicts.length) % verdicts.length;
+          onChange(verdicts[prev].value);
+        }
+      };
+
+      const currentIndex = verdicts.findIndex(v => v.value === value);
+
+      return (
+        <div role="radiogroup" aria-label="Verdict selection" style={{ display: 'flex', gap: '0.75rem' }}>
+          {verdicts.map((v, i) => (
+            <button
+              key={v.value}
+              type="button"
+              role="radio"
+              aria-checked={value === v.value}
+              tabIndex={value === v.value || (value === null && i === 0) ? 0 : -1}
+              onClick={() => onChange(v.value)}
+              onKeyDown={(e) => handleKeyDown(e, i)}
+              disabled={disabled}
+              style={{
+                flex: 1,
+                padding: '1.25rem 1rem',
+                background: value === v.value ? `${v.color}20` : 'var(--bg-elevated)',
+                border: `2px solid ${value === v.value ? v.color : 'var(--border)'}`,
+                borderRadius: '8px',
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                opacity: disabled ? 0.5 : 1,
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <div style={{
+                fontSize: '1.75rem',
+                marginBottom: '0.25rem',
+                color: v.color
+              }}>
+                {v.emoji}
+              </div>
+              <div className="mono" style={{
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                color: value === v.value ? v.color : 'var(--text-secondary)'
+              }}>
+                {v.value}
+              </div>
+            </button>
+          ))}
+        </div>
+      );
+    };
+
+    /** Button Component */
+    const Button = ({ children, onClick, variant = 'primary', disabled, fullWidth, size = 'md', ariaLabel }) => {
+      const variants = {
+        primary: {
+          background: 'var(--accent-cyan)',
+          color: 'var(--bg-deep)',
+          border: 'none'
+        },
+        secondary: {
+          background: 'transparent',
+          color: 'var(--accent-cyan)',
+          border: '2px solid var(--accent-cyan)'
+        },
+        danger: {
+          background: 'var(--accent-rose)',
+          color: 'white',
+          border: 'none'
+        }
+      };
+
+      const sizes = {
+        sm: { padding: '0.625rem 1rem', fontSize: '0.875rem', minHeight: '44px' },
+        md: { padding: '0.875rem 1.5rem', fontSize: '1rem', minHeight: '44px' },
+        lg: { padding: '1rem 2rem', fontSize: '1.125rem', minHeight: '48px' }
+      };
+
+      return (
+        <button
+          onClick={onClick}
+          disabled={disabled}
+          aria-label={ariaLabel}
+          aria-disabled={disabled}
+          className="mono"
+          style={{
+            ...variants[variant],
+            ...sizes[size],
+            width: fullWidth ? '100%' : 'auto',
+            borderRadius: '8px',
+            fontWeight: 600,
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            opacity: disabled ? 0.5 : 1,
+            transition: 'all 0.2s ease',
+            letterSpacing: '0.025em'
+          }}
+        >
+          {children}
+        </button>
+      );
+    };
+
+    /** Setup Screen */
+    const SetupScreen = ({ onStart }) => {
+      const [teamName, setTeamName] = useState('');
+      const [rounds, setRounds] = useState(5);
+
+      return (
+        <div style={{
+          maxWidth: '600px',
+          margin: '0 auto',
+          padding: '2rem 1.5rem'
+        }}>
+          <div className="animate-in" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔍</div>
+            <h1 className="mono" style={{
+              fontSize: '2rem',
+              fontWeight: 700,
+              color: 'var(--accent-cyan)',
+              marginBottom: '0.5rem',
+              letterSpacing: '-0.025em'
+            }}>
+              TRUTH HUNTERS
+            </h1>
+            <p style={{
+              fontSize: '1.125rem',
+              color: 'var(--text-secondary)',
+              fontStyle: 'italic'
+            }}>
+              The Calibration Game
+            </p>
+          </div>
+
+          <div 
+            className="animate-in" 
+            style={{ 
+              animationDelay: '0.1s',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+              padding: '1.5rem',
+              marginBottom: '1.5rem'
+            }}
+          >
+            <h2 className="mono" style={{
+              fontSize: '0.875rem',
+              color: 'var(--accent-amber)',
+              marginBottom: '1rem',
+              letterSpacing: '0.05em'
+            }}>
+              MISSION BRIEFING
+            </h2>
+            <ul style={{
+              listStyle: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem'
+            }}>
+              {[
+                'Evaluate claims — some AI-generated, some from experts',
+                'Stake confidence points on your verdict',
+                'Rewards calibration: knowing what you don\'t know',
+                'Work as a team — every role matters'
+              ].map((item, i) => (
+                <li key={i} style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '0.75rem',
+                  color: 'var(--text-secondary)',
+                  fontSize: '0.9375rem'
+                }}>
+                  <span style={{ color: 'var(--accent-cyan)' }}>▸</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div 
+            className="animate-in" 
+            style={{ 
+              animationDelay: '0.2s',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+              padding: '1.5rem',
+              marginBottom: '1.5rem'
+            }}
+          >
+            <label className="mono" style={{
+              display: 'block',
+              fontSize: '0.75rem',
+              color: 'var(--text-muted)',
+              marginBottom: '0.5rem',
+              letterSpacing: '0.05em'
+            }}>
+              TEAM NAME
+            </label>
+            <input
+              type="text"
+              value={teamName}
+              onChange={(e) => setTeamName(e.target.value)}
+              placeholder="Enter team name..."
+              maxLength={30}
+              required
+              autoComplete="off"
+              style={{
+                width: '100%',
+                padding: '0.75rem 1rem',
+                background: 'var(--bg-elevated)',
+                border: '1px solid var(--border)',
+                borderRadius: '6px',
+                color: 'var(--text-primary)',
+                fontSize: '1rem',
+                fontFamily: 'var(--font-serif)'
+              }}
+            />
+          </div>
+
+          <div 
+            className="animate-in" 
+            style={{ 
+              animationDelay: '0.3s',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+              padding: '1.5rem',
+              marginBottom: '2rem'
+            }}
+          >
+            <label className="mono" style={{
+              display: 'block',
+              fontSize: '0.75rem',
+              color: 'var(--text-muted)',
+              marginBottom: '0.75rem',
+              letterSpacing: '0.05em'
+            }}>
+              NUMBER OF ROUNDS
+            </label>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              {[3, 5, 7].map((n) => (
+                <button
+                  key={n}
+                  onClick={() => setRounds(n)}
+                  className="mono"
+                  style={{
+                    flex: 1,
+                    padding: '0.75rem',
+                    background: rounds === n ? 'var(--accent-cyan)' : 'var(--bg-elevated)',
+                    color: rounds === n ? 'var(--bg-deep)' : 'var(--text-secondary)',
+                    border: `1px solid ${rounds === n ? 'var(--accent-cyan)' : 'var(--border)'}`,
+                    borderRadius: '6px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {n} rounds
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="animate-in" style={{ animationDelay: '0.4s' }}>
+            <Button
+              onClick={() => onStart(teamName || 'Team Alpha', rounds)}
+              fullWidth
+              size="lg"
+              disabled={!teamName.trim()}
+            >
+              START MISSION →
+            </Button>
+          </div>
+        </div>
+      );
+    };
+
+    /** Playing Screen */
+    const PlayingScreen = ({ 
+      claim, 
+      round, 
+      totalRounds,
+      onSubmit,
+      phase,
+      setPhase
+    }) => {
+      const [confidence, setConfidence] = useState(1);
+      const [verdict, setVerdict] = useState(null);
+      const [reasoning, setReasoning] = useState('');
+      const [showResult, setShowResult] = useState(false);
+      const [resultData, setResultData] = useState(null);
+      const [timeoutWarning, setTimeoutWarning] = useState(false);
+      const submitRef = useRef(null);
+
+      const discussTimer = useTimer(120, () => setPhase('stake'));
+      const stakeTimer = useTimer(30, () => {
+        // Auto-submit if verdict selected, otherwise show warning
+        if (submitRef.current) {
+          submitRef.current();
+        } else {
+          setTimeoutWarning(true);
+        }
+      });
+
+      useEffect(() => {
+        if (phase === 'discuss') {
+          discussTimer.reset(120);
+          discussTimer.start();
+          setTimeoutWarning(false);
+        } else if (phase === 'stake') {
+          stakeTimer.reset(30);
+          stakeTimer.start();
+          setTimeoutWarning(false);
+        }
+      }, [phase]);
+
+      const handleSubmitVerdict = useCallback(() => {
+        if (!verdict || !claim) return;
+        
+        const correct = verdict === claim.answer;
+        const points = calculatePoints(correct, confidence);
+        
+        setResultData({ correct, points, confidence, verdict });
+        setShowResult(true);
+        setPhase('result');
+      }, [verdict, confidence, claim, setPhase]);
+
+      // Update ref for auto-submit on timeout
+      useEffect(() => {
+        if (verdict) {
+          submitRef.current = handleSubmitVerdict;
+        } else {
+          submitRef.current = null;
+        }
+      }, [verdict, handleSubmitVerdict]);
+
+      // Handle result display and transition to next round
+      useEffect(() => {
+        if (!showResult || !resultData || !claim) return;
+        
+        const timeoutId = setTimeout(() => {
+          onSubmit({
+            claimId: claim.id,
+            teamVerdict: resultData.verdict,
+            confidence: resultData.confidence,
+            correct: resultData.correct,
+            points: resultData.points,
+            reasoning
+          });
+          
+          // Reset for next round
+          setConfidence(1);
+          setVerdict(null);
+          setReasoning('');
+          setShowResult(false);
+          setResultData(null);
+        }, 4000);
+
+        return () => clearTimeout(timeoutId);
+      }, [showResult, resultData, claim, reasoning, onSubmit]);
+
+      return (
+        <div style={{
+          maxWidth: '800px',
+          margin: '0 auto',
+          padding: '1.5rem'
+        }}>
+          {/* Phase Indicator */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            marginBottom: '1.5rem'
+          }}>
+            {['discuss', 'stake', 'result'].map((p, i) => (
+              <div
+                key={p}
+                className="mono"
+                style={{
+                  padding: '0.375rem 0.75rem',
+                  fontSize: '0.75rem',
+                  background: phase === p ? 'var(--accent-cyan)' : 'var(--bg-elevated)',
+                  color: phase === p ? 'var(--bg-deep)' : 'var(--text-muted)',
+                  borderRadius: '4px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}
+              >
+                {i + 1}. {p}
+              </div>
+            ))}
+          </div>
+
+          {/* Timer */}
+          {(phase === 'discuss' || phase === 'stake') && (
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              marginBottom: '1.5rem' 
+            }}>
+              <TimerDisplay
+                time={phase === 'discuss' ? discussTimer.time : stakeTimer.time}
+                isActive={phase === 'discuss' ? discussTimer.isActive : stakeTimer.isActive}
+                isPaused={phase === 'discuss' ? discussTimer.isPaused : stakeTimer.isPaused}
+                label={phase === 'discuss' ? 'Discussion Time' : 'Stake Your Confidence'}
+              />
+            </div>
+          )}
+
+          {/* Claim Card */}
+          <ClaimCard claim={claim} showAnswer={showResult} />
+
+          {/* Discussion Phase */}
+          {phase === 'discuss' && (
+            <div className="animate-in" style={{ marginTop: '1.5rem' }}>
+              <div style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: '12px',
+                padding: '1.25rem'
+              }}>
+                <h3 className="mono" style={{
+                  fontSize: '0.875rem',
+                  color: 'var(--accent-amber)',
+                  marginBottom: '1rem'
+                }}>
+                  🗣️ TEAM ROLES
+                </h3>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                  gap: '0.75rem'
+                }}>
+                  {[
+                    { role: 'Reader', task: 'Read claim aloud' },
+                    { role: 'Skeptic', task: 'Voice doubts' },
+                    { role: 'Recorder', task: 'Note key points' },
+                    { role: 'Reporter', task: 'Share reasoning' }
+                  ].map((r) => (
+                    <div key={r.role} style={{
+                      padding: '0.75rem',
+                      background: 'var(--bg-elevated)',
+                      borderRadius: '6px'
+                    }}>
+                      <div className="mono" style={{
+                        fontSize: '0.75rem',
+                        color: 'var(--accent-cyan)',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {r.role}
+                      </div>
+                      <div style={{
+                        fontSize: '0.8125rem',
+                        color: 'var(--text-secondary)'
+                      }}>
+                        {r.task}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ marginTop: '1rem' }}>
+                <Button onClick={() => setPhase('stake')} fullWidth>
+                  Ready to Vote →
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Stake Phase */}
+          {phase === 'stake' && (
+            <div className="animate-in" style={{ marginTop: '1.5rem' }}>
+              {timeoutWarning && (
+                <div style={{
+                  padding: '0.75rem 1rem',
+                  background: 'rgba(251, 191, 36, 0.15)',
+                  border: '1px solid var(--accent-amber)',
+                  borderRadius: '8px',
+                  marginBottom: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <span>⚠️</span>
+                  <span style={{ color: 'var(--accent-amber)', fontSize: '0.875rem' }}>
+                    Time's up! Please select a verdict to continue.
+                  </span>
+                </div>
+              )}
+              <div style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: '12px',
+                padding: '1.25rem',
+                marginBottom: '1rem'
+              }}>
+                <h3 className="mono" style={{
+                  fontSize: '0.875rem',
+                  color: 'var(--accent-amber)',
+                  marginBottom: '1rem'
+                }}>
+                  VERDICT
+                </h3>
+                <VerdictSelector value={verdict} onChange={setVerdict} />
+              </div>
+
+              <div style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: '12px',
+                padding: '1.25rem',
+                marginBottom: '1rem'
+              }}>
+                <h3 className="mono" style={{
+                  fontSize: '0.875rem',
+                  color: 'var(--accent-amber)',
+                  marginBottom: '1rem'
+                }}>
+                  CONFIDENCE
+                </h3>
+                <ConfidenceSelector value={confidence} onChange={setConfidence} />
+              </div>
+
+              <div style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: '12px',
+                padding: '1.25rem',
+                marginBottom: '1rem'
+              }}>
+                <label className="mono" style={{
+                  display: 'block',
+                  fontSize: '0.75rem',
+                  color: 'var(--text-muted)',
+                  marginBottom: '0.5rem'
+                }}>
+                  KEY REASONING (optional)
+                </label>
+                <textarea
+                  value={reasoning}
+                  onChange={(e) => setReasoning(e.target.value)}
+                  placeholder="Why did you choose this verdict?"
+                  rows={2}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    background: 'var(--bg-elevated)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '6px',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.9375rem',
+                    fontFamily: 'var(--font-serif)',
+                    resize: 'vertical'
+                  }}
+                />
+              </div>
+
+              <Button 
+                onClick={handleSubmitVerdict} 
+                fullWidth
+                disabled={!verdict}
+              >
+                Lock In Answer →
+              </Button>
+            </div>
+          )}
+
+          {/* Result Phase */}
+          {phase === 'result' && resultData && (
+            <div 
+              className={`animate-in ${resultData.correct ? 'animate-celebrate' : 'animate-shake'}`}
+              style={{ 
+                marginTop: '1.5rem',
+                background: resultData.correct 
+                  ? 'rgba(16, 185, 129, 0.1)' 
+                  : 'rgba(239, 68, 68, 0.1)',
+                border: `2px solid ${resultData.correct ? 'var(--correct)' : 'var(--incorrect)'}`,
+                borderRadius: '12px',
+                padding: '1.5rem',
+                textAlign: 'center'
+              }}
+            >
+              <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>
+                {resultData.correct ? '✓' : '✗'}
+              </div>
+              <div className="mono" style={{
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                color: resultData.correct ? 'var(--correct)' : 'var(--incorrect)',
+                marginBottom: '0.5rem'
+              }}>
+                {resultData.correct ? 'CORRECT!' : 'INCORRECT'}
+              </div>
+              <div className="mono" style={{
+                fontSize: '1.125rem',
+                color: resultData.points >= 0 ? 'var(--correct)' : 'var(--incorrect)'
+              }}>
+                {resultData.points >= 0 ? '+' : ''}{resultData.points} points
+              </div>
+              <div style={{
+                marginTop: '0.75rem',
+                fontSize: '0.875rem',
+                color: 'var(--text-secondary)'
+              }}>
+                You said <strong>{resultData.verdict}</strong> with{' '}
+                <strong>{'●'.repeat(resultData.confidence)}</strong> confidence
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    /** Debrief Screen */
+    const DebriefScreen = ({ team, claims, onRestart }) => {
+      const [showPatterns, setShowPatterns] = useState(false);
+      const [calibrationReflection, setCalibrationReflection] = useState('');
+
+      const calibrationBonus = Math.abs(team.score - team.predictedScore) <= 2 ? 3 : 0;
+      const finalScore = team.score + calibrationBonus;
+
+      const correctCount = team.results.filter(r => r.correct).length;
+      const aiClaims = claims.filter(c => c.source === 'ai-generated');
+      const aiClaimResults = team.results.filter(r => {
+        const claim = claims.find(c => c.id === r.claimId);
+        return claim?.source === 'ai-generated';
+      });
+      const aiCorrectCount = aiClaimResults.filter(r => r.correct).length;
+      const aiCatchRate = aiClaims.length > 0 
+        ? Math.round((aiCorrectCount / aiClaims.length) * 100) 
+        : 0;
+
+      return (
+        <div style={{
+          maxWidth: '800px',
+          margin: '0 auto',
+          padding: '1.5rem'
+        }}>
+          {/* Final Score */}
+          <div 
+            className="animate-in"
+            style={{
+              background: 'linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%)',
+              border: '1px solid var(--border)',
+              borderRadius: '16px',
+              padding: '2rem',
+              textAlign: 'center',
+              marginBottom: '1.5rem'
+            }}
+          >
+            <div className="mono" style={{
+              fontSize: '0.875rem',
+              color: 'var(--text-muted)',
+              marginBottom: '0.5rem',
+              letterSpacing: '0.1em'
+            }}>
+              FINAL SCORE
+            </div>
+            <div className="mono" style={{
+              fontSize: '4rem',
+              fontWeight: 700,
+              color: finalScore >= 0 ? 'var(--accent-cyan)' : 'var(--accent-rose)',
+              lineHeight: 1,
+              marginBottom: '0.5rem'
+            }}>
+              {finalScore}
+            </div>
+            <div style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+              {team.name}
+            </div>
+            
+            {calibrationBonus > 0 && (
+              <div style={{
+                display: 'inline-block',
+                padding: '0.5rem 1rem',
+                background: 'rgba(251, 191, 36, 0.15)',
+                border: '1px solid var(--accent-amber)',
+                borderRadius: '8px'
+              }}>
+                <span className="mono" style={{ color: 'var(--accent-amber)' }}>
+                  +3 CALIBRATION BONUS! 🎯
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Stats Grid */}
+          <div 
+            className="animate-in"
+            style={{
+              animationDelay: '0.1s',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+              gap: '1rem',
+              marginBottom: '1.5rem'
+            }}
+          >
+            {[
+              { label: 'Accuracy', value: `${correctCount}/${team.results.length}`, sub: 'claims correct' },
+              { label: 'AI Detection', value: `${aiCatchRate}%`, sub: `${aiCorrectCount}/${aiClaims.length} caught` },
+              { label: 'Predicted', value: team.predictedScore, sub: 'your estimate' },
+              { label: 'Actual', value: team.score, sub: 'before bonus' }
+            ].map((stat, i) => (
+              <div key={i} style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: '12px',
+                padding: '1rem',
+                textAlign: 'center'
+              }}>
+                <div className="mono" style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--text-muted)',
+                  marginBottom: '0.25rem'
+                }}>
+                  {stat.label}
+                </div>
+                <div className="mono" style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 700,
+                  color: 'var(--text-primary)'
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--text-muted)'
+                }}>
+                  {stat.sub}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Round Results */}
+          <div 
+            className="animate-in"
+            style={{
+              animationDelay: '0.2s',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+              padding: '1.25rem',
+              marginBottom: '1.5rem'
+            }}
+          >
+            <h3 className="mono" style={{
+              fontSize: '0.875rem',
+              color: 'var(--accent-amber)',
+              marginBottom: '1rem'
+            }}>
+              ROUND BREAKDOWN
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {team.results.map((result, i) => {
+                const claim = claims.find(c => c.id === result.claimId);
+                return (
+                  <div key={i} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    padding: '0.75rem',
+                    background: 'var(--bg-elevated)',
+                    borderRadius: '8px'
+                  }}>
+                    <div style={{
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50%',
+                      background: result.correct 
+                        ? 'rgba(16, 185, 129, 0.2)' 
+                        : 'rgba(239, 68, 68, 0.2)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.875rem',
+                      color: result.correct ? 'var(--correct)' : 'var(--incorrect)'
+                    }}>
+                      {result.correct ? '✓' : '✗'}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{
+                        fontSize: '0.875rem',
+                        color: 'var(--text-primary)',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}>
+                        {claim?.text.substring(0, 50)}...
+                      </div>
+                      <div className="mono" style={{
+                        fontSize: '0.75rem',
+                        color: 'var(--text-muted)'
+                      }}>
+                        {result.teamVerdict} • {'●'.repeat(result.confidence)}
+                      </div>
+                    </div>
+                    <div className="mono" style={{
+                      fontWeight: 600,
+                      color: result.points >= 0 ? 'var(--correct)' : 'var(--incorrect)'
+                    }}>
+                      {result.points >= 0 ? '+' : ''}{result.points}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* AI Error Patterns */}
+          <div 
+            className="animate-in"
+            style={{
+              animationDelay: '0.3s',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+              padding: '1.25rem',
+              marginBottom: '1.5rem'
+            }}
+          >
+            <button
+              onClick={() => setShowPatterns(!showPatterns)}
+              style={{
+                width: '100%',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              <h3 className="mono" style={{
+                fontSize: '0.875rem',
+                color: 'var(--accent-violet)'
+              }}>
+                🤖 AI ERROR PATTERNS TO REMEMBER
+              </h3>
+              <span style={{ color: 'var(--text-muted)' }}>
+                {showPatterns ? '▲' : '▼'}
+              </span>
+            </button>
+            
+            {showPatterns && (
+              <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {AI_ERROR_PATTERNS.map((pattern, i) => (
+                  <div key={i} style={{
+                    padding: '0.75rem',
+                    background: 'var(--bg-elevated)',
+                    borderRadius: '8px',
+                    borderLeft: '3px solid var(--accent-violet)'
+                  }}>
+                    <div className="mono" style={{
+                      fontSize: '0.875rem',
+                      fontWeight: 600,
+                      color: 'var(--text-primary)',
+                      marginBottom: '0.25rem'
+                    }}>
+                      {pattern.name}
+                    </div>
+                    <div style={{
+                      fontSize: '0.8125rem',
+                      color: 'var(--text-secondary)',
+                      marginBottom: '0.25rem'
+                    }}>
+                      {pattern.description}
+                    </div>
+                    <div className="mono" style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--text-muted)',
+                      fontStyle: 'italic'
+                    }}>
+                      e.g., {pattern.example}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Reflection */}
+          <div 
+            className="animate-in"
+            style={{
+              animationDelay: '0.4s',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+              padding: '1.25rem',
+              marginBottom: '1.5rem'
+            }}
+          >
+            <h3 className="mono" style={{
+              fontSize: '0.875rem',
+              color: 'var(--accent-emerald)',
+              marginBottom: '1rem'
+            }}>
+              📝 CALIBRATION REFLECTION
+            </h3>
+            <p style={{
+              fontSize: '0.9375rem',
+              color: 'var(--text-secondary)',
+              marginBottom: '1rem'
+            }}>
+              My confidence this game was:
+            </p>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+              {['Too high — I was overconfident', 'About right — well calibrated', 'Too low — I doubted myself too much'].map((option) => (
+                <button
+                  key={option}
+                  onClick={() => setCalibrationReflection(option)}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    background: calibrationReflection === option 
+                      ? 'var(--accent-emerald)' 
+                      : 'var(--bg-elevated)',
+                    color: calibrationReflection === option 
+                      ? 'var(--bg-deep)' 
+                      : 'var(--text-secondary)',
+                    border: `1px solid ${calibrationReflection === option ? 'var(--accent-emerald)' : 'var(--border)'}`,
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div 
+            className="animate-in no-print"
+            style={{
+              animationDelay: '0.5s',
+              display: 'flex',
+              gap: '1rem'
+            }}
+          >
+            <Button onClick={onRestart} fullWidth>
+              Play Again
+            </Button>
+            <Button 
+              onClick={() => window.print()} 
+              variant="secondary"
+              fullWidth
+            >
+              Print Results
+            </Button>
+          </div>
+
+          {/* Research Attribution */}
+          <div 
+            className="animate-in"
+            style={{
+              animationDelay: '0.6s',
+              marginTop: '2rem',
+              padding: '1rem',
+              background: 'var(--bg-elevated)',
+              borderRadius: '8px',
+              fontSize: '0.75rem',
+              color: 'var(--text-muted)'
+            }}
+          >
+            <strong>Research Base:</strong> Johnson & Johnson (2009) cooperative learning • 
+            Wineburg et al. (2022) lateral reading • 
+            Barzilai & Chinn (2018) epistemic education • 
+            Lichtenstein et al. calibration training
+          </div>
+        </div>
+      );
+    };
+
+    /** Prediction Modal */
+    const PredictionModal = ({ onSubmit, currentScore }) => {
+      const [prediction, setPrediction] = useState(currentScore);
+
+      return (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '1rem'
+        }}>
+          <div 
+            className="animate-in"
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '16px',
+              padding: '2rem',
+              maxWidth: '400px',
+              width: '100%'
+            }}
+          >
+            <h2 className="mono" style={{
+              fontSize: '1.25rem',
+              color: 'var(--accent-amber)',
+              marginBottom: '0.5rem'
+            }}>
+              🎯 FINAL PREDICTION
+            </h2>
+            <p style={{
+              color: 'var(--text-secondary)',
+              marginBottom: '1.5rem'
+            }}>
+              What do you think your final score will be?
+              If you're within ±2 points, you'll earn a calibration bonus!
+            </p>
+            
+            <div style={{ marginBottom: '1.5rem' }}>
+              <div className="mono" style={{
+                fontSize: '0.75rem',
+                color: 'var(--text-muted)',
+                marginBottom: '0.5rem'
+              }}>
+                Current Score: {currentScore}
+              </div>
+              <input
+                type="number"
+                value={prediction}
+                onChange={(e) => setPrediction(parseInt(e.target.value) || 0)}
+                style={{
+                  width: '100%',
+                  padding: '1rem',
+                  background: 'var(--bg-elevated)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '8px',
+                  color: 'var(--text-primary)',
+                  fontSize: '1.5rem',
+                  fontFamily: 'var(--font-mono)',
+                  textAlign: 'center'
+                }}
+              />
+            </div>
+
+            <Button onClick={() => onSubmit(prediction)} fullWidth>
+              Lock In Prediction
+            </Button>
+          </div>
+        </div>
+      );
+    };
+
+    // ============================================================
+    // MAIN APP
+    // ============================================================
+
+    const App = () => {
+      const [gameState, setGameState] = useState({
+        phase: 'setup',
+        currentRound: 0,
+        totalRounds: 5,
+        claims: [],
+        currentClaim: null,
+        team: {
+          name: '',
+          score: 0,
+          predictedScore: 0,
+          results: []
+        }
+      });
+
+      const [showPrediction, setShowPrediction] = useState(false);
+
+      const startGame = useCallback((teamName, rounds) => {
+        const selectedClaims = shuffleArray(CLAIMS_DATABASE).slice(0, rounds);
+        
+        setGameState({
+          phase: 'playing',
+          currentRound: 1,
+          totalRounds: rounds,
+          claims: selectedClaims,
+          currentClaim: selectedClaims[0],
+          playPhase: 'discuss',
+          team: {
+            name: teamName,
+            score: 0,
+            predictedScore: 0,
+            results: []
+          }
+        });
+      }, []);
+
+      const [playPhase, setPlayPhase] = useState('discuss');
+
+      const handleRoundSubmit = useCallback((result) => {
+        setGameState(prev => {
+          const newResults = [...prev.team.results, { ...result, round: prev.currentRound }];
+          const newScore = prev.team.score + result.points;
+          
+          const isLastRound = prev.currentRound >= prev.totalRounds;
+          
+          if (isLastRound) {
+            setShowPrediction(true);
+          }
+
+          return {
+            ...prev,
+            currentRound: isLastRound ? prev.currentRound : prev.currentRound + 1,
+            currentClaim: isLastRound ? null : prev.claims[prev.currentRound],
+            team: {
+              ...prev.team,
+              score: newScore,
+              results: newResults
+            }
+          };
+        });
+        setPlayPhase('discuss');
+      }, []);
+
+      const handlePrediction = useCallback((prediction) => {
+        setShowPrediction(false);
+        setGameState(prev => ({
+          ...prev,
+          phase: 'debrief',
+          team: {
+            ...prev.team,
+            predictedScore: prediction
+          }
+        }));
+      }, []);
+
+      const restartGame = useCallback(() => {
+        setGameState({
+          phase: 'setup',
+          currentRound: 0,
+          totalRounds: 5,
+          claims: [],
+          currentClaim: null,
+          team: {
+            name: '',
+            score: 0,
+            predictedScore: 0,
+            results: []
+          }
+        });
+        setPlayPhase('discuss');
+      }, []);
+
+      return (
+        <>
+          <Header
+            score={gameState.team.score}
+            round={gameState.currentRound}
+            totalRounds={gameState.totalRounds}
+            phase={gameState.phase}
+          />
+
+          <main role="main" style={{ flex: 1 }}>
+            {gameState.phase === 'setup' && (
+              <SetupScreen onStart={startGame} />
+            )}
+
+            {gameState.phase === 'playing' && gameState.currentClaim && (
+              <PlayingScreen
+                claim={gameState.currentClaim}
+                round={gameState.currentRound}
+                totalRounds={gameState.totalRounds}
+                onSubmit={handleRoundSubmit}
+                phase={playPhase}
+                setPhase={setPlayPhase}
+              />
+            )}
+
+            {gameState.phase === 'debrief' && (
+              <DebriefScreen
+                team={gameState.team}
+                claims={gameState.claims}
+                onRestart={restartGame}
+              />
+            )}
+          </main>
+
+          {showPrediction && (
+            <PredictionModal
+              onSubmit={handlePrediction}
+              currentScore={gameState.team.score}
+            />
+          )}
+
+          <footer className="no-print" style={{
+            padding: '1rem',
+            borderTop: '1px solid var(--border)',
+            textAlign: 'center'
+          }}>
+            <p className="mono" style={{
+              fontSize: '0.75rem',
+              color: 'var(--text-muted)'
+            }}>
+              Truth Hunters • Research-based epistemic training for middle schoolers
+            </p>
+          </footer>
+        </>
+      );
+    };
+
+    // Mount
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      React.createElement(ErrorBoundary, null,
+        React.createElement(App)
+      )
+    );
+  </script>
+</body>
+</html>
