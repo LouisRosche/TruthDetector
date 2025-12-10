@@ -1,4 +1,5 @@
 # Netlify deployment configuration for Truth Hunters
+# NOTE: Keep security headers in sync with vercel.json
 
 [build]
   command = "npm run build"

@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "_comment": "Keep security headers in sync with netlify.toml",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
