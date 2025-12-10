@@ -3,14 +3,14 @@
  * Team configuration and game settings
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from './Button';
+import { LeaderboardView } from './LeaderboardView';
+import { TeacherSetup } from './TeacherSetup';
 import { TEAM_AVATARS, DIFFICULTY_CONFIG, EDUCATIONAL_TIPS } from '../data/constants';
-import { LeaderboardManager } from '../services/leaderboard';
-import { FirebaseBackend } from '../services/firebase';
 import { SoundManager } from '../services/sound';
 import { validateName, isContentAppropriate, sanitizeInput } from '../utils/moderation';
-import { formatPlayerName, getRandomItem } from '../utils/helpers';
+import { getRandomItem } from '../utils/helpers';
 
 export function SetupScreen({ onStart }) {
   const [teamName, setTeamName] = useState('');
@@ -20,19 +20,8 @@ export function SetupScreen({ onStart }) {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [leaderboardTab, setLeaderboardTab] = useState('teams');
   const [validationError, setValidationError] = useState('');
-
-  // Firebase/Class code state
   const [showTeacherSetup, setShowTeacherSetup] = useState(false);
-  const [classCode, setClassCode] = useState(FirebaseBackend.getClassCode() || '');
-  const [firebaseConfigText, setFirebaseConfigText] = useState('');
-  const [firebaseStatus, setFirebaseStatus] = useState(
-    FirebaseBackend.initialized ? 'connected' : 'disconnected'
-  );
-  const [cloudTeams, setCloudTeams] = useState([]);
-  const [cloudPlayers, setCloudPlayers] = useState([]);
-  const [loadingCloud, setLoadingCloud] = useState(false);
 
   // Player inputs (up to 4 players per group)
   const [players, setPlayers] = useState([
@@ -46,57 +35,6 @@ export function SetupScreen({ onStart }) {
   useEffect(() => {
     SoundManager.init();
   }, []);
-
-  // Load cloud leaderboard when showing leaderboard and Firebase is connected
-  useEffect(() => {
-    if (showLeaderboard && FirebaseBackend.initialized) {
-      setLoadingCloud(true);
-      Promise.all([FirebaseBackend.getTopTeams(10), FirebaseBackend.getTopPlayers(10)])
-        .then(([teams, players]) => {
-          setCloudTeams(teams);
-          setCloudPlayers(players);
-        })
-        .catch((e) => {
-          console.warn('Failed to load cloud leaderboard:', e);
-        })
-        .finally(() => {
-          setLoadingCloud(false);
-        });
-    }
-  }, [showLeaderboard]);
-
-  // Handle Firebase configuration
-  const handleConnectFirebase = () => {
-    try {
-      const config = JSON.parse(firebaseConfigText);
-      if (FirebaseBackend.init(config)) {
-        setFirebaseStatus('connected');
-        if (classCode) {
-          FirebaseBackend.setClassCode(classCode);
-        }
-      } else {
-        setFirebaseStatus('error');
-      }
-    } catch (e) {
-      console.error('Invalid Firebase config:', e);
-      setFirebaseStatus('error');
-    }
-  };
-
-  const handleDisconnectFirebase = () => {
-    FirebaseBackend.disconnect();
-    setFirebaseStatus('disconnected');
-    setFirebaseConfigText('');
-  };
-
-  const handleClassCodeChange = (e) => {
-    const code = e.target.value
-      .toUpperCase()
-      .replace(/[^A-Z0-9]/g, '')
-      .slice(0, 10);
-    setClassCode(code);
-    FirebaseBackend.setClassCode(code);
-  };
 
   const handleSoundToggle = () => {
     const newState = SoundManager.toggle();
@@ -160,356 +98,14 @@ export function SetupScreen({ onStart }) {
     mixed: 'rgba(167, 139, 250, 0.15)'
   };
 
-  // Leaderboard data - showLeaderboard dep triggers refresh when viewing
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const topTeams = useMemo(() => LeaderboardManager.getTopTeams(10), [showLeaderboard]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const topPlayers = useMemo(() => LeaderboardManager.getTopPlayers(10), [showLeaderboard]);
-
-  // Leaderboard View
+  // Delegate to LeaderboardView component
   if (showLeaderboard) {
-    return (
-      <div style={{ maxWidth: '640px', margin: '0 auto', padding: '1.5rem' }}>
-        <div className="animate-in" style={{ marginBottom: '1.5rem' }}>
-          <button
-            onClick={() => setShowLeaderboard(false)}
-            className="mono"
-            style={{
-              padding: '0.5rem 1rem',
-              background: 'var(--bg-elevated)',
-              border: '1px solid var(--border)',
-              borderRadius: '6px',
-              color: 'var(--text-secondary)',
-              fontSize: '0.75rem',
-              cursor: 'pointer'
-            }}
-          >
-            ← Back to Setup
-          </button>
-        </div>
-
-        <div className="animate-in" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🏆</div>
-          <h2
-            className="mono"
-            style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--accent-amber)' }}
-          >
-            LEADERBOARD
-          </h2>
-        </div>
-
-        {/* Tab Selector */}
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-          <button
-            onClick={() => setLeaderboardTab('teams')}
-            className="mono"
-            style={{
-              flex: 1,
-              padding: '0.75rem',
-              background: leaderboardTab === 'teams' ? 'var(--accent-cyan)' : 'var(--bg-elevated)',
-              color: leaderboardTab === 'teams' ? 'var(--bg-deep)' : 'var(--text-secondary)',
-              border: `1px solid ${leaderboardTab === 'teams' ? 'var(--accent-cyan)' : 'var(--border)'}`,
-              borderRadius: '6px',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}
-          >
-            🎯 Top Teams
-          </button>
-          <button
-            onClick={() => setLeaderboardTab('players')}
-            className="mono"
-            style={{
-              flex: 1,
-              padding: '0.75rem',
-              background: leaderboardTab === 'players' ? 'var(--accent-cyan)' : 'var(--bg-elevated)',
-              color: leaderboardTab === 'players' ? 'var(--bg-deep)' : 'var(--text-secondary)',
-              border: `1px solid ${leaderboardTab === 'players' ? 'var(--accent-cyan)' : 'var(--border)'}`,
-              borderRadius: '6px',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}
-          >
-            👤 Top Players
-          </button>
-        </div>
-
-        {/* Leaderboard Content */}
-        <div
-          style={{
-            background: 'var(--bg-card)',
-            border: '1px solid var(--border)',
-            borderRadius: '12px',
-            overflow: 'hidden'
-          }}
-        >
-          {(() => {
-            const displayData =
-              leaderboardTab === 'teams'
-                ? FirebaseBackend.initialized && cloudTeams.length > 0
-                  ? cloudTeams
-                  : topTeams
-                : FirebaseBackend.initialized && cloudPlayers.length > 0
-                ? cloudPlayers
-                : topPlayers;
-
-            if (displayData.length === 0) {
-              return (
-                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                  {loadingCloud ? 'Loading...' : 'No games played yet. Be the first!'}
-                </div>
-              );
-            }
-
-            return displayData.map((item, index) => (
-              <div
-                key={item.id || index}
-                style={{
-                  padding: '0.875rem 1rem',
-                  borderBottom: index < displayData.length - 1 ? '1px solid var(--border)' : 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  background: index < 3 ? 'rgba(251, 191, 36, 0.05)' : 'transparent'
-                }}
-              >
-                <div
-                  className="mono"
-                  style={{
-                    width: '2rem',
-                    fontSize: index < 3 ? '1.25rem' : '0.875rem',
-                    color:
-                      index === 0
-                        ? '#ffd700'
-                        : index === 1
-                        ? '#c0c0c0'
-                        : index === 2
-                        ? '#cd7f32'
-                        : 'var(--text-muted)',
-                    fontWeight: 700
-                  }}
-                >
-                  {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
-                    {leaderboardTab === 'teams' ? (
-                      <>
-                        <span>{item.teamAvatar || '🔍'}</span> {item.teamName}
-                      </>
-                    ) : (
-                      item.displayName
-                    )}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    {leaderboardTab === 'teams'
-                      ? item.players?.map((p) => formatPlayerName(p.firstName, p.lastInitial)).join(', ') || 'Anonymous'
-                      : `${item.gamesPlayed} games • avg: ${item.avgScore}`}
-                  </div>
-                </div>
-                <div
-                  className="mono"
-                  style={{
-                    fontSize: '1rem',
-                    fontWeight: 700,
-                    color:
-                      leaderboardTab === 'teams'
-                        ? item.score >= 0
-                          ? 'var(--correct)'
-                          : 'var(--incorrect)'
-                        : 'var(--accent-amber)'
-                  }}
-                >
-                  {leaderboardTab === 'teams'
-                    ? `${item.score >= 0 ? '+' : ''}${item.score}`
-                    : `Best: ${item.bestScore}`}
-                </div>
-              </div>
-            ));
-          })()}
-        </div>
-      </div>
-    );
+    return <LeaderboardView onBack={() => setShowLeaderboard(false)} />;
   }
 
-  // Teacher Setup View
+  // Delegate to TeacherSetup component
   if (showTeacherSetup) {
-    return (
-      <div style={{ maxWidth: '640px', margin: '0 auto', padding: '1.5rem' }}>
-        <div className="animate-in" style={{ marginBottom: '1.5rem' }}>
-          <button
-            onClick={() => setShowTeacherSetup(false)}
-            className="mono"
-            style={{
-              padding: '0.5rem 1rem',
-              background: 'var(--bg-elevated)',
-              border: '1px solid var(--border)',
-              borderRadius: '6px',
-              color: 'var(--text-secondary)',
-              fontSize: '0.75rem',
-              cursor: 'pointer'
-            }}
-          >
-            ← Back to Setup
-          </button>
-        </div>
-
-        <div className="animate-in" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>⚙️</div>
-          <h2
-            className="mono"
-            style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--accent-cyan)' }}
-          >
-            TEACHER SETUP
-          </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-            Enable class-wide leaderboards with Firebase (free)
-          </p>
-        </div>
-
-        {/* Status */}
-        <div
-          style={{
-            background: firebaseStatus === 'connected' ? 'rgba(52, 211, 153, 0.1)' : 'var(--bg-card)',
-            border: `1px solid ${firebaseStatus === 'connected' ? 'var(--accent-emerald)' : 'var(--border)'}`,
-            borderRadius: '12px',
-            padding: '1rem',
-            marginBottom: '1rem',
-            textAlign: 'center'
-          }}
-        >
-          <span
-            className="mono"
-            style={{
-              color:
-                firebaseStatus === 'connected'
-                  ? 'var(--accent-emerald)'
-                  : firebaseStatus === 'error'
-                  ? 'var(--accent-rose)'
-                  : 'var(--text-muted)'
-            }}
-          >
-            {firebaseStatus === 'connected'
-              ? '✓ Connected to Firebase'
-              : firebaseStatus === 'error'
-              ? '✗ Connection Error'
-              : '○ Not Connected'}
-          </span>
-        </div>
-
-        {/* Class Code */}
-        <div
-          style={{
-            background: 'var(--bg-card)',
-            border: '1px solid var(--border)',
-            borderRadius: '12px',
-            padding: '1rem',
-            marginBottom: '1rem'
-          }}
-        >
-          <label
-            className="mono"
-            style={{ display: 'block', fontSize: '0.75rem', color: 'var(--accent-amber)', marginBottom: '0.5rem' }}
-          >
-            CLASS CODE (optional)
-          </label>
-          <input
-            type="text"
-            value={classCode}
-            onChange={handleClassCodeChange}
-            placeholder="e.g., PERIOD3, SMITH5A"
-            maxLength={10}
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              background: 'var(--bg-elevated)',
-              border: '1px solid var(--border)',
-              borderRadius: '6px',
-              color: 'var(--text-primary)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '1rem',
-              textTransform: 'uppercase'
-            }}
-          />
-        </div>
-
-        {/* Firebase Config */}
-        {firebaseStatus !== 'connected' && (
-          <div
-            style={{
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border)',
-              borderRadius: '12px',
-              padding: '1rem',
-              marginBottom: '1rem'
-            }}
-          >
-            <label className="mono" style={{ display: 'block', fontSize: '0.75rem', color: 'var(--accent-cyan)', marginBottom: '0.5rem' }}>
-              FIREBASE CONFIG JSON
-            </label>
-            <textarea
-              value={firebaseConfigText}
-              onChange={(e) => setFirebaseConfigText(e.target.value)}
-              placeholder='{"apiKey": "...", "projectId": "...", ...}'
-              rows={5}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                background: 'var(--bg-elevated)',
-                border: '1px solid var(--border)',
-                borderRadius: '6px',
-                color: 'var(--text-primary)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.6875rem',
-                resize: 'vertical'
-              }}
-            />
-            <button
-              onClick={handleConnectFirebase}
-              disabled={!firebaseConfigText.trim()}
-              className="mono"
-              style={{
-                width: '100%',
-                marginTop: '0.75rem',
-                padding: '0.75rem',
-                background: firebaseConfigText.trim() ? 'var(--accent-cyan)' : 'var(--bg-elevated)',
-                color: firebaseConfigText.trim() ? 'var(--bg-deep)' : 'var(--text-muted)',
-                border: 'none',
-                borderRadius: '6px',
-                fontWeight: 600,
-                cursor: firebaseConfigText.trim() ? 'pointer' : 'not-allowed'
-              }}
-            >
-              Connect Firebase
-            </button>
-          </div>
-        )}
-
-        {firebaseStatus === 'connected' && (
-          <button
-            onClick={handleDisconnectFirebase}
-            className="mono"
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              background: 'rgba(239, 68, 68, 0.2)',
-              color: 'var(--accent-rose)',
-              border: '1px solid var(--accent-rose)',
-              borderRadius: '6px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              marginBottom: '1rem'
-            }}
-          >
-            Disconnect Firebase
-          </button>
-        )}
-
-        <Button onClick={() => setShowTeacherSetup(false)} fullWidth>
-          Done
-        </Button>
-      </div>
-    );
+    return <TeacherSetup onBack={() => setShowTeacherSetup(false)} />;
   }
 
   // Main Setup View
