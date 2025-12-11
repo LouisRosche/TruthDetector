@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { shuffleArray, formatPlayerName, getRandomItem, getRotatingRoles, getHintContent } from './helpers';
+import { shuffleArray, formatPlayerName, getRandomItem, getHintContent } from './helpers';
 
 describe('shuffleArray', () => {
   it('returns array of same length', () => {
@@ -74,28 +74,6 @@ describe('getRandomItem', () => {
 
   it('handles single element array', () => {
     expect(getRandomItem(['only'])).toBe('only');
-  });
-});
-
-describe('getRotatingRoles', () => {
-  it('returns 4 roles', () => {
-    const roles = getRotatingRoles(1);
-    expect(roles.length).toBe(4);
-  });
-
-  it('rotates roles based on round', () => {
-    const round1 = getRotatingRoles(1);
-    const round2 = getRotatingRoles(2);
-
-    // First role in round 1 should be last role in round 2
-    expect(round1[0]).toEqual(round2[3]);
-  });
-
-  it('cycles back after 4 rounds', () => {
-    const round1 = getRotatingRoles(1);
-    const round5 = getRotatingRoles(5);
-
-    expect(round1).toEqual(round5);
   });
 });
 
