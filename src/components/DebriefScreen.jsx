@@ -321,6 +321,41 @@ export function DebriefScreen({ team, claims, onRestart, difficulty: _difficulty
                     {claim.explanation}
                   </div>
                 )}
+                {claim?.citation && (
+                  <div
+                    style={{
+                      marginLeft: '2.25rem',
+                      marginTop: '0.375rem',
+                      fontSize: '0.6875rem',
+                      color: 'var(--text-muted)'
+                    }}
+                  >
+                    📚 Source:{' '}
+                    <a
+                      href={claim.citation}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'var(--accent-cyan)', textDecoration: 'underline' }}
+                    >
+                      {claim.citation.length > 50 ? claim.citation.substring(0, 50) + '...' : claim.citation}
+                    </a>
+                  </div>
+                )}
+                {claim?.errorPattern && (
+                  <div
+                    style={{
+                      marginLeft: '2.25rem',
+                      marginTop: '0.375rem',
+                      padding: '0.375rem 0.5rem',
+                      background: 'rgba(167, 139, 250, 0.1)',
+                      borderRadius: '4px',
+                      fontSize: '0.6875rem',
+                      color: 'var(--accent-violet)'
+                    }}
+                  >
+                    🤖 Error Pattern: <strong>{AI_ERROR_PATTERNS.find(p => p.id === claim.errorPattern)?.name || claim.errorPattern}</strong>
+                  </div>
+                )}
               </div>
             );
           })}
@@ -385,6 +420,11 @@ export function DebriefScreen({ team, claims, onRestart, difficulty: _difficulty
                 <div className="mono" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
                   e.g., {pattern.example}
                 </div>
+                {pattern.teachingPoint && (
+                  <div style={{ marginTop: '0.375rem', fontSize: '0.75rem', color: 'var(--accent-emerald)', fontWeight: 500 }}>
+                    💡 {pattern.teachingPoint}
+                  </div>
+                )}
               </div>
             ))}
           </div>

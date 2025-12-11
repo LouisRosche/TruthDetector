@@ -62,10 +62,10 @@ export function App() {
 
   // Start game with new settings object
   const startGame = useCallback((settings) => {
-    const { teamName, rounds, difficulty, avatar, soundEnabled, players } = settings;
+    const { teamName, rounds, difficulty, avatar, soundEnabled, players, subjects } = settings;
 
-    // Select claims based on difficulty
-    const selectedClaims = selectClaimsByDifficulty(difficulty, rounds);
+    // Select claims based on difficulty and subjects
+    const selectedClaims = selectClaimsByDifficulty(difficulty, rounds, subjects);
 
     // Initialize sound manager with user preference
     SoundManager.enabled = soundEnabled;

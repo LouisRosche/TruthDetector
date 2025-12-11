@@ -7,9 +7,13 @@ import { useState, useEffect } from 'react';
 import { Button } from './Button';
 import { LeaderboardView } from './LeaderboardView';
 import { TEAM_AVATARS, DIFFICULTY_CONFIG, EDUCATIONAL_TIPS } from '../data/constants';
+import { getSubjects } from '../data/claims';
 import { SoundManager } from '../services/sound';
 import { validateName, isContentAppropriate, sanitizeInput } from '../utils/moderation';
 import { getRandomItem } from '../utils/helpers';
+
+// Get all available subjects
+const ALL_SUBJECTS = getSubjects();
 
 export function SetupScreen({ onStart }) {
   const [teamName, setTeamName] = useState('');
@@ -20,6 +24,7 @@ export function SetupScreen({ onStart }) {
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [validationError, setValidationError] = useState('');
+  const [selectedSubjects, setSelectedSubjects] = useState([]); // Empty = all subjects
 
   // Player inputs (up to 4 players per group)
   const [players, setPlayers] = useState([
@@ -81,10 +86,21 @@ export function SetupScreen({ onStart }) {
       difficulty,
       avatar: selectedAvatar,
       soundEnabled,
+      subjects: selectedSubjects,
       players: playersWithNames.map((p) => ({
         firstName: sanitizeInput(p.firstName),
         lastInitial: sanitizeInput(p.lastInitial)
       }))
+    });
+  };
+
+  // Toggle subject selection
+  const toggleSubject = (subject) => {
+    setSelectedSubjects(prev => {
+      if (prev.includes(subject)) {
+        return prev.filter(s => s !== subject);
+      }
+      return [...prev, subject];
     });
   };
 
@@ -365,6 +381,48 @@ export function SetupScreen({ onStart }) {
               </div>
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Subject Filter */}
+      <div
+        className="animate-in"
+        style={{
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border)',
+          borderRadius: '12px',
+          padding: '1rem',
+          marginBottom: '0.75rem'
+        }}
+      >
+        <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+          📚 SUBJECTS {selectedSubjects.length > 0 ? `(${selectedSubjects.length} selected)` : '(all)'}
+        </label>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
+          {ALL_SUBJECTS.map((subject) => {
+            const isSelected = selectedSubjects.length === 0 || selectedSubjects.includes(subject);
+            return (
+              <button
+                key={subject}
+                onClick={() => toggleSubject(subject)}
+                style={{
+                  padding: '0.375rem 0.625rem',
+                  background: selectedSubjects.includes(subject) ? 'rgba(34, 211, 238, 0.15)' : 'var(--bg-elevated)',
+                  border: `1px solid ${selectedSubjects.includes(subject) ? 'var(--accent-cyan)' : 'var(--border)'}`,
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '0.6875rem',
+                  color: isSelected ? 'var(--text-primary)' : 'var(--text-muted)',
+                  opacity: selectedSubjects.length > 0 && !selectedSubjects.includes(subject) ? 0.5 : 1
+                }}
+              >
+                {subject}
+              </button>
+            );
+          })}
+        </div>
+        <div style={{ marginTop: '0.375rem', fontSize: '0.625rem', color: 'var(--text-muted)' }}>
+          Click subjects to focus on specific areas, or leave empty for all
         </div>
       </div>
 
