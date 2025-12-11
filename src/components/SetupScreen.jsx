@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from './Button';
 import { LeaderboardView } from './LeaderboardView';
+import { TeacherDashboard } from './TeacherDashboard';
 import { TEAM_AVATARS, DIFFICULTY_CONFIG, EDUCATIONAL_TIPS } from '../data/constants';
 import { getSubjects } from '../data/claims';
 import { SoundManager } from '../services/sound';
@@ -23,6 +24,7 @@ export function SetupScreen({ onStart }) {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showTeacherDashboard, setShowTeacherDashboard] = useState(false);
   const [validationError, setValidationError] = useState('');
   const [selectedSubjects, setSelectedSubjects] = useState([]); // Empty = all subjects
 
@@ -117,6 +119,11 @@ export function SetupScreen({ onStart }) {
     return <LeaderboardView onBack={() => setShowLeaderboard(false)} />;
   }
 
+  // Delegate to TeacherDashboard component
+  if (showTeacherDashboard) {
+    return <TeacherDashboard onBack={() => setShowTeacherDashboard(false)} />;
+  }
+
   // Main Setup View
   return (
     <div style={{ maxWidth: '640px', margin: '0 auto', padding: '1.5rem' }}>
@@ -140,8 +147,8 @@ export function SetupScreen({ onStart }) {
         </p>
       </div>
 
-      {/* Leaderboard Button */}
-      <div className="animate-in" style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+      {/* Leaderboard & Teacher Dashboard Buttons */}
+      <div className="animate-in" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
         <button
           onClick={() => setShowLeaderboard(true)}
           className="mono"
@@ -155,7 +162,22 @@ export function SetupScreen({ onStart }) {
             cursor: 'pointer'
           }}
         >
-          🏆 View Leaderboard
+          🏆 Leaderboard
+        </button>
+        <button
+          onClick={() => setShowTeacherDashboard(true)}
+          className="mono"
+          style={{
+            padding: '0.5rem 1rem',
+            background: 'rgba(34, 211, 238, 0.15)',
+            border: '1px solid var(--accent-cyan)',
+            borderRadius: '6px',
+            color: 'var(--accent-cyan)',
+            fontSize: '0.75rem',
+            cursor: 'pointer'
+          }}
+        >
+          📊 Teacher Dashboard
         </button>
       </div>
 

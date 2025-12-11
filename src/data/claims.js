@@ -1357,6 +1357,166 @@ export const CLAIMS_DATABASE = [
     citation: 'https://www.apple.com/newsroom/2024/02/apple-reports-first-quarter-results/',
     lastVerified: '2024-12-01',
     reviewedBy: ['content-team']
+  },
+
+  // ==================== ADDITIONAL MIXED CLAIMS ====================
+  // These claims teach nuance - some parts true, some false
+
+  {
+    id: 'mixed-sci-001',
+    text: 'Humans swallow an average of 8 spiders per year while sleeping, according to a 1993 study.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'The "1993 study" is fabricated - this "fact" was actually invented to demonstrate how misinformation spreads. Humans swallowing spiders while sleeping is extremely rare because spiders avoid large, breathing creatures.',
+    errorPattern: 'appeal-to-authority',
+    subject: 'Biology',
+    difficulty: 'medium',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-sci-002',
+    text: 'Dogs see only in black and white, which is why they rely more on smell than sight.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Dogs DO rely heavily on smell (true), but they are NOT colorblind. Dogs see blue and yellow, just not the full spectrum humans see. The reasoning is flawed even though the smell part is accurate.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Biology',
+    difficulty: 'easy',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-hist-001',
+    text: 'Thomas Edison invented the light bulb in 1879 after testing over 10,000 different materials for the filament.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Edison did create a practical incandescent bulb in 1879 (true), but he improved on existing designs rather than "inventing" it. The 10,000 experiments number is an exaggerated myth - the actual number is unknown.',
+    errorPattern: 'confident-specificity',
+    subject: 'History',
+    difficulty: 'medium',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-sci-003',
+    text: 'Bats are blind, which is why they evolved echolocation to navigate.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Bats DID evolve echolocation for navigation (true), but they are NOT blind. Most bats can see quite well, and some fruit bats have excellent vision. Echolocation evolved for hunting in darkness, not to compensate for blindness.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Biology',
+    difficulty: 'easy',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-med-001',
+    text: 'The tongue has different regions for tasting sweet, sour, salty, and bitter, which was mapped by scientist D.P. Hanig in 1901.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Hanig did publish research in 1901 about taste sensitivity (true), but the "tongue map" showing distinct regions is a misinterpretation. All taste buds can detect all basic tastes, though with slightly varying sensitivity.',
+    errorPattern: 'appeal-to-authority',
+    subject: 'Medicine',
+    difficulty: 'medium',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-geo-001',
+    text: 'Mount Everest is the tallest mountain on Earth at 29,032 feet, making it the point farthest from the center of the Earth.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Everest IS the highest point above sea level at 29,032 feet (true). However, due to Earth\'s equatorial bulge, Mount Chimborazo in Ecuador is actually the point farthest from Earth\'s center.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Geography',
+    difficulty: 'hard',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-tech-001',
+    text: 'The first email was sent in 1971 by Ray Tomlinson, and its content was "QWERTYUIOP" - the top row of the keyboard.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Ray Tomlinson did send the first networked email in 1971 (true). However, he said the content was likely "something like QWERTYUIOP" but couldn\'t remember exactly - the specific content is uncertain, not confirmed.',
+    errorPattern: 'confident-specificity',
+    subject: 'History',
+    difficulty: 'medium',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-sci-004',
+    text: 'Albert Einstein was a slow learner who didn\'t speak until age 4, which proves that late development can lead to genius.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Einstein reportedly was a late talker (possibly true, based on family accounts). However, claiming this "proves" late development leads to genius is a logical fallacy - correlation doesn\'t prove causation.',
+    errorPattern: 'false-causation',
+    subject: 'History',
+    difficulty: 'medium',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-bio-001',
+    text: 'Chameleons change color to camouflage with their surroundings, which helps them hide from predators.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Chameleons DO change color (true), but primarily to communicate mood, regulate temperature, and signal to other chameleons - not mainly for camouflage. The camouflage purpose is overstated in popular belief.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Biology',
+    difficulty: 'easy',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-astro-001',
+    text: 'The dark side of the Moon is always dark because it never receives sunlight.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'There IS a "far side" of the Moon we never see from Earth (true). But it\'s not "always dark" - it receives just as much sunlight as the near side. "Dark" refers to "unknown/unseen," not "unlit."',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Astronomy',
+    difficulty: 'easy',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-civ-001',
+    text: 'The Constitution guarantees Americans the right to vote, which is why all citizens over 18 can vote today.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'The Constitution doesn\'t explicitly guarantee a right to vote - it only prohibits certain types of discrimination in voting (race, sex, age for 18+). Voting rights are largely controlled by states, and various restrictions still exist.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Civics',
+    difficulty: 'hard',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mixed-sci-005',
+    text: 'Sugar causes hyperactivity in children, which is why parents limit candy before bedtime.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Parents DO often limit candy before bedtime (true observation). However, numerous scientific studies have found NO link between sugar and hyperactivity in children - it\'s a widely believed myth that isn\'t supported by evidence.',
+    errorPattern: 'false-causation',
+    subject: 'Medicine',
+    difficulty: 'easy',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
   }
 ];
 
