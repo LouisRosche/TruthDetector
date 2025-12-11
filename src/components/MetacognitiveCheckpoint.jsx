@@ -83,7 +83,7 @@ export function MetacognitiveCheckpoint({ onContinue, currentScore, correctCount
             HALFTIME CHECK-IN
           </h2>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-            Let's pause and reflect on how your team is doing!
+            Let&apos;s pause and reflect on how your team is doing!
           </p>
         </div>
 

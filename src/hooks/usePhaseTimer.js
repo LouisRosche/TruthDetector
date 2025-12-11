@@ -3,7 +3,7 @@
  * Tracks time spent in each game phase for analytics
  */
 
-import { useRef, useCallback, useEffect } from 'react';
+import { useRef, useCallback } from 'react';
 
 /**
  * Custom hook for tracking duration of game phases

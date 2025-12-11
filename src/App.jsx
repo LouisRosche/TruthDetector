@@ -164,7 +164,7 @@ export function App() {
       });
       setPlayPhase('discuss');
     },
-    [currentStreak]
+    [currentStreak, checkpointShown]
   );
 
   const handlePrediction = useCallback((prediction) => {
