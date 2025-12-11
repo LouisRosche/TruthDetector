@@ -8,27 +8,34 @@ import { TEAM_ROLES, SUBJECT_HINTS } from '../data/constants';
 import { shuffleArray } from './generic';
 
 /**
- * Select claims based on difficulty setting
+ * Select claims based on difficulty and optional subject filter
  * @param {string} difficulty - 'easy' | 'medium' | 'hard' | 'mixed'
  * @param {number} count - Number of claims to select
+ * @param {Array<string>} subjects - Optional array of subjects to include (empty = all)
  * @returns {Array} Selected claims
  */
-export function selectClaimsByDifficulty(difficulty, count) {
+export function selectClaimsByDifficulty(difficulty, count, subjects = []) {
+  // Filter by subjects if specified
+  let pool = CLAIMS_DATABASE;
+  if (subjects && subjects.length > 0) {
+    pool = CLAIMS_DATABASE.filter(c => subjects.includes(c.subject));
+  }
+
   if (difficulty === 'mixed') {
     // Progressive: distribute claims across difficulties
     const easyCount = Math.ceil(count * 0.3);
     const medCount = Math.ceil(count * 0.4);
     const hardCount = count - easyCount - medCount;
 
-    const easy = shuffleArray(CLAIMS_DATABASE.filter(c => c.difficulty === 'easy')).slice(0, easyCount);
-    const med = shuffleArray(CLAIMS_DATABASE.filter(c => c.difficulty === 'medium')).slice(0, medCount);
-    const hard = shuffleArray(CLAIMS_DATABASE.filter(c => c.difficulty === 'hard')).slice(0, hardCount);
+    const easy = shuffleArray(pool.filter(c => c.difficulty === 'easy')).slice(0, easyCount);
+    const med = shuffleArray(pool.filter(c => c.difficulty === 'medium')).slice(0, medCount);
+    const hard = shuffleArray(pool.filter(c => c.difficulty === 'hard')).slice(0, hardCount);
 
     // Order: easy first, then medium, then hard
     return [...easy, ...med, ...hard];
   }
 
-  const filtered = CLAIMS_DATABASE.filter(c => c.difficulty === difficulty);
+  const filtered = pool.filter(c => c.difficulty === difficulty);
   return shuffleArray(filtered).slice(0, count);
 }
 
