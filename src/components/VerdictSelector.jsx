@@ -5,9 +5,9 @@
 
 export function VerdictSelector({ value, onChange, disabled }) {
   const verdicts = [
-    { value: 'TRUE', emoji: '✓', color: 'var(--correct)' },
-    { value: 'MIXED', emoji: '◐', color: 'var(--accent-amber)' },
-    { value: 'FALSE', emoji: '✗', color: 'var(--incorrect)' }
+    { value: 'TRUE', emoji: '✓', color: 'var(--correct)', description: 'The claim is completely true' },
+    { value: 'MIXED', emoji: '◐', color: 'var(--accent-amber)', description: 'The claim contains both true and false elements' },
+    { value: 'FALSE', emoji: '✗', color: 'var(--incorrect)', description: 'The claim is false or misleading' }
   ];
 
   const handleKeyDown = (e, currentIndex) => {
@@ -36,6 +36,7 @@ export function VerdictSelector({ value, onChange, disabled }) {
           type="button"
           role="radio"
           aria-checked={value === v.value}
+          aria-label={`${v.value}: ${v.description}`}
           tabIndex={value === v.value || (value === null && i === 0) ? 0 : -1}
           onClick={() => onChange(v.value)}
           onKeyDown={(e) => handleKeyDown(e, i)}
@@ -54,6 +55,7 @@ export function VerdictSelector({ value, onChange, disabled }) {
           }}
         >
           <div
+            aria-hidden="true"
             style={{
               fontSize: '2rem',
               marginBottom: '0.375rem',

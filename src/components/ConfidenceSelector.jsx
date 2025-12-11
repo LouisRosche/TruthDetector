@@ -5,9 +5,9 @@
 
 export function ConfidenceSelector({ value, onChange, disabled }) {
   const levels = [
-    { value: 1, label: 'We think so', risk: '+1 / -1', color: 'var(--confidence-1)' },
-    { value: 2, label: 'Pretty sure', risk: '+3 / -3', color: 'var(--confidence-2)' },
-    { value: 3, label: 'Certain', risk: '+5 / -6', color: 'var(--confidence-3)' }
+    { value: 1, label: 'We think so', risk: '+1 / -1', color: 'var(--confidence-1)', levelText: 'Low' },
+    { value: 2, label: 'Pretty sure', risk: '+3 / -3', color: 'var(--confidence-2)', levelText: 'Medium' },
+    { value: 3, label: 'Certain', risk: '+5 / -6', color: 'var(--confidence-3)', levelText: 'High' }
   ];
 
   const handleKeyDown = (e, levelValue) => {
@@ -36,6 +36,7 @@ export function ConfidenceSelector({ value, onChange, disabled }) {
           type="button"
           role="radio"
           aria-checked={value === level.value}
+          aria-label={`${level.levelText} confidence: ${level.label}. Points: ${level.risk}`}
           tabIndex={value === level.value ? 0 : -1}
           onClick={() => onChange(level.value)}
           onKeyDown={(e) => handleKeyDown(e, level.value)}
@@ -54,17 +55,34 @@ export function ConfidenceSelector({ value, onChange, disabled }) {
             transition: 'all 0.2s ease'
           }}
         >
-          <div
-            className="mono"
-            style={{
-              fontSize: '1.75rem',
-              fontWeight: 700,
-              color: level.color,
-              marginBottom: '0.375rem'
-            }}
-          >
-            {'●'.repeat(level.value)}
-            {'○'.repeat(3 - level.value)}
+          {/* Confidence level indicator with text label for accessibility */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
+            <div
+              className="mono"
+              aria-hidden="true"
+              style={{
+                fontSize: '1.75rem',
+                fontWeight: 700,
+                color: level.color
+              }}
+            >
+              {'●'.repeat(level.value)}
+              {'○'.repeat(3 - level.value)}
+            </div>
+            <span
+              className="mono"
+              style={{
+                fontSize: '0.625rem',
+                padding: '0.125rem 0.375rem',
+                background: value === level.value ? level.color : 'var(--bg-card)',
+                color: value === level.value ? 'var(--bg-deep)' : 'var(--text-muted)',
+                borderRadius: '4px',
+                fontWeight: 600,
+                textTransform: 'uppercase'
+              }}
+            >
+              {level.levelText}
+            </span>
           </div>
           <div
             style={{
