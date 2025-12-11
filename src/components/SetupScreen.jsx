@@ -131,8 +131,8 @@ export function SetupScreen({ onStart }) {
         </p>
       </div>
 
-      {/* Leaderboard Button */}
-      <div className="animate-in" style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+      {/* Leaderboard & Teacher Setup Buttons */}
+      <div className="animate-in" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
         <button
           onClick={() => setShowLeaderboard(true)}
           className="mono"
@@ -146,7 +146,22 @@ export function SetupScreen({ onStart }) {
             cursor: 'pointer'
           }}
         >
-          🏆 View Leaderboard
+          🏆 Leaderboard
+        </button>
+        <button
+          onClick={() => setShowTeacherSetup(true)}
+          className="mono"
+          style={{
+            padding: '0.5rem 1rem',
+            background: 'rgba(167, 139, 250, 0.15)',
+            border: '1px solid var(--accent-violet)',
+            borderRadius: '6px',
+            color: 'var(--accent-violet)',
+            fontSize: '0.75rem',
+            cursor: 'pointer'
+          }}
+        >
+          ⚙️ Teacher Setup
         </button>
       </div>
 
