@@ -4,7 +4,7 @@
  */
 
 import { CLAIMS_DATABASE } from '../data/claims';
-import { TEAM_ROLES, SUBJECT_HINTS } from '../data/constants';
+import { SUBJECT_HINTS } from '../data/constants';
 import { shuffleArray } from './generic';
 
 /**
@@ -87,16 +87,6 @@ export function selectClaimsByDifficulty(difficulty, count, subjects = []) {
   }
 
   return uniqueClaims.slice(0, count);
-}
-
-/**
- * Get rotating team role assignments based on round
- * @param {number} round - Current round number
- * @returns {Array} Roles in order for this round
- */
-export function getRotatingRoles(round) {
-  const rotation = (round - 1) % TEAM_ROLES.length;
-  return [...TEAM_ROLES.slice(rotation), ...TEAM_ROLES.slice(0, rotation)];
 }
 
 /**

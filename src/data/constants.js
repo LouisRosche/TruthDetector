@@ -226,16 +226,6 @@ export const REFLECTION_PROMPTS = [
 ];
 
 /**
- * Team roles that rotate each round
- */
-export const TEAM_ROLES = [
-  { role: 'Reader', task: 'Read claim aloud clearly' },
-  { role: 'Skeptic', task: 'Challenge assumptions' },
-  { role: 'Researcher', task: 'Recall relevant knowledge' },
-  { role: 'Decider', task: 'Guide final verdict' }
-];
-
-/**
  * Subject-specific hints
  */
 export const SUBJECT_HINTS = {
