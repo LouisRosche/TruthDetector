@@ -122,7 +122,7 @@ export function DebriefScreen({ team, claims, onRestart, difficulty: _difficulty
         </div>
         <div style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>{team.name}</div>
 
-        {calibrationBonus > 0 && (
+        {calibrationBonus > 0 ? (
           <div
             style={{
               display: 'inline-block',
@@ -135,6 +135,13 @@ export function DebriefScreen({ team, claims, onRestart, difficulty: _difficulty
             <span className="mono" style={{ color: 'var(--accent-amber)' }}>
               +3 CALIBRATION BONUS! 🎯
             </span>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+              You predicted {team.predictedScore} and scored {team.score}
+            </div>
+          </div>
+        ) : (
+          <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+            Predicted: {team.predictedScore} | Actual: {team.score} (off by {Math.abs(team.score - team.predictedScore)})
           </div>
         )}
       </div>

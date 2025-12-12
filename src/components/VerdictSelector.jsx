@@ -3,11 +3,15 @@
  * Allows users to select TRUE, MIXED, or FALSE
  */
 
+import { useState } from 'react';
+
 export function VerdictSelector({ value, onChange, disabled }) {
+  const [showMixedHelp, setShowMixedHelp] = useState(false);
+
   const verdicts = [
-    { value: 'TRUE', emoji: '✓', color: 'var(--correct)', description: 'The claim is completely true' },
-    { value: 'MIXED', emoji: '◐', color: 'var(--accent-amber)', description: 'The claim contains both true and false elements' },
-    { value: 'FALSE', emoji: '✗', color: 'var(--incorrect)', description: 'The claim is false or misleading' }
+    { value: 'TRUE', emoji: '✓', color: 'var(--correct)', description: 'The claim is completely true', shortHelp: 'Everything in this claim is accurate' },
+    { value: 'MIXED', emoji: '◐', color: 'var(--accent-amber)', description: 'The claim contains both true and false elements', shortHelp: 'Some parts are true, but other parts are false or misleading', hasExplainer: true },
+    { value: 'FALSE', emoji: '✗', color: 'var(--incorrect)', description: 'The claim is false or misleading', shortHelp: 'This claim is incorrect or misleading' }
   ];
 
   const handleKeyDown = (e, currentIndex) => {
@@ -24,58 +28,136 @@ export function VerdictSelector({ value, onChange, disabled }) {
   };
 
   return (
-    <div
-      role="radiogroup"
-      aria-label="Verdict selection"
-      className="verdict-grid"
-      style={{ display: 'flex', gap: '0.75rem' }}
-    >
-      {verdicts.map((v, i) => (
-        <button
-          key={v.value}
-          type="button"
-          role="radio"
-          aria-checked={value === v.value}
-          aria-label={`${v.value}: ${v.description}`}
-          tabIndex={value === v.value || (value === null && i === 0) ? 0 : -1}
-          onClick={() => onChange(v.value)}
-          onKeyDown={(e) => handleKeyDown(e, i)}
-          disabled={disabled}
-          className="verdict-option"
+    <div>
+      <div
+        role="radiogroup"
+        aria-label="Verdict selection"
+        className="verdict-grid"
+        style={{ display: 'flex', gap: '0.75rem' }}
+      >
+        {verdicts.map((v, i) => (
+          <button
+            key={v.value}
+            type="button"
+            role="radio"
+            aria-checked={value === v.value}
+            aria-label={`${v.value}: ${v.description}`}
+            tabIndex={value === v.value || (value === null && i === 0) ? 0 : -1}
+            onClick={() => onChange(v.value)}
+            onKeyDown={(e) => handleKeyDown(e, i)}
+            disabled={disabled}
+            className="verdict-option"
+            style={{
+              flex: 1,
+              padding: '1.5rem 1.25rem',
+              minHeight: '5.5rem',
+              background: value === v.value ? `${v.color}20` : 'var(--bg-elevated)',
+              border: `2px solid ${value === v.value ? v.color : 'var(--border)'}`,
+              borderRadius: '10px',
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              opacity: disabled ? 0.5 : 1,
+              transition: 'all 0.2s ease',
+              position: 'relative'
+            }}
+          >
+            <div
+              aria-hidden="true"
+              style={{
+                fontSize: '2rem',
+                marginBottom: '0.375rem',
+                color: v.color
+              }}
+            >
+              {v.emoji}
+            </div>
+            <div
+              className="mono"
+              style={{
+                fontSize: '1rem',
+                fontWeight: 600,
+                color: value === v.value ? v.color : 'var(--text-secondary)'
+              }}
+            >
+              {v.value}
+            </div>
+            {v.hasExplainer && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowMixedHelp(!showMixedHelp);
+                }}
+                aria-label="What does MIXED mean?"
+                title="What does MIXED mean?"
+                style={{
+                  position: 'absolute',
+                  top: '0.375rem',
+                  right: '0.375rem',
+                  width: '1.25rem',
+                  height: '1.25rem',
+                  borderRadius: '50%',
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-muted)',
+                  fontSize: '0.75rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 600
+                }}
+              >
+                ?
+              </button>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* MIXED Explainer Panel */}
+      {showMixedHelp && (
+        <div
+          className="animate-in"
           style={{
-            flex: 1,
-            padding: '1.5rem 1.25rem',
-            minHeight: '5.5rem',
-            background: value === v.value ? `${v.color}20` : 'var(--bg-elevated)',
-            border: `2px solid ${value === v.value ? v.color : 'var(--border)'}`,
-            borderRadius: '10px',
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            opacity: disabled ? 0.5 : 1,
-            transition: 'all 0.2s ease'
+            marginTop: '0.75rem',
+            padding: '1rem',
+            background: 'rgba(251, 191, 36, 0.1)',
+            border: '1px solid var(--accent-amber)',
+            borderRadius: '8px'
           }}
         >
-          <div
-            aria-hidden="true"
-            style={{
-              fontSize: '2rem',
-              marginBottom: '0.375rem',
-              color: v.color
-            }}
-          >
-            {v.emoji}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+            <h4 className="mono" style={{ fontSize: '0.8125rem', color: 'var(--accent-amber)', margin: 0 }}>
+              What does MIXED mean?
+            </h4>
+            <button
+              type="button"
+              onClick={() => setShowMixedHelp(false)}
+              aria-label="Close help"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                padding: '0 0.25rem'
+              }}
+            >
+              ×
+            </button>
           </div>
-          <div
-            className="mono"
-            style={{
-              fontSize: '1rem',
-              fontWeight: 600,
-              color: value === v.value ? v.color : 'var(--text-secondary)'
-            }}
-          >
-            {v.value}
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: '0 0 0.75rem 0' }}>
+            A <strong style={{ color: 'var(--accent-amber)' }}>MIXED</strong> claim has some truth to it, but also contains errors, exaggerations, or misleading parts.
+          </p>
+          <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+            <strong>Example:</strong> &quot;Humans only use 10% of their brain, which is why we sleep.&quot;
+            <br />
+            <span style={{ color: 'var(--correct)' }}>✓ True:</span> We do sleep
+            <br />
+            <span style={{ color: 'var(--incorrect)' }}>✗ False:</span> The &quot;10% of brain&quot; claim is a myth
           </div>
-        </button>
-      ))}
+        </div>
+      )}
     </div>
   );
 }
