@@ -1,15 +1,21 @@
 /**
  * PREDICTION MODAL
- * End-of-game modal for predicting final score
+ * Start-of-game modal for predicting final score (metacognition priming)
  */
 
 import { useState } from 'react';
 import { Button } from './Button';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 
-export function PredictionModal({ onSubmit, currentScore }) {
-  const [prediction, setPrediction] = useState(currentScore);
+export function PredictionModal({ onSubmit, totalRounds, difficulty, isStartOfGame = true }) {
+  // Default prediction based on rounds and difficulty (rough estimate)
+  const defaultPrediction = Math.round(totalRounds * 2); // Assume ~2 points per round average
+  const [prediction, setPrediction] = useState(defaultPrediction);
   const focusTrapRef = useFocusTrap(true);
+
+  // Calculate potential score range for context
+  const maxPossibleScore = totalRounds * 5; // All correct with high confidence
+  const minPossibleScore = totalRounds * -6; // All wrong with high confidence
 
   return (
     <div
@@ -38,7 +44,7 @@ export function PredictionModal({ onSubmit, currentScore }) {
           border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '2rem',
-          maxWidth: '400px',
+          maxWidth: '440px',
           width: '100%'
         }}
       >
@@ -51,40 +57,52 @@ export function PredictionModal({ onSubmit, currentScore }) {
             marginBottom: '0.5rem'
           }}
         >
-          <span aria-hidden="true">🎯</span> FINAL PREDICTION
+          <span aria-hidden="true">🎯</span> PREDICT YOUR SCORE
         </h2>
         <p
           style={{
             color: 'var(--text-secondary)',
-            marginBottom: '1.5rem'
+            marginBottom: '1rem'
           }}
         >
-          What do you think your final score will be? If you&apos;re within ±2 points, you&apos;ll earn a
-          calibration bonus!
+          Before you start, how well do you think your team will do?
+        </p>
+        <p
+          style={{
+            color: 'var(--text-muted)',
+            fontSize: '0.875rem',
+            marginBottom: '1.25rem'
+          }}
+        >
+          This is called <strong style={{ color: 'var(--accent-cyan)' }}>calibration</strong> — matching your confidence to reality.
+          If your prediction is within ±2 points of your final score, you&apos;ll earn a <strong style={{ color: 'var(--accent-amber)' }}>+3 bonus</strong>!
         </p>
 
-        <div style={{ marginBottom: '1.5rem' }}>
+        <div style={{ marginBottom: '1.25rem' }}>
           <div
             className="mono"
             style={{
               fontSize: '0.75rem',
               color: 'var(--text-muted)',
-              marginBottom: '0.5rem'
+              marginBottom: '0.75rem',
+              display: 'flex',
+              justifyContent: 'space-between'
             }}
           >
-            Current Score: {currentScore}
+            <span>{totalRounds} rounds • {difficulty} difficulty</span>
+            <span>Range: {minPossibleScore} to {maxPossibleScore}</span>
           </div>
           <input
             type="number"
             value={prediction}
             onChange={(e) => {
               const val = parseInt(e.target.value) || 0;
-              // Bound prediction to reasonable range (-100 to 100)
-              const bounded = Math.max(-100, Math.min(100, val));
+              // Bound prediction to possible range
+              const bounded = Math.max(minPossibleScore, Math.min(maxPossibleScore, val));
               setPrediction(bounded);
             }}
-            min="-100"
-            max="100"
+            min={minPossibleScore}
+            max={maxPossibleScore}
             autoFocus
             aria-label="Predicted final score"
             style={{
@@ -99,10 +117,20 @@ export function PredictionModal({ onSubmit, currentScore }) {
               textAlign: 'center'
             }}
           />
+          <div
+            style={{
+              marginTop: '0.5rem',
+              fontSize: '0.75rem',
+              color: 'var(--text-muted)',
+              textAlign: 'center'
+            }}
+          >
+            Think about how confident you are and how hard the questions might be
+          </div>
         </div>
 
         <Button onClick={() => onSubmit(prediction)} fullWidth>
-          Lock In Prediction
+          Lock In Prediction &amp; Start Game
         </Button>
       </div>
     </div>

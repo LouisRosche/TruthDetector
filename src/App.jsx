@@ -95,7 +95,10 @@ export function App() {
     };
   }, []);
 
-  // Start game with new settings object
+  // Pending game settings (waiting for prediction)
+  const [pendingGameSettings, setPendingGameSettings] = useState(null);
+
+  // Start game with new settings object - but show prediction modal first
   const startGame = useCallback((settings) => {
     const { teamName, rounds, difficulty, avatar, soundEnabled, players, subjects } = settings;
 
@@ -105,25 +108,43 @@ export function App() {
     // Initialize sound manager with user preference
     SoundManager.enabled = soundEnabled;
 
+    // Store pending settings and show prediction modal
+    setPendingGameSettings({
+      claims: selectedClaims,
+      rounds,
+      difficulty,
+      teamName,
+      avatar,
+      players: players || []
+    });
+    setShowPrediction(true);
+  }, []);
+
+  // After prediction is submitted, actually start the game
+  const handleStartPrediction = useCallback((prediction) => {
+    if (!pendingGameSettings) return;
+
+    setShowPrediction(false);
     setGameState({
       phase: 'playing',
       currentRound: 1,
-      totalRounds: rounds,
-      claims: selectedClaims,
-      currentClaim: selectedClaims[0],
-      difficulty: difficulty,
+      totalRounds: pendingGameSettings.rounds,
+      claims: pendingGameSettings.claims,
+      currentClaim: pendingGameSettings.claims[0],
+      difficulty: pendingGameSettings.difficulty,
       team: {
-        name: teamName,
+        name: pendingGameSettings.teamName,
         score: 0,
-        predictedScore: 0,
+        predictedScore: prediction, // Store prediction at start
         results: [],
-        avatar: avatar,
-        players: players || []
+        avatar: pendingGameSettings.avatar,
+        players: pendingGameSettings.players
       }
     });
 
     setCurrentStreak(0);
-  }, []);
+    setPendingGameSettings(null);
+  }, [pendingGameSettings]);
 
   // Handle hint usage (deduct points)
   const handleUseHint = useCallback((cost) => {
@@ -160,19 +181,62 @@ export function App() {
         const newScore = prev.team.score + result.points;
         const isLastRound = prev.currentRound >= prev.totalRounds;
 
-        if (isLastRound) {
-          setShowPrediction(true);
-        }
-
         // Get next claim with bounds checking
         const nextRound = prev.currentRound + 1;
         const nextClaimIndex = prev.currentRound;
         const nextClaim =
           !isLastRound && nextClaimIndex < prev.claims.length ? prev.claims[nextClaimIndex] : null;
 
+        // If last round, finalize the game
+        if (isLastRound) {
+          // Calculate final score with calibration bonus (prediction was made at start)
+          const calibrationBonus = Math.abs(newScore - prev.team.predictedScore) <= 2 ? 3 : 0;
+          const finalScore = newScore + calibrationBonus;
+
+          // Calculate accuracy percentage
+          const correctCount = newResults.filter((r) => r.correct).length;
+          const totalRounds = newResults.length;
+          const accuracy = totalRounds > 0 ? Math.round((correctCount / totalRounds) * 100) : 0;
+
+          // Calculate achievements earned
+          const gameStats = calculateGameStats(newResults, prev.claims, newScore, prev.team.predictedScore);
+          const earnedAchievementIds = ACHIEVEMENTS.filter((a) => a.condition(gameStats)).map((a) => a.id);
+
+          // Save to leaderboard (local + Firebase if configured)
+          const gameRecord = {
+            teamName: prev.team.name,
+            teamAvatar: prev.team.avatar?.emoji || '🔍',
+            players: prev.team.players || [],
+            score: finalScore,
+            accuracy: accuracy,
+            difficulty: prev.difficulty,
+            rounds: prev.totalRounds,
+            achievements: earnedAchievementIds
+          };
+
+          LeaderboardManager.save(gameRecord);
+
+          // Also save to Firebase for class-wide leaderboard
+          if (FirebaseBackend.initialized) {
+            FirebaseBackend.save(gameRecord).catch((e) => {
+              console.warn('Firebase save failed:', e);
+            });
+          }
+
+          return {
+            ...prev,
+            phase: 'debrief',
+            team: {
+              ...prev.team,
+              score: newScore, // Keep raw score, debrief calculates bonus
+              results: newResults
+            }
+          };
+        }
+
         return {
           ...prev,
-          currentRound: isLastRound ? prev.currentRound : nextRound,
+          currentRound: nextRound,
           currentClaim: nextClaim,
           team: {
             ...prev.team,
@@ -185,53 +249,6 @@ export function App() {
     [currentStreak]
   );
 
-  const handlePrediction = useCallback((prediction) => {
-    setShowPrediction(false);
-    setGameState((prev) => {
-      // Calculate final score with calibration bonus
-      const calibrationBonus = Math.abs(prev.team.score - prediction) <= 2 ? 3 : 0;
-      const finalScore = prev.team.score + calibrationBonus;
-
-      // Calculate accuracy percentage
-      const correctCount = prev.team.results.filter((r) => r.correct).length;
-      const totalRounds = prev.team.results.length;
-      const accuracy = totalRounds > 0 ? Math.round((correctCount / totalRounds) * 100) : 0;
-
-      // Calculate achievements earned
-      const gameStats = calculateGameStats(prev.team.results, prev.claims, prev.team.score, prediction);
-      const earnedAchievementIds = ACHIEVEMENTS.filter((a) => a.condition(gameStats)).map((a) => a.id);
-
-      // Save to leaderboard (local + Firebase if configured)
-      const gameRecord = {
-        teamName: prev.team.name,
-        teamAvatar: prev.team.avatar?.emoji || '🔍',
-        players: prev.team.players || [],
-        score: finalScore,
-        accuracy: accuracy,
-        difficulty: prev.difficulty,
-        rounds: prev.totalRounds,
-        achievements: earnedAchievementIds
-      };
-
-      LeaderboardManager.save(gameRecord);
-
-      // Also save to Firebase for class-wide leaderboard
-      if (FirebaseBackend.initialized) {
-        FirebaseBackend.save(gameRecord).catch((e) => {
-          console.warn('Firebase save failed:', e);
-        });
-      }
-
-      return {
-        ...prev,
-        phase: 'debrief',
-        team: {
-          ...prev.team,
-          predictedScore: prediction
-        }
-      };
-    });
-  }, []);
 
   const restartGame = useCallback(() => {
     setGameState({
@@ -306,6 +323,7 @@ export function App() {
         phase={gameState.phase}
         presentationMode={presentationMode}
         onTogglePresentationMode={togglePresentationMode}
+        onExitGame={restartGame}
       />
 
       <main id="main-content" role="main" style={{ flex: 1 }}>
@@ -347,9 +365,13 @@ export function App() {
         </Suspense>
       </main>
 
-      {/* Prediction Modal */}
-      {showPrediction && (
-        <PredictionModal onSubmit={handlePrediction} currentScore={gameState.team.score} />
+      {/* Prediction Modal - shown at start of game for metacognition priming */}
+      {showPrediction && pendingGameSettings && (
+        <PredictionModal
+          onSubmit={handleStartPrediction}
+          totalRounds={pendingGameSettings.rounds}
+          difficulty={pendingGameSettings.difficulty}
+        />
       )}
 
       <footer
@@ -364,12 +386,28 @@ export function App() {
           className="mono"
           style={{
             fontSize: '0.6875rem',
-            color: 'var(--text-muted)'
+            color: 'var(--text-muted)',
+            marginBottom: '0.375rem'
           }}
         >
           Truth Hunters • Research-based epistemic training for middle schoolers •{' '}
           {gameState.team.avatar?.emoji || '🔍'}
         </p>
+        <a
+          href="?teacher=true"
+          className="mono"
+          style={{
+            fontSize: '0.625rem',
+            color: 'var(--accent-violet)',
+            textDecoration: 'none',
+            opacity: 0.7,
+            transition: 'opacity 0.2s ease'
+          }}
+          onMouseEnter={(e) => { e.target.style.opacity = '1'; }}
+          onMouseLeave={(e) => { e.target.style.opacity = '0.7'; }}
+        >
+          Teacher Dashboard
+        </a>
       </footer>
     </ErrorBoundary>
   );

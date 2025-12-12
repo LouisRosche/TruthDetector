@@ -27,13 +27,11 @@ export function SetupScreen({ onStart }) {
   const [validationError, setValidationError] = useState('');
   const [selectedSubjects, setSelectedSubjects] = useState([]); // Empty = all subjects
 
-  // Player inputs (up to 4 players per group)
+  // Player inputs (up to 6 players per group) - start with just 1 visible
   const [players, setPlayers] = useState([
-    { firstName: '', lastInitial: '' },
-    { firstName: '', lastInitial: '' },
-    { firstName: '', lastInitial: '' },
     { firstName: '', lastInitial: '' }
   ]);
+  const MAX_PLAYERS = 6;
 
   // Initialize sound manager
   useEffect(() => {
@@ -53,6 +51,18 @@ export function SetupScreen({ onStart }) {
       return updated;
     });
     if (validationError) setValidationError('');
+  };
+
+  const addPlayer = () => {
+    if (players.length < MAX_PLAYERS) {
+      setPlayers((prev) => [...prev, { firstName: '', lastInitial: '' }]);
+    }
+  };
+
+  const removePlayer = (index) => {
+    if (players.length > 1) {
+      setPlayers((prev) => prev.filter((_, i) => i !== index));
+    }
   };
 
   const handleTeamNameChange = (e) => {
@@ -301,10 +311,6 @@ export function SetupScreen({ onStart }) {
         <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
           👥 TEAM MEMBERS (for leaderboard)
         </label>
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.375rem', paddingLeft: '1.5rem' }}>
-          <span className="mono" style={{ flex: 1, fontSize: '0.625rem', color: 'var(--text-muted)' }}>Name</span>
-          <span className="mono" style={{ width: '2.5rem', fontSize: '0.625rem', color: 'var(--text-muted)', textAlign: 'center' }}>Initial</span>
-        </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {players.map((player, index) => (
             <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -352,8 +358,60 @@ export function SetupScreen({ onStart }) {
                   textTransform: 'uppercase'
                 }}
               />
+              {players.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removePlayer(index)}
+                  aria-label={`Remove player ${index + 1}`}
+                  title="Remove player"
+                  style={{
+                    width: '2rem',
+                    height: '2rem',
+                    padding: 0,
+                    background: 'transparent',
+                    border: '1px solid var(--border)',
+                    borderRadius: '4px',
+                    color: 'var(--text-muted)',
+                    fontSize: '1rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}
+                >
+                  ×
+                </button>
+              )}
             </div>
           ))}
+        </div>
+        {players.length < MAX_PLAYERS && (
+          <button
+            type="button"
+            onClick={addPlayer}
+            className="mono"
+            style={{
+              marginTop: '0.75rem',
+              padding: '0.5rem 0.75rem',
+              background: 'var(--bg-elevated)',
+              border: '1px dashed var(--border)',
+              borderRadius: '6px',
+              color: 'var(--text-muted)',
+              fontSize: '0.75rem',
+              cursor: 'pointer',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.375rem'
+            }}
+          >
+            <span>+</span> Add another player
+          </button>
+        )}
+        <div style={{ marginTop: '0.375rem', fontSize: '0.625rem', color: 'var(--text-muted)' }}>
+          {players.length === 1 ? 'Playing solo? That works too!' : `${players.length} players on team`}
         </div>
       </div>
 
