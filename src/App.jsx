@@ -150,15 +150,25 @@ export function App() {
   }, []);
 
   // Start game with new settings object - but show prediction modal first
-  const startGame = useCallback((settings) => {
+  const startGame = useCallback(async (settings) => {
     const { teamName, rounds, difficulty, avatar, soundEnabled, players, subjects } = settings;
 
     // Get previously seen claims for solo players to prioritize new content
     const playerProfile = PlayerProfile.get();
     const previouslySeenIds = playerProfile.claimsSeen || [];
 
-    // Select claims based on difficulty and subjects, prioritizing unseen claims
-    const selectedClaims = selectClaimsByDifficulty(difficulty, rounds, subjects, previouslySeenIds);
+    // Fetch approved student-contributed claims from Firebase
+    let studentClaims = [];
+    try {
+      if (FirebaseBackend.initialized) {
+        studentClaims = await FirebaseBackend.getApprovedClaims();
+      }
+    } catch (e) {
+      console.warn('Could not fetch student claims:', e);
+    }
+
+    // Select claims based on difficulty and subjects, including student contributions
+    const selectedClaims = selectClaimsByDifficulty(difficulty, rounds, subjects, previouslySeenIds, studentClaims);
 
     // Initialize sound manager with user preference
     SoundManager.enabled = soundEnabled;

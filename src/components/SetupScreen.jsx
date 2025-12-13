@@ -8,6 +8,8 @@ import { Button } from './Button';
 import { LeaderboardView } from './LeaderboardView';
 import { ScrollingLeaderboard } from './ScrollingLeaderboard';
 import { SoloStatsView } from './SoloStatsView';
+import { ClaimSubmissionForm } from './ClaimSubmissionForm';
+import { StudentClaimNotifications } from './StudentClaimNotifications';
 import { TEAM_AVATARS, DIFFICULTY_CONFIG, EDUCATIONAL_TIPS } from '../data/constants';
 import { getSubjects } from '../data/claims';
 import { SoundManager } from '../services/sound';
@@ -44,6 +46,8 @@ export function SetupScreen({ onStart }) {
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showSoloStats, setShowSoloStats] = useState(false);
+  const [showClaimSubmission, setShowClaimSubmission] = useState(false);
+  const [showMySubmissions, setShowMySubmissions] = useState(false);
   const [validationError, setValidationError] = useState('');
   const [selectedSubjects, setSelectedSubjects] = useState(
     isReturningPlayer ? (quickStartSettings.subjects || []) : []
@@ -178,6 +182,65 @@ export function SetupScreen({ onStart }) {
     );
   }
 
+  // Claim Submission Modal
+  if (showClaimSubmission) {
+    return (
+      <div style={{ maxWidth: '700px', margin: '0 auto', padding: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h1 className="mono" style={{ fontSize: '1.25rem', color: 'var(--accent-violet)' }}>
+            Submit a Claim
+          </h1>
+          <button
+            onClick={() => setShowClaimSubmission(false)}
+            style={{
+              padding: '0.5rem 1rem',
+              background: 'var(--bg-elevated)',
+              border: '1px solid var(--border)',
+              borderRadius: '6px',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer'
+            }}
+          >
+            ← Back
+          </button>
+        </div>
+        <ClaimSubmissionForm
+          onClose={() => setShowClaimSubmission(false)}
+          onSubmitSuccess={() => {
+            // Could show notification here
+          }}
+        />
+      </div>
+    );
+  }
+
+  // My Submissions View
+  if (showMySubmissions) {
+    return (
+      <div style={{ maxWidth: '700px', margin: '0 auto', padding: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h1 className="mono" style={{ fontSize: '1.25rem', color: 'var(--accent-violet)' }}>
+            My Submissions
+          </h1>
+          <button
+            onClick={() => setShowMySubmissions(false)}
+            style={{
+              padding: '0.5rem 1rem',
+              background: 'var(--bg-elevated)',
+              border: '1px solid var(--border)',
+              borderRadius: '6px',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer'
+            }}
+          >
+            ← Back
+          </button>
+        </div>
+        <StudentClaimNotifications onClose={() => setShowMySubmissions(false)} />
+      </div>
+    );
+  }
+
   // Main Setup View - with scrolling leaderboard on left for larger screens
   return (
     <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', padding: '1.5rem' }}>
@@ -286,7 +349,7 @@ export function SetupScreen({ onStart }) {
       )}
 
       {/* Leaderboard Button - shown on mobile only (desktop has sidebar) */}
-      <div className="leaderboard-mobile-btn animate-in" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+      <div className="leaderboard-mobile-btn animate-in" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
         <button
           onClick={() => setShowLeaderboard(true)}
           className="mono"
@@ -319,6 +382,59 @@ export function SetupScreen({ onStart }) {
             📊 My Stats
           </button>
         )}
+      </div>
+
+      {/* Contribute Claims Section */}
+      <div
+        className="animate-in"
+        style={{
+          background: 'linear-gradient(135deg, rgba(167, 139, 250, 0.1) 0%, rgba(251, 191, 36, 0.1) 100%)',
+          border: '1px solid var(--accent-violet)',
+          borderRadius: '12px',
+          padding: '1rem',
+          marginBottom: '1rem',
+          textAlign: 'center'
+        }}
+      >
+        <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+          <span style={{ fontSize: '1rem' }}>✨</span> Help build the game!
+        </div>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setShowClaimSubmission(true)}
+            className="mono"
+            style={{
+              padding: '0.5rem 1rem',
+              background: 'var(--accent-violet)',
+              border: 'none',
+              borderRadius: '6px',
+              color: 'white',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              cursor: 'pointer'
+            }}
+          >
+            📝 Submit a Claim
+          </button>
+          <button
+            onClick={() => setShowMySubmissions(true)}
+            className="mono"
+            style={{
+              padding: '0.5rem 1rem',
+              background: 'var(--bg-elevated)',
+              border: '1px solid var(--border)',
+              borderRadius: '6px',
+              color: 'var(--text-secondary)',
+              fontSize: '0.75rem',
+              cursor: 'pointer'
+            }}
+          >
+            📋 My Submissions
+          </button>
+        </div>
+        <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+          Submit claims for your teacher to review. Approved claims get added to the game!
+        </div>
       </div>
 
       {/* How To Play */}
