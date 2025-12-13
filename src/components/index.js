@@ -14,3 +14,4 @@ export { PlayingScreen } from './PlayingScreen';
 export { DebriefScreen } from './DebriefScreen';
 export { TeacherDashboard } from './TeacherDashboard';
 export { ScrollingLeaderboard } from './ScrollingLeaderboard';
+export { SoloStatsView } from './SoloStatsView';
