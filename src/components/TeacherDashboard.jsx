@@ -56,10 +56,15 @@ export function TeacherDashboard({ onBack }) {
   const [activeTab, setActiveTab] = useState('overview');
   const [reflections, setReflections] = useState([]);
   const [games, setGames] = useState([]);
+  const [pendingClaims, setPendingClaims] = useState([]);
+  const [reviewedClaims, setReviewedClaims] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [classCode, setClassCode] = useState(FirebaseBackend.getClassCode() || '');
   const [isEditing, setIsEditing] = useState(false);
+  const [reviewingClaim, setReviewingClaim] = useState(null);
+  const [reviewNote, setReviewNote] = useState('');
+  const [claimFilter, setClaimFilter] = useState('pending'); // pending, approved, rejected, all
   const isOnline = useOnlineStatus();
 
   // Load data from Firebase and local storage
@@ -70,17 +75,22 @@ export function TeacherDashboard({ onBack }) {
     try {
       // Load from Firebase if available
       if (FirebaseBackend.initialized && isOnline) {
-        const [firebaseReflections, firebaseGames] = await Promise.all([
+        const [firebaseReflections, firebaseGames, claims] = await Promise.all([
           FirebaseBackend.getClassReflections(),
-          FirebaseBackend.getTopTeams(100)
+          FirebaseBackend.getTopTeams(100),
+          FirebaseBackend.getAllSubmittedClaims()
         ]);
         setReflections(firebaseReflections);
         setGames(firebaseGames);
+        setPendingClaims(claims.filter(c => c.status === 'pending'));
+        setReviewedClaims(claims.filter(c => c.status !== 'pending'));
       } else {
         // Fallback to local storage
         const localGames = LeaderboardManager.getAll();
         setGames(localGames);
         setReflections([]);
+        setPendingClaims([]);
+        setReviewedClaims([]);
       }
     } catch (err) {
       console.error('Failed to load dashboard data:', err);
@@ -170,6 +180,32 @@ export function TeacherDashboard({ onBack }) {
     }));
     exportToCSV(exportData, 'truthhunters_reflections');
   };
+
+  // Handle claim review (approve/reject)
+  const handleReviewClaim = async (claimId, approved) => {
+    const result = await FirebaseBackend.reviewClaim(claimId, approved, reviewNote);
+    if (result.success) {
+      // Move claim from pending to reviewed
+      const claim = pendingClaims.find(c => c.id === claimId);
+      if (claim) {
+        const updatedClaim = { ...claim, status: approved ? 'approved' : 'rejected', reviewerNote: reviewNote };
+        setPendingClaims(prev => prev.filter(c => c.id !== claimId));
+        setReviewedClaims(prev => [updatedClaim, ...prev]);
+      }
+      setReviewingClaim(null);
+      setReviewNote('');
+    } else {
+      setError('Failed to review claim. Please try again.');
+    }
+  };
+
+  // Get claims based on filter
+  const filteredClaims = useMemo(() => {
+    if (claimFilter === 'pending') return pendingClaims;
+    if (claimFilter === 'approved') return reviewedClaims.filter(c => c.status === 'approved');
+    if (claimFilter === 'rejected') return reviewedClaims.filter(c => c.status === 'rejected');
+    return [...pendingClaims, ...reviewedClaims];
+  }, [claimFilter, pendingClaims, reviewedClaims]);
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '1.5rem' }}>
@@ -271,11 +307,12 @@ export function TeacherDashboard({ onBack }) {
       </div>
 
       {/* Tab Navigation */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
         {[
           { id: 'overview', label: 'Overview', icon: '📊' },
           { id: 'games', label: 'Games', icon: '🎮' },
-          { id: 'reflections', label: 'Reflections', icon: '🪞' }
+          { id: 'reflections', label: 'Reflections', icon: '🪞' },
+          { id: 'claims', label: `Claims${pendingClaims.length > 0 ? ` (${pendingClaims.length})` : ''}`, icon: '📝' }
         ].map(tab => (
           <button
             key={tab.id}
@@ -588,6 +625,255 @@ export function TeacherDashboard({ onBack }) {
                       ) : (
                         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
                           No written response
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Student Claims Tab */}
+      {!loading && activeTab === 'claims' && (
+        <div className="animate-in">
+          {/* Filter buttons */}
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+            {[
+              { id: 'pending', label: 'Pending', count: pendingClaims.length },
+              { id: 'approved', label: 'Approved', count: reviewedClaims.filter(c => c.status === 'approved').length },
+              { id: 'rejected', label: 'Needs Work', count: reviewedClaims.filter(c => c.status === 'rejected').length },
+              { id: 'all', label: 'All', count: pendingClaims.length + reviewedClaims.length }
+            ].map(filter => (
+              <button
+                key={filter.id}
+                onClick={() => setClaimFilter(filter.id)}
+                style={{
+                  padding: '0.5rem 1rem',
+                  background: claimFilter === filter.id ? 'var(--accent-violet)' : 'var(--bg-card)',
+                  color: claimFilter === filter.id ? 'white' : 'var(--text-secondary)',
+                  border: `1px solid ${claimFilter === filter.id ? 'var(--accent-violet)' : 'var(--border)'}`,
+                  borderRadius: '6px',
+                  fontSize: '0.8125rem',
+                  cursor: 'pointer'
+                }}
+              >
+                {filter.label} ({filter.count})
+              </button>
+            ))}
+          </div>
+
+          {filteredClaims.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+              {claimFilter === 'pending'
+                ? 'No pending claims to review.'
+                : 'No claims found.'}
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {filteredClaims.map((claim) => (
+                <div
+                  key={claim.id}
+                  style={{
+                    background: 'var(--bg-card)',
+                    border: `1px solid ${claim.status === 'approved' ? 'var(--accent-emerald)' : claim.status === 'rejected' ? 'var(--accent-amber)' : 'var(--border)'}`,
+                    borderRadius: '12px',
+                    padding: '1.25rem'
+                  }}
+                >
+                  {/* Claim Header */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span style={{ fontSize: '1.25rem' }}>{claim.submitterAvatar || '🔍'}</span>
+                      <div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+                          {claim.submitterName}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                          {formatDate(claim.timestamp)}
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                      <span
+                        style={{
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          background: claim.answer === 'TRUE' ? 'rgba(52, 211, 153, 0.2)' : claim.answer === 'FALSE' ? 'rgba(251, 113, 133, 0.2)' : 'rgba(251, 191, 36, 0.2)',
+                          color: claim.answer === 'TRUE' ? 'var(--accent-emerald)' : claim.answer === 'FALSE' ? 'var(--accent-rose)' : 'var(--accent-amber)'
+                        }}
+                      >
+                        {claim.answer}
+                      </span>
+                      <span
+                        style={{
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          fontSize: '0.75rem',
+                          background: 'var(--bg-elevated)',
+                          color: 'var(--text-muted)'
+                        }}
+                      >
+                        {claim.subject}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Claim Text */}
+                  <div
+                    style={{
+                      padding: '1rem',
+                      background: 'var(--bg-elevated)',
+                      borderRadius: '8px',
+                      marginBottom: '0.75rem',
+                      fontSize: '1rem',
+                      lineHeight: '1.5'
+                    }}
+                  >
+                    &ldquo;{claim.claimText}&rdquo;
+                  </div>
+
+                  {/* Explanation */}
+                  <div style={{ marginBottom: '0.75rem' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
+                      Student&apos;s Explanation:
+                    </div>
+                    <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                      {claim.explanation}
+                    </div>
+                  </div>
+
+                  {/* Citation if provided */}
+                  {claim.citation && (
+                    <div style={{ marginBottom: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                      <strong>Source:</strong> {claim.citation}
+                    </div>
+                  )}
+
+                  {/* Error pattern if FALSE */}
+                  {claim.answer === 'FALSE' && claim.errorPattern && (
+                    <div style={{ marginBottom: '0.75rem', fontSize: '0.8rem', color: 'var(--accent-amber)' }}>
+                      <strong>Error type:</strong> {claim.errorPattern}
+                    </div>
+                  )}
+
+                  {/* Status badge and review note for reviewed claims */}
+                  {claim.status !== 'pending' && (
+                    <div
+                      style={{
+                        padding: '0.75rem',
+                        background: claim.status === 'approved' ? 'rgba(52, 211, 153, 0.1)' : 'rgba(251, 191, 36, 0.1)',
+                        borderRadius: '8px',
+                        marginBottom: '0.75rem'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: claim.reviewerNote ? '0.5rem' : 0 }}>
+                        <span>{claim.status === 'approved' ? '✅' : '📝'}</span>
+                        <span style={{ fontWeight: 600, color: claim.status === 'approved' ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>
+                          {claim.status === 'approved' ? 'Approved - In game pool' : 'Needs revision'}
+                        </span>
+                      </div>
+                      {claim.reviewerNote && (
+                        <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                          Your note: {claim.reviewerNote}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Review Actions for pending claims */}
+                  {claim.status === 'pending' && (
+                    <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+                      {reviewingClaim === claim.id ? (
+                        <div>
+                          <div style={{ marginBottom: '0.75rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
+                              Feedback for student (optional):
+                            </label>
+                            <textarea
+                              value={reviewNote}
+                              onChange={(e) => setReviewNote(e.target.value)}
+                              placeholder="Add feedback or suggestions..."
+                              style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                background: 'var(--bg-elevated)',
+                                border: '1px solid var(--border)',
+                                borderRadius: '6px',
+                                color: 'var(--text-primary)',
+                                fontSize: '0.875rem',
+                                resize: 'vertical',
+                                minHeight: '60px'
+                              }}
+                            />
+                          </div>
+                          <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <button
+                              onClick={() => handleReviewClaim(claim.id, true)}
+                              style={{
+                                flex: 1,
+                                padding: '0.75rem',
+                                background: 'var(--accent-emerald)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '6px',
+                                fontWeight: 600,
+                                cursor: 'pointer'
+                              }}
+                            >
+                              ✓ Approve
+                            </button>
+                            <button
+                              onClick={() => handleReviewClaim(claim.id, false)}
+                              style={{
+                                flex: 1,
+                                padding: '0.75rem',
+                                background: 'var(--accent-amber)',
+                                color: 'var(--bg-deep)',
+                                border: 'none',
+                                borderRadius: '6px',
+                                fontWeight: 600,
+                                cursor: 'pointer'
+                              }}
+                            >
+                              ✎ Needs Work
+                            </button>
+                            <button
+                              onClick={() => { setReviewingClaim(null); setReviewNote(''); }}
+                              style={{
+                                padding: '0.75rem 1rem',
+                                background: 'var(--bg-elevated)',
+                                color: 'var(--text-secondary)',
+                                border: '1px solid var(--border)',
+                                borderRadius: '6px',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                          <button
+                            onClick={() => setReviewingClaim(claim.id)}
+                            style={{
+                              flex: 1,
+                              padding: '0.75rem',
+                              background: 'var(--accent-violet)',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              fontWeight: 600,
+                              cursor: 'pointer'
+                            }}
+                          >
+                            Review This Claim
+                          </button>
                         </div>
                       )}
                     </div>

@@ -260,6 +260,266 @@ export const FirebaseBackend = {
   },
 
   /**
+   * STUDENT CLAIM CONTRIBUTIONS
+   * Students can submit claims for teacher review
+   */
+
+  /**
+   * Submit a new claim for teacher review
+   * @param {Object} claimData - The claim submission
+   */
+  async submitClaim(claimData) {
+    if (!this.initialized || !this.db) {
+      return { success: false, error: 'Firebase not initialized' };
+    }
+
+    try {
+      const classCode = this.getClassCode() || 'PUBLIC';
+
+      const docData = {
+        ...claimData,
+        classCode: classCode,
+        status: 'pending', // pending, approved, rejected
+        submittedAt: serverTimestamp(),
+        reviewedAt: null,
+        reviewerNote: null,
+        // Student info
+        submitterName: sanitizeInput(claimData.submitterName || 'Anonymous'),
+        submitterAvatar: claimData.submitterAvatar || '🔍',
+        // Claim content
+        claimText: sanitizeInput(claimData.claimText || ''),
+        answer: claimData.answer, // TRUE, FALSE, or MIXED
+        explanation: sanitizeInput(claimData.explanation || ''),
+        subject: claimData.subject || 'General',
+        difficulty: claimData.difficulty || 'medium',
+        source: 'student-contributed',
+        citation: sanitizeInput(claimData.citation || ''),
+        // If it's a FALSE claim, optionally include error pattern
+        errorPattern: claimData.errorPattern || null
+      };
+
+      const claimsRef = collection(this.db, 'pendingClaims');
+      const docRef = await addDoc(claimsRef, docData);
+      return { success: true, id: docRef.id };
+    } catch (e) {
+      console.warn('Failed to submit claim:', e);
+      return { success: false, error: e.message };
+    }
+  },
+
+  /**
+   * Get pending claims for teacher review
+   * @param {string} classFilter - Optional class code filter
+   */
+  async getPendingClaims(classFilter = null) {
+    if (!this.initialized || !this.db) {
+      return [];
+    }
+
+    try {
+      const filterClass = classFilter || this.getClassCode();
+      const claimsRef = collection(this.db, 'pendingClaims');
+
+      let q;
+      if (filterClass) {
+        q = query(
+          claimsRef,
+          where('classCode', '==', filterClass),
+          where('status', '==', 'pending'),
+          orderBy('submittedAt', 'desc'),
+          limit(50)
+        );
+      } else {
+        q = query(
+          claimsRef,
+          where('status', '==', 'pending'),
+          orderBy('submittedAt', 'desc'),
+          limit(50)
+        );
+      }
+
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        timestamp: doc.data().submittedAt?.toMillis() || Date.now()
+      }));
+    } catch (e) {
+      console.warn('Failed to fetch pending claims:', e);
+      return [];
+    }
+  },
+
+  /**
+   * Get all claims (for teacher to see history)
+   * @param {string} classFilter - Optional class code filter
+   * @param {string} statusFilter - Optional status filter (pending, approved, rejected)
+   */
+  async getAllSubmittedClaims(classFilter = null, statusFilter = null) {
+    if (!this.initialized || !this.db) {
+      return [];
+    }
+
+    try {
+      const filterClass = classFilter || this.getClassCode();
+      const claimsRef = collection(this.db, 'pendingClaims');
+
+      let q;
+      if (filterClass && statusFilter) {
+        q = query(
+          claimsRef,
+          where('classCode', '==', filterClass),
+          where('status', '==', statusFilter),
+          orderBy('submittedAt', 'desc'),
+          limit(100)
+        );
+      } else if (filterClass) {
+        q = query(
+          claimsRef,
+          where('classCode', '==', filterClass),
+          orderBy('submittedAt', 'desc'),
+          limit(100)
+        );
+      } else if (statusFilter) {
+        q = query(
+          claimsRef,
+          where('status', '==', statusFilter),
+          orderBy('submittedAt', 'desc'),
+          limit(100)
+        );
+      } else {
+        q = query(
+          claimsRef,
+          orderBy('submittedAt', 'desc'),
+          limit(100)
+        );
+      }
+
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        timestamp: doc.data().submittedAt?.toMillis() || Date.now()
+      }));
+    } catch (e) {
+      console.warn('Failed to fetch submitted claims:', e);
+      return [];
+    }
+  },
+
+  /**
+   * Approve or reject a claim
+   * @param {string} claimId - The claim document ID
+   * @param {boolean} approved - Whether to approve or reject
+   * @param {string} reviewerNote - Optional note from teacher
+   */
+  async reviewClaim(claimId, approved, reviewerNote = '') {
+    if (!this.initialized || !this.db) {
+      return { success: false, error: 'Firebase not initialized' };
+    }
+
+    try {
+      const { doc, updateDoc } = await import('firebase/firestore');
+      const claimRef = doc(this.db, 'pendingClaims', claimId);
+
+      await updateDoc(claimRef, {
+        status: approved ? 'approved' : 'rejected',
+        reviewedAt: serverTimestamp(),
+        reviewerNote: sanitizeInput(reviewerNote || '')
+      });
+
+      return { success: true };
+    } catch (e) {
+      console.warn('Failed to review claim:', e);
+      return { success: false, error: e.message };
+    }
+  },
+
+  /**
+   * Get approved claims to add to game pool
+   * @param {string} classFilter - Optional class code filter
+   */
+  async getApprovedClaims(classFilter = null) {
+    if (!this.initialized || !this.db) {
+      return [];
+    }
+
+    try {
+      const filterClass = classFilter || this.getClassCode();
+      const claimsRef = collection(this.db, 'pendingClaims');
+
+      let q;
+      if (filterClass) {
+        q = query(
+          claimsRef,
+          where('classCode', '==', filterClass),
+          where('status', '==', 'approved')
+        );
+      } else {
+        q = query(
+          claimsRef,
+          where('status', '==', 'approved')
+        );
+      }
+
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: `student-${doc.id}`,
+          text: data.claimText,
+          answer: data.answer,
+          explanation: data.explanation,
+          subject: data.subject,
+          difficulty: data.difficulty,
+          source: 'student-contributed',
+          citation: data.citation || null,
+          errorPattern: data.errorPattern || null,
+          contributor: data.submitterName,
+          contributorAvatar: data.submitterAvatar
+        };
+      });
+    } catch (e) {
+      console.warn('Failed to fetch approved claims:', e);
+      return [];
+    }
+  },
+
+  /**
+   * Get claims submitted by a specific student (for notifications)
+   * @param {string} studentName - The student's name
+   */
+  async getStudentClaims(studentName) {
+    if (!this.initialized || !this.db) {
+      return [];
+    }
+
+    try {
+      const classCode = this.getClassCode() || 'PUBLIC';
+      const claimsRef = collection(this.db, 'pendingClaims');
+
+      const q = query(
+        claimsRef,
+        where('classCode', '==', classCode),
+        where('submitterName', '==', sanitizeInput(studentName)),
+        orderBy('submittedAt', 'desc'),
+        limit(20)
+      );
+
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        timestamp: doc.data().submittedAt?.toMillis() || Date.now(),
+        reviewedTimestamp: doc.data().reviewedAt?.toMillis() || null
+      }));
+    } catch (e) {
+      console.warn('Failed to fetch student claims:', e);
+      return [];
+    }
+  },
+
+  /**
    * Save team reflection data for teacher insights
    * @param {Object} reflectionData - Reflection data to save
    */

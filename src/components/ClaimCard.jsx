@@ -25,7 +25,9 @@ export function ClaimCard({ claim, showAnswer = false }) {
           right: 0,
           height: '3px',
           background:
-            claim.source === 'ai-generated'
+            claim.source === 'student-contributed'
+              ? 'linear-gradient(90deg, var(--accent-amber), var(--accent-violet))'
+              : claim.source === 'ai-generated'
               ? 'linear-gradient(90deg, var(--accent-violet), var(--accent-rose))'
               : 'linear-gradient(90deg, var(--accent-emerald), var(--accent-cyan))'
         }}
@@ -60,17 +62,25 @@ export function ClaimCard({ claim, showAnswer = false }) {
               fontSize: '0.75rem',
               padding: '0.25rem 0.5rem',
               background:
-                claim.source === 'ai-generated'
+                claim.source === 'student-contributed'
+                  ? 'rgba(251, 191, 36, 0.2)'
+                  : claim.source === 'ai-generated'
                   ? 'rgba(167, 139, 250, 0.2)'
                   : 'rgba(52, 211, 153, 0.2)',
               color:
-                claim.source === 'ai-generated'
+                claim.source === 'student-contributed'
+                  ? 'var(--accent-amber)'
+                  : claim.source === 'ai-generated'
                   ? 'var(--accent-violet)'
                   : 'var(--accent-emerald)',
               borderRadius: '4px'
             }}
           >
-            {claim.source === 'ai-generated' ? '🤖 AI-Generated' : '📚 Expert-Sourced'}
+            {claim.source === 'student-contributed'
+              ? `✨ By ${claim.contributor || 'Classmate'}`
+              : claim.source === 'ai-generated'
+              ? '🤖 AI-Generated'
+              : '📚 Expert-Sourced'}
           </span>
         )}
       </div>

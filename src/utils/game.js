@@ -16,13 +16,17 @@ import { shuffleArray } from './generic';
  * @param {number} count - Number of claims to select
  * @param {Array<string>} subjects - Optional array of subjects to include (empty = all)
  * @param {Array<string>} previouslySeenIds - Claim IDs the player has already seen (for solo mode)
+ * @param {Array<Object>} additionalClaims - Extra claims to add to the pool (e.g., student-contributed)
  * @returns {Array} Selected claims (unique, no repeats, prioritizing unseen)
  */
-export function selectClaimsByDifficulty(difficulty, count, subjects = [], previouslySeenIds = []) {
+export function selectClaimsByDifficulty(difficulty, count, subjects = [], previouslySeenIds = [], additionalClaims = []) {
+  // Combine base database with any additional claims (e.g., student-contributed)
+  const combinedPool = [...CLAIMS_DATABASE, ...additionalClaims];
+
   // Filter by subjects if specified
-  let pool = CLAIMS_DATABASE;
+  let pool = combinedPool;
   if (subjects && subjects.length > 0) {
-    pool = CLAIMS_DATABASE.filter(c => subjects.includes(c.subject));
+    pool = combinedPool.filter(c => subjects.includes(c.subject));
   }
 
   // Convert previouslySeenIds to a Set for O(1) lookup
