@@ -16,13 +16,14 @@ const PlayingScreen = lazy(() => import('./components/PlayingScreen').then(m => 
 const DebriefScreen = lazy(() => import('./components/DebriefScreen').then(m => ({ default: m.DebriefScreen })));
 const TeacherDashboard = lazy(() => import('./components/TeacherDashboard').then(m => ({ default: m.TeacherDashboard })));
 import { TEAM_AVATARS } from './data/constants';
-import { ACHIEVEMENTS } from './data/achievements';
+import { ACHIEVEMENTS, getNewLifetimeAchievements } from './data/achievements';
 import { selectClaimsByDifficulty } from './utils/helpers';
 import { calculateGameStats } from './utils/scoring';
 import { SoundManager } from './services/sound';
 import { LeaderboardManager } from './services/leaderboard';
 import { FirebaseBackend } from './services/firebase';
 import { GameStateManager } from './services/gameState';
+import { PlayerProfile } from './services/playerProfile';
 
 export function App() {
   // Check for teacher mode via URL parameter (?teacher=true or #teacher)
@@ -272,6 +273,52 @@ export function App() {
               console.warn('Firebase save failed:', e);
             });
           }
+
+          // Record to player profile for solo stats tracking
+          const profileData = PlayerProfile.get();
+          const maxStreak = Math.max(
+            ...newResults.map((_, i) => {
+              let streak = 0;
+              for (let j = i; j >= 0 && newResults[j].correct; j--) {
+                streak++;
+              }
+              return streak;
+            }),
+            0
+          );
+
+          PlayerProfile.recordGame({
+            finalScore: finalScore,
+            rounds: newResults,
+            claims: prev.claims,
+            difficulty: prev.difficulty,
+            predictedScore: prev.team.predictedScore,
+            maxStreak: maxStreak,
+            achievements: earnedAchievementIds,
+            subjects: [] // Could track if we stored selected subjects
+          });
+
+          // Update player identity if this is their first game or name changed
+          if (prev.team.players && prev.team.players.length > 0) {
+            const playerName = prev.team.players[0].firstName || prev.team.name;
+            PlayerProfile.updateIdentity(playerName, prev.team.avatar);
+          }
+
+          // Check for newly earned lifetime achievements
+          const updatedProfile = PlayerProfile.get();
+          const newLifetimeAchievements = getNewLifetimeAchievements(
+            {
+              ...updatedProfile.stats,
+              subjectStats: updatedProfile.subjectStats,
+              claimsSeen: updatedProfile.claimsSeen.length
+            },
+            updatedProfile.lifetimeAchievements
+          );
+
+          // Award new lifetime achievements
+          newLifetimeAchievements.forEach(a => {
+            PlayerProfile.awardAchievement(a.id);
+          });
 
           return {
             ...prev,

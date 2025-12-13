@@ -3,13 +3,15 @@
  * Team configuration and game settings
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from './Button';
 import { LeaderboardView } from './LeaderboardView';
 import { ScrollingLeaderboard } from './ScrollingLeaderboard';
+import { SoloStatsView } from './SoloStatsView';
 import { TEAM_AVATARS, DIFFICULTY_CONFIG, EDUCATIONAL_TIPS } from '../data/constants';
 import { getSubjects } from '../data/claims';
 import { SoundManager } from '../services/sound';
+import { PlayerProfile } from '../services/playerProfile';
 import { validateName, isContentAppropriate, sanitizeInput } from '../utils/moderation';
 import { getRandomItem } from '../utils/helpers';
 
@@ -17,19 +19,33 @@ import { getRandomItem } from '../utils/helpers';
 const ALL_SUBJECTS = getSubjects();
 
 export function SetupScreen({ onStart }) {
-  const [teamName, setTeamName] = useState('');
-  const [rounds, setRounds] = useState(5);
-  const [difficulty, setDifficulty] = useState('mixed');
-  const [selectedAvatar, setSelectedAvatar] = useState(TEAM_AVATARS[0]);
-  const [soundEnabled, setSoundEnabled] = useState(true);
+  // Check if returning solo player
+  const existingProfile = useMemo(() => PlayerProfile.get(), []);
+  const isReturningPlayer = existingProfile.stats.totalGames > 0;
+  const quickStartSettings = useMemo(() => PlayerProfile.getQuickStartSettings(), []);
+
+  const [teamName, setTeamName] = useState(isReturningPlayer ? quickStartSettings.playerName : '');
+  const [rounds, setRounds] = useState(isReturningPlayer ? quickStartSettings.rounds : 5);
+  const [difficulty, setDifficulty] = useState(isReturningPlayer ? quickStartSettings.difficulty : 'mixed');
+  const [selectedAvatar, setSelectedAvatar] = useState(
+    isReturningPlayer && quickStartSettings.avatar
+      ? quickStartSettings.avatar
+      : TEAM_AVATARS[0]
+  );
+  const [soundEnabled, setSoundEnabled] = useState(
+    isReturningPlayer ? quickStartSettings.soundEnabled : true
+  );
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showSoloStats, setShowSoloStats] = useState(false);
   const [validationError, setValidationError] = useState('');
-  const [selectedSubjects, setSelectedSubjects] = useState([]); // Empty = all subjects
+  const [selectedSubjects, setSelectedSubjects] = useState(
+    isReturningPlayer ? (quickStartSettings.subjects || []) : []
+  );
 
   // Player inputs (up to 6 players per group) - start with just 1 visible
   const [players, setPlayers] = useState([
-    { firstName: '', lastInitial: '' }
+    { firstName: isReturningPlayer ? quickStartSettings.playerName : '', lastInitial: '' }
   ]);
   const MAX_PLAYERS = 6;
 
@@ -37,6 +53,21 @@ export function SetupScreen({ onStart }) {
   useEffect(() => {
     SoundManager.init();
   }, []);
+
+  // Quick Solo Start - uses saved preferences
+  const handleQuickSoloStart = () => {
+    const playerName = quickStartSettings.playerName || 'Solo Hunter';
+    onStart({
+      teamName: playerName,
+      rounds: quickStartSettings.rounds || 5,
+      difficulty: quickStartSettings.difficulty || 'mixed',
+      avatar: quickStartSettings.avatar || TEAM_AVATARS[0],
+      soundEnabled: quickStartSettings.soundEnabled !== false,
+      subjects: quickStartSettings.subjects || [],
+      players: [{ firstName: playerName, lastInitial: '' }],
+      isSoloMode: true
+    });
+  };
 
   const handleSoundToggle = () => {
     const newState = SoundManager.toggle();
@@ -128,6 +159,19 @@ export function SetupScreen({ onStart }) {
     return <LeaderboardView onBack={() => setShowLeaderboard(false)} />;
   }
 
+  // Delegate to Solo Stats View
+  if (showSoloStats) {
+    return (
+      <SoloStatsView
+        onBack={() => setShowSoloStats(false)}
+        onQuickStart={() => {
+          setShowSoloStats(false);
+          handleQuickSoloStart();
+        }}
+      />
+    );
+  }
+
   // Main Setup View - with scrolling leaderboard on left for larger screens
   return (
     <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', padding: '1.5rem' }}>
@@ -162,8 +206,56 @@ export function SetupScreen({ onStart }) {
         </p>
       </div>
 
+      {/* Returning Solo Player Welcome */}
+      {isReturningPlayer && (
+        <div
+          className="animate-in"
+          style={{
+            background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%)',
+            border: '1px solid var(--accent-cyan)',
+            borderRadius: '12px',
+            padding: '1rem',
+            marginBottom: '1rem',
+            textAlign: 'center'
+          }}
+        >
+          <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+            Welcome back, <strong style={{ color: 'var(--accent-cyan)' }}>{quickStartSettings.playerName || 'Hunter'}</strong>!
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button onClick={handleQuickSoloStart} size="sm">
+              Quick Solo Play
+            </Button>
+            <button
+              onClick={() => setShowSoloStats(true)}
+              className="mono"
+              style={{
+                padding: '0.5rem 1rem',
+                background: 'var(--bg-elevated)',
+                border: '1px solid var(--border)',
+                borderRadius: '6px',
+                color: 'var(--text-secondary)',
+                fontSize: '0.75rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.375rem'
+              }}
+            >
+              📊 My Stats
+            </button>
+          </div>
+          <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+            {existingProfile.stats.totalGames} games played • {existingProfile.stats.totalCorrect} correct answers
+            {existingProfile.stats.currentDayStreak > 1 && (
+              <span style={{ color: 'var(--accent-amber)' }}> • 🔥 {existingProfile.stats.currentDayStreak} day streak</span>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Leaderboard Button - shown on mobile only (desktop has sidebar) */}
-      <div className="leaderboard-mobile-btn animate-in" style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+      <div className="leaderboard-mobile-btn animate-in" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
         <button
           onClick={() => setShowLeaderboard(true)}
           className="mono"
@@ -177,8 +269,25 @@ export function SetupScreen({ onStart }) {
             cursor: 'pointer'
           }}
         >
-          🏆 View Leaderboard
+          🏆 Leaderboard
         </button>
+        {!isReturningPlayer && (
+          <button
+            onClick={() => setShowSoloStats(true)}
+            className="mono"
+            style={{
+              padding: '0.5rem 1rem',
+              background: 'var(--bg-elevated)',
+              border: '1px solid var(--border)',
+              borderRadius: '6px',
+              color: 'var(--text-secondary)',
+              fontSize: '0.75rem',
+              cursor: 'pointer'
+            }}
+          >
+            📊 My Stats
+          </button>
+        )}
       </div>
 
       {/* How To Play */}
