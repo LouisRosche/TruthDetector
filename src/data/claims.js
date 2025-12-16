@@ -16,9 +16,16 @@
  * - errorPattern: Type of error (see AI_ERROR_PATTERNS)
  * - subject: Academic subject area
  * - difficulty: 'easy' | 'medium' | 'hard'
+ * - gradeLevel: 'elementary' | 'middle' | 'high' | 'college' (default: 'middle')
  * - citation: Source URL or DOI (for TRUE claims)
  * - lastVerified: Date of last fact-check
  * - reviewedBy: Array of reviewer identifiers
+ *
+ * GRADE LEVEL GUIDE:
+ * - elementary (K-5): Simple, concrete facts. Age 5-11. Fun, memorable, shareable.
+ * - middle (6-8): Standard complexity. Age 11-14. Current default level.
+ * - high (9-12): Nuanced analysis required. Age 14-18. More context needed.
+ * - college: Sophisticated, specialized. Age 18+. Expert-level critical thinking.
  */
 
 /**
@@ -2112,6 +2119,1594 @@ export const CLAIMS_DATABASE = [
     citation: null,
     lastVerified: '2024-12-01',
     reviewedBy: ['content-team']
+  },
+
+  // ==================== ELEMENTARY (K-5) CLAIMS ====================
+  // Simple, concrete, fun facts for young learners (ages 5-11)
+
+  {
+    id: 'elem-bio-001',
+    text: 'A giraffe\'s tongue is about 18-20 inches long and is purple-black to protect it from sunburn.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Giraffes have dark tongues (purple, black, or dark blue) with melanin that protects against UV rays while eating from trees for hours.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.nationalgeographic.com/animals/mammals/facts/giraffe',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-002',
+    text: 'Butterflies taste with their feet.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Butterflies have taste sensors (chemoreceptors) on their feet! When they land on a plant, they can taste it immediately.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.scientificamerican.com/article/butterflies-taste-with-their-feet/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-003',
+    text: 'Dogs can only see in black and white.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Dogs can see colors! They see blues and yellows well, but have trouble with reds and greens. They see fewer colors than humans, but not just black and white.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-004',
+    text: 'Elephants are the only animals that can\'t jump.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'While elephants can\'t jump, they\'re not alone! Sloths, hippos, and rhinos can\'t jump either. Many heavy animals can\'t.',
+    errorPattern: 'confident-specificity',
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-005',
+    text: 'A snail can sleep for 3 years.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Some snails can enter a deep sleep (estivation) during dry conditions for up to 3 years to survive without water!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.britannica.com/animal/snail',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-006',
+    text: 'Octopuses have three hearts and blue blood.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Two hearts pump blood to the gills, one pumps to the body. Their blood is blue because it uses copper (not iron like ours) to carry oxygen.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://ocean.si.edu/ocean-life/invertebrates/octopus',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-007',
+    text: 'Cows have exactly four stomachs.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Cows have ONE stomach with FOUR compartments (rumen, reticulum, omasum, abomasum). It\'s one stomach divided into parts, not four separate stomachs.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-008',
+    text: 'A group of owls is called a "parliament."',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'The collective noun for owls is a "parliament," possibly because owls are often seen as wise, like parliament members.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.merriam-webster.com/dictionary/parliament',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-009',
+    text: 'Sharks are older than trees.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Sharks appeared about 450 million years ago. Trees only appeared about 350 million years ago. Sharks are 100 million years older!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.smithsonianmag.com/smart-news/sharks-are-older-trees-180957312/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-010',
+    text: 'Penguins have knees hidden under their feathers.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Penguins do have knees! Their legs are structured with knees hidden inside their bodies, which is why they waddle.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.britannica.com/animal/penguin',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-011',
+    text: 'A frog must close its eyes to swallow food.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Frogs push their eyes down to help push food down their throats! They literally use their eyeballs to swallow.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.scientificamerican.com/article/frogs-use-their-eyes-to-swallow-prey/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-bio-012',
+    text: 'Cats always land on their feet because they have exactly 9 lives.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Cats often land on their feet because they have a flexible spine and inner ear balance. The "9 lives" is just a saying - cats have one life like all animals.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-astro-001',
+    text: 'A day on Venus is longer than a year on Venus.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Venus rotates very slowly! One day (rotation) takes 243 Earth days, but one year (orbit) only takes 225 Earth days.',
+    errorPattern: null,
+    subject: 'Astronomy',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://solarsystem.nasa.gov/planets/venus/overview/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-astro-002',
+    text: 'The Moon makes its own light like the Sun does.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'The Moon doesn\'t make light - it reflects sunlight! The Sun is a star that makes light from nuclear fusion. The Moon is just a giant rock.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Astronomy',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-astro-003',
+    text: 'You could fit all the other planets between Earth and the Moon.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'The average Earth-Moon distance is about 384,400 km. All the other planets lined up equal about 380,000 km!',
+    errorPattern: null,
+    subject: 'Astronomy',
+    difficulty: 'medium',
+    gradeLevel: 'elementary',
+    citation: 'https://www.nasa.gov/audience/forstudents/k-4/stories/distances-in-space',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-astro-004',
+    text: 'Saturn would float if you could find a bathtub big enough.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Saturn is the only planet less dense than water (0.687 g/cm³ vs water\'s 1 g/cm³). It would float like a giant beach ball!',
+    errorPattern: null,
+    subject: 'Astronomy',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://solarsystem.nasa.gov/planets/saturn/overview/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-astro-005',
+    text: 'There are exactly 100 billion stars in our galaxy.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Scientists estimate 100-400 billion stars in the Milky Way, but we can\'t count them exactly! "Exactly 100 billion" is made up.',
+    errorPattern: 'confident-specificity',
+    subject: 'Astronomy',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-phys-001',
+    text: 'Hot water can freeze faster than cold water under certain conditions.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'This is called the Mpemba effect! Under certain conditions, hot water freezes faster than cold water. Scientists are still studying why.',
+    errorPattern: null,
+    subject: 'Physics',
+    difficulty: 'medium',
+    gradeLevel: 'elementary',
+    citation: 'https://www.scientificamerican.com/article/mpemba-effect-hot-water-freezes-faster-cold/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-phys-002',
+    text: 'Light from the Sun takes exactly 1 minute to reach Earth.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Sunlight takes about 8 minutes and 20 seconds to reach Earth, not 1 minute. "Exactly 1 minute" is fabricated.',
+    errorPattern: 'confident-specificity',
+    subject: 'Physics',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-phys-003',
+    text: 'A rainbow always has exactly 7 colors.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'A rainbow is actually a continuous spectrum! We see it as 7 colors (ROYGBIV) because that\'s how Isaac Newton described it, but there are infinite colors blending into each other.',
+    errorPattern: 'confident-specificity',
+    subject: 'Physics',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-geo-001',
+    text: 'The Amazon River flows through Argentina.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'The Amazon River flows through Brazil, Peru, and Colombia, but NOT Argentina. Argentina is too far south.',
+    errorPattern: 'geographic-fabrication',
+    subject: 'Geography',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-geo-002',
+    text: 'Australia is both a country and a continent.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Australia is the only place that is both a country (with a government) and a continent (a major landmass). It\'s unique!',
+    errorPattern: null,
+    subject: 'Geography',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.britannica.com/place/Australia',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-geo-003',
+    text: 'Mount Everest grows about half an inch taller every year.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'The collision of tectonic plates pushes Mount Everest up by about 4mm (roughly half an inch) per year!',
+    errorPattern: null,
+    subject: 'Geography',
+    difficulty: 'medium',
+    gradeLevel: 'elementary',
+    citation: 'https://www.nationalgeographic.com/science/article/151214-everest-grows-higher-nepal-earthquake',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-hist-001',
+    text: 'Cleopatra lived closer in time to the first iPhone than to the building of the pyramids.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'The Great Pyramid was built around 2560 BCE. Cleopatra died in 30 BCE (2,530 years later). iPhone came in 2007 CE (2,037 years after Cleopatra). Mind-blowing!',
+    errorPattern: null,
+    subject: 'History',
+    difficulty: 'medium',
+    gradeLevel: 'elementary',
+    citation: 'https://www.britannica.com/biography/Cleopatra-queen-of-Egypt',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-hist-002',
+    text: 'Vikings wore helmets with horns on them.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'This is a popular myth! Real Viking helmets were plain metal or leather. The horned helmets idea came from old operas and movies.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'History',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-hist-003',
+    text: 'The Eiffel Tower can grow 6 inches taller in summer.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'When metal heats up, it expands! In hot summer weather, the iron in the Eiffel Tower expands, making it about 6 inches taller.',
+    errorPattern: null,
+    subject: 'History',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.toureiffel.paris/en/news/history-and-culture',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-human-001',
+    text: 'Your nose and ears never stop growing your entire life.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Unlike bones, the cartilage in your nose and ears keeps growing slowly throughout your life. That\'s why older people have bigger noses and ears!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.scientificamerican.com/article/why-do-noses-and-ears-continue-to-grow/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-human-002',
+    text: 'You are about 1 cm taller in the morning than at night.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'The cartilage between your spine bones (vertebrae) compresses during the day from gravity. You\'re slightly shorter at night and "taller" after sleeping!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.scientificamerican.com/article/why-am-i-taller-in-the-morning/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-human-003',
+    text: 'Humans have exactly 206 bones at all ages.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Babies are born with about 270-300 bones! Many fuse together as you grow. Adults have 206 bones, but babies have more.',
+    errorPattern: 'confident-specificity',
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-human-004',
+    text: 'Your stomach gets a new lining every few days.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Your stomach lining replaces itself every 3-4 days to protect against the strong acid that digests your food!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.ncbi.nlm.nih.gov/books/NBK534792/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-chem-001',
+    text: 'Honey never spoils and can last thousands of years.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Honey has natural preservatives! Archaeologists found 3,000-year-old honey in Egyptian tombs that was still edible.',
+    errorPattern: null,
+    subject: 'Chemistry',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.smithsonianmag.com/science-nature/the-science-behind-honeys-eternal-shelf-life-1218690/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-chem-002',
+    text: 'Water is the only thing that exists as solid, liquid, and gas at normal Earth temperatures.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Water exists as ice (solid), water (liquid), and steam (gas) in everyday conditions on Earth. Most substances need extreme temperatures to change states.',
+    errorPattern: null,
+    subject: 'Chemistry',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.usgs.gov/special-topics/water-science-school/science/water-density',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-tech-001',
+    text: 'The first computer weighed more than an elephant.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'ENIAC (1945) weighed about 30 tons (60,000 pounds)! An African elephant weighs about 6-7 tons. ENIAC was 4-5 elephants heavy!',
+    errorPattern: null,
+    subject: 'Computer Science',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.britannica.com/technology/ENIAC',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'elem-tech-002',
+    text: 'The @ symbol was invented for email.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'The @ symbol existed for centuries! Merchants used it to mean "at the rate of" for prices. Ray Tomlinson chose it for email in 1971 because it was already on keyboards.',
+    errorPattern: 'timeline-compression',
+    subject: 'Computer Science',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+
+  // ==================== MIDDLE SCHOOL (6-8) CLAIMS ====================
+  // Standard complexity, building critical thinking skills (ages 11-14)
+
+  {
+    id: 'mid-bio-001',
+    text: 'The human body contains enough iron to make a 3-inch nail.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Adults have about 4 grams of iron in their blood and tissues. That\'s enough to forge a small nail!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3685880/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-bio-002',
+    text: 'Humans share exactly 60% of their DNA with bananas.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Humans share about 40-60% of DNA with bananas, but "exactly 60%" is too precise. The actual percentage depends on which genes you compare.',
+    errorPattern: 'confident-specificity',
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-bio-003',
+    text: 'A cockroach can live for several weeks without its head.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Cockroaches breathe through body segments and don\'t need their head for breathing. They eventually die from dehydration since they can\'t drink.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.scientificamerican.com/article/fact-or-fiction-a-luftwa/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-bio-004',
+    text: 'The mantis shrimp can punch with the force of a bullet.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Mantis shrimp can accelerate their clubs at 50 mph, creating a force equivalent to a .22 caliber bullet! They can break aquarium glass.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.nature.com/articles/nature03657',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-bio-005',
+    text: 'Tardigrades (water bears) can survive in the vacuum of space.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Tardigrades have survived exposure to space vacuum, extreme radiation, and temperatures from -458°F to 300°F! They enter a dried state called cryptobiosis.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.nature.com/articles/news.2008.1087',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-bio-006',
+    text: 'Jellyfish are immortal and cannot die of old age.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Only ONE species (Turritopsis dohrnii) can potentially reverse aging. Most jellyfish die normally. Saying "jellyfish are immortal" is a huge overgeneralization.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Biology',
+    difficulty: 'hard',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-chem-001',
+    text: 'Glass is actually a liquid that flows very slowly over time.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'This is a popular myth! Glass is an amorphous solid. Old windows are thicker at the bottom because of how they were made, not because glass flows.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Chemistry',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-chem-002',
+    text: 'Diamond and pencil graphite are both made of the same element - carbon.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Both diamond and graphite are pure carbon! The difference is how the carbon atoms are arranged. Diamond has a 3D crystal structure; graphite has flat sheets.',
+    errorPattern: null,
+    subject: 'Chemistry',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.britannica.com/science/carbon-chemical-element',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-phys-001',
+    text: 'The speed of light is exactly 186,282 miles per second with no variation.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Light travels at about 186,282 miles/second IN A VACUUM. In water, glass, or other materials, light slows down significantly!',
+    errorPattern: 'confident-specificity',
+    subject: 'Physics',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-phys-002',
+    text: 'If you could fold a piece of paper 42 times, it would reach the Moon.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Exponential growth! Each fold doubles thickness. 42 folds = 2^42 × 0.1mm ≈ 440,000 km. Moon is ~384,000 km away. (You can\'t actually fold paper that many times!)',
+    errorPattern: null,
+    subject: 'Mathematics',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.sciencealert.com/fold-a-piece-of-paper-42-times-reach-moon',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-hist-001',
+    text: 'Oxford University is older than the Aztec Empire.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Oxford started teaching in 1096; it was established by 1249. The Aztec Empire was founded in 1428 when they built Tenochtitlan. Oxford is about 200 years older!',
+    errorPattern: null,
+    subject: 'History',
+    difficulty: 'hard',
+    gradeLevel: 'middle',
+    citation: 'https://www.ox.ac.uk/about/organisation/history',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-hist-002',
+    text: 'Albert Einstein failed math as a child.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Einstein was excellent at math! This myth started from a misunderstanding of German grading scales. He excelled in math and physics from childhood.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'History',
+    difficulty: 'easy',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-hist-003',
+    text: 'The shortest war in history lasted exactly 38 minutes.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'The Anglo-Zanzibar War (1896) lasted 38-45 minutes, but "exactly 38 minutes" is too precise. Historical records vary on the exact duration.',
+    errorPattern: 'confident-specificity',
+    subject: 'History',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-hist-004',
+    text: 'Thomas Edison invented the light bulb.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Edison improved and commercialized the light bulb, but didn\'t invent it. At least 20 inventors created incandescent lights before him. He made it practical and affordable.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'History',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-tech-001',
+    text: 'The inventor of the Pringles can is buried in one.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Fredric Baur invented the Pringles can shape. When he died in 2008, his children honored his wishes by burying some of his ashes in a Pringles can!',
+    errorPattern: null,
+    subject: 'History',
+    difficulty: 'easy',
+    gradeLevel: 'middle',
+    citation: 'https://time.com/3957979/pringles-can-inventor-buried/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-tech-002',
+    text: 'Nintendo started as a video game company.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Nintendo was founded in 1889 as a playing card company! They made "Hanafuda" cards. They didn\'t enter video games until the 1970s.',
+    errorPattern: 'timeline-compression',
+    subject: 'History',
+    difficulty: 'easy',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-geo-001',
+    text: 'Russia has 11 time zones.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Russia spans 11 time zones, from UTC+2 to UTC+12. When it\'s midnight in western Russia, it\'s already 9 AM the next day in the far east!',
+    errorPattern: null,
+    subject: 'Geography',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.britannica.com/place/Russia',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-geo-002',
+    text: 'Canada has more lakes than the rest of the world combined.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Canada has an estimated 2 million lakes! That\'s more than all other countries combined. About 9% of Canada\'s area is covered by freshwater.',
+    errorPattern: null,
+    subject: 'Geography',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.nrcan.gc.ca/our-natural-resources/water-resources/water-basics/8721',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-math-001',
+    text: 'Zero is an even number.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Zero is even! An even number is divisible by 2 with no remainder. 0 ÷ 2 = 0 with no remainder. Zero also fits the pattern: -4, -2, 0, 2, 4...',
+    errorPattern: null,
+    subject: 'Mathematics',
+    difficulty: 'easy',
+    gradeLevel: 'middle',
+    citation: 'https://www.britannica.com/science/zero-mathematics',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'mid-math-002',
+    text: 'The number "googol" (1 followed by 100 zeros) is bigger than the number of atoms in the observable universe.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'The observable universe has about 10^80 atoms. A googol is 10^100. That\'s 100 billion trillion times more than all atoms in the universe!',
+    errorPattern: null,
+    subject: 'Mathematics',
+    difficulty: 'hard',
+    gradeLevel: 'middle',
+    citation: 'https://www.britannica.com/topic/googol',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+
+  // ==================== HIGH SCHOOL (9-12) CLAIMS ====================
+  // More nuanced analysis required, complex topics (ages 14-18)
+
+  {
+    id: 'high-bio-001',
+    text: 'Humans are 99.9% genetically identical to each other.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'All humans share about 99.9% of their DNA sequence. The 0.1% difference accounts for all variation in traits, disease susceptibility, and individual uniqueness.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'high',
+    citation: 'https://www.genome.gov/about-genomics/fact-sheets/Genetics-vs-Genomics',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-bio-002',
+    text: 'CRISPR technology allows scientists to cut and edit DNA with surgical precision, making zero unintended changes.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'CRISPR is powerful but not perfect. "Off-target effects" (unintended edits) remain a significant concern in gene editing research. "Zero unintended changes" is false.',
+    errorPattern: 'confident-specificity',
+    subject: 'Biotechnology',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-bio-003',
+    text: 'Mitochondria have their own DNA, separate from the cell\'s nuclear DNA.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Mitochondrial DNA (mtDNA) is inherited only from mothers. This supports the endosymbiotic theory that mitochondria were once free-living bacteria.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'high',
+    citation: 'https://www.ncbi.nlm.nih.gov/books/NBK21251/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-bio-004',
+    text: 'The appendix has no known function and is purely a vestigial organ.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Recent research shows the appendix serves as a "safe house" for beneficial gut bacteria and plays a role in immune function. It\'s not purely vestigial.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-chem-001',
+    text: 'Neutron stars are so dense that a teaspoon would weigh about 6 billion tons.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Neutron stars pack the mass of the Sun into a sphere ~20 km across. A teaspoon of neutron star material would weigh billions of tons on Earth.',
+    errorPattern: null,
+    subject: 'Astronomy',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: 'https://www.nasa.gov/mission_pages/GLAST/science/neutron_stars.html',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-chem-002',
+    text: 'Water is a universal solvent that can dissolve any substance given enough time.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'While water dissolves many substances, it cannot dissolve everything. Oils, fats, and many plastics are hydrophobic and won\'t dissolve in water.',
+    errorPattern: 'confident-specificity',
+    subject: 'Chemistry',
+    difficulty: 'medium',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-phys-001',
+    text: 'Nothing can travel faster than light in a vacuum.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'This is mostly true for matter and information, but some phenomena appear to exceed light speed: quantum entanglement "spooky action," the expanding universe, and phase velocities.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Physics',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-phys-002',
+    text: 'Schrödinger\'s cat was a real experiment performed on cats.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Schrödinger\'s cat was a thought experiment to illustrate problems with quantum superposition when applied to everyday objects. No cats were harmed - it was purely theoretical.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Physics',
+    difficulty: 'easy',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-phys-003',
+    text: 'GPS satellites must account for time dilation from both special and general relativity to work accurately.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'GPS clocks tick faster (45 μs/day from general relativity) and slower (7 μs/day from special relativity). Without corrections, GPS would accumulate 10 km of error daily!',
+    errorPattern: null,
+    subject: 'Physics',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: 'https://www.scientificamerican.com/article/how-does-relativity-affect-gps/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-hist-001',
+    text: 'The Library of Alexandria was destroyed in a single fire.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'The Library of Alexandria declined over centuries through multiple events: Julius Caesar\'s fire, Christian riots, and gradual defunding. No single dramatic destruction.',
+    errorPattern: 'timeline-compression',
+    subject: 'History',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-hist-002',
+    text: 'The term "cold turkey" for quitting addictions comes from the goosebumps that appear during withdrawal.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'This is one popular etymology, as withdrawal causes goosebumps resembling plucked turkey skin. However, the true origin is uncertain and other theories exist.',
+    errorPattern: 'appeal-to-authority',
+    subject: 'History',
+    difficulty: 'medium',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-econ-001',
+    text: 'The stock market has returned exactly 10% annually on average since its inception.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Historical S&P 500 returns average about 10-11% including dividends, but "exactly 10%" is too precise. Returns vary greatly by period measured and whether you adjust for inflation.',
+    errorPattern: 'confident-specificity',
+    subject: 'Mathematics',
+    difficulty: 'medium',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-psych-001',
+    text: 'People only use 10% of their brain, leaving 90% untapped potential.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Brain scans show we use virtually all areas of our brain. Different regions activate for different tasks. The "10%" myth has been thoroughly debunked.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Neuroscience',
+    difficulty: 'easy',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-psych-002',
+    text: 'The Dunning-Kruger effect shows that incompetent people think they\'re experts while experts doubt themselves.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'The original study showed low performers overestimate while high performers underestimate their ranking, but both groups\' estimates correlate with actual ability. The popular interpretation is oversimplified.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Neuroscience',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-tech-001',
+    text: 'Quantum computers can already crack any encryption used today.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Current quantum computers are too small and error-prone. Breaking RSA encryption would require millions of stable qubits. Today\'s quantum computers have ~1000 noisy qubits.',
+    errorPattern: 'timeline-compression',
+    subject: 'Computer Science',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-tech-002',
+    text: 'The first computer programmer was a woman named Ada Lovelace.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Ada Lovelace wrote the first algorithm intended for machine processing in 1843 for Charles Babbage\'s Analytical Engine, making her history\'s first computer programmer.',
+    errorPattern: null,
+    subject: 'Computer Science',
+    difficulty: 'easy',
+    gradeLevel: 'high',
+    citation: 'https://www.britannica.com/biography/Ada-Lovelace',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-env-001',
+    text: 'Recycling a single aluminum can saves enough energy to power a TV for three hours.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Recycling aluminum uses 95% less energy than creating new aluminum from ore. That saved energy (about 255 watt-hours) can power a TV for 2-3 hours.',
+    errorPattern: null,
+    subject: 'Chemistry',
+    difficulty: 'medium',
+    gradeLevel: 'high',
+    citation: 'https://www.epa.gov/recycle/recycling-basics',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-math-001',
+    text: 'There are more possible chess games than atoms in the observable universe.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'The Shannon number estimates 10^120 possible chess games. The universe has about 10^80 atoms. Chess possibilities exceed atoms by a factor of 10^40!',
+    errorPattern: null,
+    subject: 'Mathematics',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: 'https://www.chess.com/article/view/how-many-possible-chess-games-are-there',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'high-math-002',
+    text: 'Pi has been proven to contain every possible sequence of digits.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Pi is believed to be a "normal" number containing all digit sequences, but this has NOT been proven. It\'s one of mathematics\' open problems.',
+    errorPattern: 'confident-specificity',
+    subject: 'Mathematics',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+
+  // ==================== COLLEGE/UNIVERSITY CLAIMS ====================
+  // Sophisticated, specialized content for advanced critical thinking (ages 18+)
+
+  {
+    id: 'col-bio-001',
+    text: 'Horizontal gene transfer means bacteria can acquire antibiotic resistance without reproducing.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Bacteria can transfer plasmids containing resistance genes directly to neighboring bacteria through conjugation, transformation, or transduction - without cell division.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4536516/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-bio-002',
+    text: 'Epigenetic changes can be inherited across multiple generations, proving Lamarckian evolution was correct.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Transgenerational epigenetic inheritance exists and resembles Lamarck\'s ideas, but this doesn\'t validate his full theory. Modern epigenetics works through different mechanisms than Lamarck proposed.',
+    errorPattern: 'false-causation',
+    subject: 'Biology',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-bio-003',
+    text: 'The human microbiome contains more bacterial cells than human cells in the body.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'The commonly cited 10:1 ratio is outdated. Current estimates suggest roughly 1:1 ratio (38 trillion bacteria vs 37 trillion human cells), varying by individual and conditions.',
+    errorPattern: 'confident-specificity',
+    subject: 'Biology',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-phys-001',
+    text: 'The Many-Worlds interpretation of quantum mechanics is now the accepted standard among physicists.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'There\'s no consensus interpretation of quantum mechanics. The Copenhagen interpretation remains widely taught. Many-Worlds has supporters but isn\'t "the accepted standard."',
+    errorPattern: 'appeal-to-authority',
+    subject: 'Physics',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-phys-002',
+    text: 'Virtual particles in quantum field theory violate conservation of energy, but only briefly.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'This depends on interpretation. Virtual particles are mathematical tools in perturbation theory. Whether they "exist" or "violate" conservation laws is debated. The energy-time uncertainty principle is often misapplied here.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Physics',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-phys-003',
+    text: 'Hawking radiation has been directly detected emanating from a black hole.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Hawking radiation is theoretically predicted but has never been directly detected from a black hole. It would be extremely faint. Lab analogues have shown similar effects.',
+    errorPattern: 'timeline-compression',
+    subject: 'Physics',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-neuro-001',
+    text: 'Neuroplasticity allows adult brains to form new neurons throughout life in multiple brain regions.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'Adult neurogenesis is well-established in the hippocampus, but claims about "multiple brain regions" remain controversial. The extent of adult neurogenesis is still being researched.',
+    errorPattern: 'confident-specificity',
+    subject: 'Neuroscience',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-neuro-002',
+    text: 'The "left brain/right brain" theory accurately describes how creativity and logic are processed.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'While hemispheric specialization exists for some functions (e.g., language in left hemisphere), the creative/logical divide is vastly oversimplified. Most tasks use both hemispheres.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Neuroscience',
+    difficulty: 'medium',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-stat-001',
+    text: 'A statistically significant result means the finding is important and practically meaningful.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Statistical significance (p < 0.05) only means the result is unlikely under the null hypothesis. It says nothing about effect size or practical importance. Large samples can yield significant but trivial effects.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Mathematics',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-stat-002',
+    text: 'Bayesian statistics are now widely accepted as superior to frequentist approaches for all applications.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Both approaches have strengths. Bayesian methods excel with prior knowledge and small samples; frequentist methods are often simpler and preferred for regulatory approval. Neither is universally superior.',
+    errorPattern: 'appeal-to-authority',
+    subject: 'Mathematics',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-econ-001',
+    text: 'The efficient market hypothesis states it\'s impossible to consistently beat the market.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'EMH has different forms (weak, semi-strong, strong). Only the strong form claims markets are perfectly efficient. Evidence shows markets are mostly efficient but some anomalies exist.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Mathematics',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-cs-001',
+    text: 'P vs NP has been solved, proving P ≠ NP.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'P vs NP remains one of the seven Millennium Prize Problems. No accepted proof exists. Many attempts have been made, but none have withstood peer review.',
+    errorPattern: 'timeline-compression',
+    subject: 'Computer Science',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-cs-002',
+    text: 'Machine learning models can learn to be truly creative and generate genuinely novel ideas beyond their training data.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'ML models can produce novel combinations and interpolations, but whether this constitutes "true creativity" is philosophical. They cannot reason beyond patterns in training data in the way humans might.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Computer Science',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-phil-001',
+    text: 'Gödel\'s incompleteness theorems prove that mathematics is fundamentally flawed.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Gödel showed that sufficiently powerful formal systems can\'t prove all true statements about themselves. This is a feature of formal systems, not a "flaw" in mathematics itself.',
+    errorPattern: 'plausible-adjacency',
+    subject: 'Mathematics',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-med-001',
+    text: 'The placebo effect has been shown to cause measurable biological changes, not just subjective improvements.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Placebo responses involve real neurobiological changes: endorphin release, dopamine activity, and changes in brain regions associated with pain and mood. These are objective, measurable effects.',
+    errorPattern: null,
+    subject: 'Medical Science',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5841469/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-med-002',
+    text: 'Vaccines cause autism according to the original 1998 Lancet study by Andrew Wakefield.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Wakefield\'s study was fraudulent and retracted. He lost his medical license. Dozens of large studies involving millions of children have found no link between vaccines and autism.',
+    errorPattern: 'appeal-to-authority',
+    subject: 'Medical Science',
+    difficulty: 'medium',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-env-001',
+    text: 'Carbon capture technology can already remove CO2 from the atmosphere at a cost-effective scale.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Current carbon capture is expensive ($400-600+ per ton) and energy-intensive. It works but isn\'t cost-effective at climate-relevant scale. Costs are decreasing but remain prohibitive.',
+    errorPattern: 'timeline-compression',
+    subject: 'Chemistry',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-hist-001',
+    text: 'The "Dark Ages" were actually a period of significant technological and intellectual progress in many regions.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'While Western Europe saw decline after Rome, the Byzantine Empire, Islamic Golden Age, Tang Dynasty China, and other civilizations flourished. The term "Dark Ages" is Eurocentric and misleading.',
+    errorPattern: null,
+    subject: 'History',
+    difficulty: 'medium',
+    gradeLevel: 'college',
+    citation: 'https://www.britannica.com/event/Dark-Ages',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'col-ling-001',
+    text: 'The Sapir-Whorf hypothesis has been proven: language completely determines thought.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'The strong version (linguistic determinism) is largely rejected. The weak version (linguistic relativity) - that language influences thought - has more support, but "completely determines" is too strong.',
+    errorPattern: 'confident-specificity',
+    subject: 'Neuroscience',
+    difficulty: 'hard',
+    gradeLevel: 'college',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+
+  // ==================== ADDITIONAL VIRAL CLAIMS (ALL LEVELS) ====================
+  // High engagement potential - surprising, shareable facts
+
+  {
+    id: 'viral-001',
+    text: 'A blue whale\'s heart is so big that a small child could crawl through its arteries.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'A blue whale\'s heart weighs about 400 pounds and is the size of a small car. Its aorta is large enough for a small child (or a basketball) to pass through!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.nationalgeographic.com/animals/mammals/facts/blue-whale',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-002',
+    text: 'There are more ways to arrange a deck of cards than atoms on Earth.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: '52! (52 factorial) ≈ 8×10^67 arrangements. Earth has about 10^50 atoms. Card arrangements outnumber atoms by a factor of 10^17 (100,000 trillion times)!',
+    errorPattern: null,
+    subject: 'Mathematics',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: 'https://www.sciencefocus.com/science/how-many-ways-can-you-shuffle-a-deck-of-cards/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-003',
+    text: 'Honey bees can recognize human faces.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Studies show honeybees can learn to recognize and remember human faces, using the same part of their brain they use to recognize flowers!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.science.org/doi/10.1126/science.1103676',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-004',
+    text: 'Your brain uses more electricity than a light bulb.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Your brain uses about 12-20 watts - similar to a dim LED bulb but less than most incandescent bulbs (40-100W). "More than a light bulb" is misleading without specifying which bulb.',
+    errorPattern: 'confident-specificity',
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-005',
+    text: 'Bananas are radioactive.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Bananas contain potassium-40, a radioactive isotope. Eating one exposes you to about 0.01 millirem of radiation - completely harmless and far less than background radiation.',
+    errorPattern: null,
+    subject: 'Physics',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.epa.gov/radtown/natural-radioactivity-food',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-006',
+    text: 'A cloud can weigh more than a million pounds.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'An average cumulus cloud contains about 500 million grams of water (1.1 million pounds)! It floats because the water is spread over a huge volume with air underneath.',
+    errorPattern: null,
+    subject: 'Physics',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.usgs.gov/special-topics/water-science-school/science/how-much-does-a-cloud-weigh',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-007',
+    text: 'Wombat poop is cube-shaped.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Wombats produce cube-shaped droppings due to the varied elasticity of their intestinal walls. The cubes don\'t roll away, helping mark territory. Scientists won an Ig Nobel Prize studying this!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.nationalgeographic.com/animals/article/wombat-poop-cubes-why-study-reveals-mystery',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-008',
+    text: 'Scotland\'s national animal is the unicorn.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'The unicorn has been a Scottish heraldic symbol since the 12th century! It represents purity, innocence, power, and independence - values important to Scottish identity.',
+    errorPattern: null,
+    subject: 'History',
+    difficulty: 'easy',
+    gradeLevel: 'elementary',
+    citation: 'https://www.visitscotland.com/things-to-do/attractions/arts-culture/traditions/unicorn',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-009',
+    text: 'There\'s a basketball court on the top floor of the Supreme Court building, nicknamed "the highest court in the land."',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'There\'s a full basketball court on the 5th floor above the courtrooms. It\'s nicknamed "the highest court in the land" - a legal pun since the Supreme Court is the highest court!',
+    errorPattern: null,
+    subject: 'History',
+    difficulty: 'easy',
+    gradeLevel: 'middle',
+    citation: 'https://www.supremecourt.gov/about/buildingfeatures.aspx',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-010',
+    text: 'Venus is the only planet that spins clockwise (viewed from above the north pole).',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'Uranus also spins differently - it rotates on its side! And technically Venus and Uranus both have retrograde rotation. Saying Venus is "the only" planet is incorrect.',
+    errorPattern: 'confident-specificity',
+    subject: 'Astronomy',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-011',
+    text: 'The inventor of the frisbee was turned into a frisbee after death.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Walter Morrison, who invented the modern frisbee (Pluto Platter), died in 2010. His family had his ashes molded into memorial frisbees!',
+    errorPattern: null,
+    subject: 'History',
+    difficulty: 'easy',
+    gradeLevel: 'middle',
+    citation: 'https://www.nytimes.com/2010/02/11/sports/11frisbee.html',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-012',
+    text: 'Crows can remember human faces and hold grudges for years.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Research shows crows recognize faces and can hold grudges against people who threatened them. They even teach their offspring to recognize "dangerous" humans!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.scientificamerican.com/article/grudge-holding-crows-pass-on-their-anger-to-family-and-friends/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-013',
+    text: 'A jiffy is an actual unit of time equal to 1/100th of a second.',
+    answer: 'MIXED',
+    source: 'ai-generated',
+    explanation: 'A "jiffy" has multiple definitions in science! In physics it\'s often the time for light to travel one centimeter (~33.4 picoseconds). In electronics it can mean 1/60 second. "1/100th of a second" is just one definition.',
+    errorPattern: 'confident-specificity',
+    subject: 'Physics',
+    difficulty: 'medium',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-014',
+    text: 'Human trafficking happens more in the US than in any other country.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'This is difficult to measure accurately. While the US has more identified victims due to better reporting systems, raw numbers don\'t mean more trafficking. Many countries have worse problems but less reporting.',
+    errorPattern: 'statistical-manipulation',
+    subject: 'Geography',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-015',
+    text: 'A day on Mercury (sunrise to sunrise) lasts 176 Earth days.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Mercury rotates very slowly (59 Earth days) and orbits fast (88 days). Combined with its elliptical orbit, one solar day (noon to noon) equals 176 Earth days!',
+    errorPattern: null,
+    subject: 'Astronomy',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: 'https://solarsystem.nasa.gov/planets/mercury/overview/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-016',
+    text: 'You can see the Great Wall of China from the Moon.',
+    answer: 'FALSE',
+    source: 'ai-generated',
+    explanation: 'You can\'t see the Great Wall from the Moon - it\'s far too thin (15-30 feet wide). Apollo astronauts confirmed you can barely see continental outlines from the Moon, let alone structures.',
+    errorPattern: 'myth-perpetuation',
+    subject: 'Geography',
+    difficulty: 'easy',
+    gradeLevel: 'middle',
+    citation: null,
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-017',
+    text: 'Every person alive today shares a common ancestor who lived only about 3,000 years ago.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Mathematical modeling shows everyone alive today shares at least one ancestor from roughly 1000 BCE. This "identical ancestors point" is surprisingly recent due to population interconnection.',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: 'https://www.nature.com/articles/nature02842',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-018',
+    text: 'The smell after rain has an official name: petrichor.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Australian scientists coined "petrichor" in 1964 from Greek "petra" (stone) and "ichor" (fluid of the gods). It\'s caused by bacteria, plant oils, and ozone released during rain.',
+    errorPattern: null,
+    subject: 'Chemistry',
+    difficulty: 'easy',
+    gradeLevel: 'middle',
+    citation: 'https://www.scientificamerican.com/article/storm-scents-it-s-true-you-can-smell-incoming-rain/',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-019',
+    text: 'Maine is the closest US state to Africa.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Due to Earth\'s curvature, Quoddy Head in Maine is about 3,154 miles from El Beddouza, Morocco. Florida looks closer on flat maps but is actually farther due to map projection distortion!',
+    errorPattern: null,
+    subject: 'Geography',
+    difficulty: 'hard',
+    gradeLevel: 'high',
+    citation: 'https://www.worldatlas.com/articles/the-african-nation-closest-to-the-united-states.html',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
+  },
+  {
+    id: 'viral-020',
+    text: 'A strawberry is not actually a berry, but a banana is.',
+    answer: 'TRUE',
+    source: 'expert-sourced',
+    explanation: 'Botanically, berries develop from a single ovary with seeds inside the flesh. Strawberries develop from multiple ovaries (making them "aggregate fruits"). Bananas meet the berry definition!',
+    errorPattern: null,
+    subject: 'Biology',
+    difficulty: 'medium',
+    gradeLevel: 'middle',
+    citation: 'https://www.britannica.com/science/berry-plant-reproductive-body',
+    lastVerified: '2024-12-01',
+    reviewedBy: ['content-team']
   }
 ];
 
@@ -2128,6 +3723,58 @@ export function getSubjects() {
  */
 export function getClaimsBySubject(subject) {
   return CLAIMS_DATABASE.filter(c => c.subject === subject);
+}
+
+/**
+ * Get claims by grade level
+ * @param {string} gradeLevel - 'elementary' | 'middle' | 'high' | 'college'
+ * @returns {Array} Claims for that grade level (+ claims without gradeLevel for backwards compat)
+ */
+export function getClaimsByGradeLevel(gradeLevel) {
+  return CLAIMS_DATABASE.filter(c =>
+    c.gradeLevel === gradeLevel || (!c.gradeLevel && gradeLevel === 'middle')
+  );
+}
+
+/**
+ * Get claims filtered by multiple criteria
+ * @param {Object} filters - { gradeLevel, difficulty, subject, excludeIds }
+ * @returns {Array} Filtered claims
+ */
+export function getFilteredClaims(filters = {}) {
+  const { gradeLevel, difficulty, subject, excludeIds = [] } = filters;
+  const excludeSet = new Set(excludeIds);
+
+  return CLAIMS_DATABASE.filter(claim => {
+    // Exclude already-seen claims
+    if (excludeSet.has(claim.id)) return false;
+
+    // Grade level filter (claims without gradeLevel default to 'middle')
+    if (gradeLevel) {
+      const claimLevel = claim.gradeLevel || 'middle';
+      if (claimLevel !== gradeLevel) return false;
+    }
+
+    // Difficulty filter
+    if (difficulty && claim.difficulty !== difficulty) return false;
+
+    // Subject filter
+    if (subject && claim.subject !== subject) return false;
+
+    return true;
+  });
+}
+
+/**
+ * Get grade level distribution statistics
+ */
+export function getGradeLevelDistribution() {
+  const dist = { elementary: 0, middle: 0, high: 0, college: 0 };
+  CLAIMS_DATABASE.forEach(c => {
+    const level = c.gradeLevel || 'middle';
+    if (dist[level] !== undefined) dist[level]++;
+  });
+  return dist;
 }
 
 /**
@@ -2171,6 +3818,11 @@ export function validateClaimsDatabase() {
       invalidClaims.push({ index, claim, reason: `Invalid difficulty: ${claim.difficulty}` });
     }
 
+    // Validate grade level if present
+    if (claim.gradeLevel && !['elementary', 'middle', 'high', 'college'].includes(claim.gradeLevel)) {
+      invalidClaims.push({ index, claim, reason: `Invalid gradeLevel: ${claim.gradeLevel}` });
+    }
+
     // Validate error pattern for AI-generated claims
     if (claim.source === 'ai-generated' && claim.errorPattern) {
       const validPatterns = AI_ERROR_PATTERNS.map(p => p.id);
@@ -2186,6 +3838,7 @@ export function validateClaimsDatabase() {
     invalidClaims,
     totalClaims: CLAIMS_DATABASE.length,
     distribution: getAnswerDistribution(),
+    gradeLevels: getGradeLevelDistribution(),
     subjects: getSubjects()
   };
 }
@@ -2197,7 +3850,8 @@ if (import.meta.env?.DEV) {
     console.warn('Claims database validation failed:', validation);
   } else {
     console.log('Claims database validation passed:', validation.totalClaims, 'claims');
-    console.log('Distribution:', validation.distribution);
+    console.log('Answer distribution:', validation.distribution);
+    console.log('Grade levels:', validation.gradeLevels);
     console.log('Subjects:', validation.subjects);
   }
 }
