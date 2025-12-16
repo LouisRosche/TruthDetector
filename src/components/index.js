@@ -9,10 +9,8 @@ export { ClaimCard } from './ClaimCard';
 export { ConfidenceSelector } from './ConfidenceSelector';
 export { VerdictSelector } from './VerdictSelector';
 export { PredictionModal } from './PredictionModal';
-export { SetupScreen } from './SetupScreen';
-export { PlayingScreen } from './PlayingScreen';
-export { DebriefScreen } from './DebriefScreen';
-export { TeacherDashboard } from './TeacherDashboard';
+// Note: SetupScreen, PlayingScreen, DebriefScreen, TeacherDashboard are lazy-loaded in App.jsx
+// Do not export them here to enable proper code splitting
 export { ScrollingLeaderboard } from './ScrollingLeaderboard';
 export { SoloStatsView } from './SoloStatsView';
 export { ClaimSubmissionForm } from './ClaimSubmissionForm';
