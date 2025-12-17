@@ -3,7 +3,7 @@
  * For teacher dashboard - approve/reject student-submitted claims
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from './Button';
 import { FirebaseBackend } from '../services/firebase';
 
@@ -13,17 +13,7 @@ export function ClaimModeration({ classCode }) {
   const [error, setError] = useState(null);
   const [processingId, setProcessingId] = useState(null);
 
-  // Fetch pending claims from Firebase
-  useEffect(() => {
-    if (!FirebaseBackend.initialized) {
-      setLoading(false);
-      return;
-    }
-
-    loadPendingClaims();
-  }, [classCode]);
-
-  const loadPendingClaims = async () => {
+  const loadPendingClaims = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -36,7 +26,17 @@ export function ClaimModeration({ classCode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [classCode]);
+
+  // Fetch pending claims from Firebase
+  useEffect(() => {
+    if (!FirebaseBackend.initialized) {
+      setLoading(false);
+      return;
+    }
+
+    loadPendingClaims();
+  }, [loadPendingClaims]);
 
   const handleApprove = async (claim) => {
     setProcessingId(claim.id);
@@ -223,7 +223,7 @@ function ClaimReviewCard({ claim, onApprove, onReject, isProcessing }) {
         marginBottom: '1rem'
       }}>
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: 'var(--text-primary)' }}>
-          "{claim.text}"
+          &ldquo;{claim.text}&rdquo;
         </p>
       </div>
 
