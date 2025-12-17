@@ -32,6 +32,12 @@ export function SetupScreen({ onStart, isLoading = false }) {
     return getUnseenClaimStats(existingProfile.claimsSeen || []);
   }, [isReturningPlayer, existingProfile.claimsSeen]);
 
+  // Calculate available claims for selected subjects (warn if too few)
+  const subjectClaimStats = useMemo(() => {
+    if (selectedSubjects.length === 0) return null;
+    return getUnseenClaimStats([], selectedSubjects);
+  }, [selectedSubjects]);
+
   const [teamName, setTeamName] = useState(isReturningPlayer ? quickStartSettings.playerName : '');
   const [rounds, setRounds] = useState(isReturningPlayer ? quickStartSettings.rounds : 5);
   const [difficulty, setDifficulty] = useState(isReturningPlayer ? quickStartSettings.difficulty : 'mixed');
@@ -668,6 +674,20 @@ export function SetupScreen({ onStart, isLoading = false }) {
         <div style={{ marginTop: '0.375rem', fontSize: '0.625rem', color: 'var(--text-muted)' }}>
           Click subjects to focus on specific areas, or leave empty for all
         </div>
+        {/* Warning if not enough claims for selected subjects */}
+        {subjectClaimStats && subjectClaimStats.total < rounds && (
+          <div style={{
+            marginTop: '0.5rem',
+            padding: '0.375rem 0.625rem',
+            background: 'rgba(251, 191, 36, 0.15)',
+            border: '1px solid var(--accent-amber)',
+            borderRadius: '6px',
+            fontSize: '0.6875rem',
+            color: 'var(--accent-amber)'
+          }}>
+            ⚠️ Only {subjectClaimStats.total} claims available for selected subjects. {rounds > subjectClaimStats.total ? `Other subjects will be mixed in to reach ${rounds} rounds.` : ''}
+          </div>
+        )}
       </div>
 
       {/* Rounds */}
