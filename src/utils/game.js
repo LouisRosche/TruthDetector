@@ -111,6 +111,15 @@ export function selectClaimsByDifficulty(difficulty, count, subjects = [], previ
     }
   }
 
+  // CRITICAL: If subject filter resulted in too few claims, fall back to full database
+  // This prevents the game from breaking mid-way when there aren't enough claims
+  if (selectedClaims.length < count && subjects && subjects.length > 0) {
+    console.warn(`Only ${selectedClaims.length} claims found for subjects [${subjects.join(', ')}], falling back to full database`);
+    const fullPool = [...CLAIMS_DATABASE, ...additionalClaims].filter(c => !usedIds.has(c.id));
+    const additional = selectUnique(fullPool, count - selectedClaims.length, false);
+    selectedClaims.push(...additional);
+  }
+
   // Final safety check: ensure absolutely no duplicates
   const uniqueClaims = [];
   const finalSeenIds = new Set();

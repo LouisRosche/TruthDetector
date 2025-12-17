@@ -1013,7 +1013,7 @@ export const FirebaseBackend = {
       const q = query(
         gamesRef,
         where('classCode', '==', filterClass),
-        orderBy('timestamp', 'desc'),
+        orderBy('createdAt', 'desc'),
         limit(500)
       );
 
@@ -1023,13 +1023,13 @@ export const FirebaseBackend = {
         return {
           id: doc.id,
           teamName: data.teamName || 'Unknown',
-          players: (data.players || []).join(', '),
+          players: (data.players || []).map(p => typeof p === 'string' ? p : `${p.firstName || ''} ${p.lastInitial || ''}`.trim()).join(', '),
           score: data.score || 0,
           accuracy: data.accuracy || 0,
           rounds: data.rounds || 0,
           difficulty: data.difficulty || 'mixed',
           maxStreak: data.maxStreak || 0,
-          timestamp: data.timestamp?.toDate?.()?.toISOString() || new Date().toISOString(),
+          timestamp: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
           subjects: (data.subjects || []).join(', ')
         };
       });
