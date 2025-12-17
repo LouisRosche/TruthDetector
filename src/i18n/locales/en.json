@@ -1,0 +1,168 @@
+{
+  "appName": "Truth Hunters",
+  "tagline": "Research-based epistemic training for middle schoolers",
+
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "continue": "Continue"
+  },
+
+  "setup": {
+    "title": "Setup Your Game",
+    "teamName": "Team Name",
+    "teamNamePlaceholder": "Enter your team name",
+    "players": "Players",
+    "addPlayer": "Add Player",
+    "playerName": "Player Name",
+    "selectAvatar": "Select Avatar",
+    "difficulty": "Difficulty",
+    "difficultyLevels": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard",
+      "mixed": "Mixed"
+    },
+    "subjects": "Subjects",
+    "selectSubjects": "Select at least one subject",
+    "rounds": "Number of Rounds",
+    "roundsLabel": "{{count}} round",
+    "roundsLabel_other": "{{count}} rounds",
+    "startGame": "Start Game",
+    "resumeGame": "Resume Game",
+    "newGame": "New Game"
+  },
+
+  "gameplay": {
+    "round": "Round",
+    "roundProgress": "Round {{current}} of {{total}}",
+    "score": "Score",
+    "points": "{{count}} point",
+    "points_other": "{{count}} points",
+    "verdict": "Verdict",
+    "verdictOptions": {
+      "true": "TRUE",
+      "false": "FALSE",
+      "mixed": "MIXED"
+    },
+    "confidence": "Confidence",
+    "confidenceLevels": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "hints": "Hints",
+    "useHint": "Use Hint",
+    "hintCost": "Cost: {{points}} point",
+    "hintCost_other": "Cost: {{points}} points",
+    "submitAnswer": "Submit Answer",
+    "nextRound": "Next Round",
+    "correct": "Correct!",
+    "incorrect": "Incorrect",
+    "explanation": "Explanation",
+    "paused": "Game Paused",
+    "resume": "Resume Game",
+    "exitGame": "Exit Game"
+  },
+
+  "debrief": {
+    "title": "Game Complete!",
+    "finalScore": "Final Score",
+    "accuracy": "Accuracy",
+    "calibrationBonus": "Calibration Bonus",
+    "achievements": "Achievements",
+    "roundBreakdown": "Round by Round",
+    "playAgain": "Play Again",
+    "viewLeaderboard": "View Leaderboard",
+    "reflection": "Team Reflection",
+    "reflectionPrompt": "What did your team learn?",
+    "submitReflection": "Submit Reflection"
+  },
+
+  "leaderboard": {
+    "title": "Leaderboard",
+    "teamName": "Team",
+    "score": "Score",
+    "accuracy": "Accuracy",
+    "difficulty": "Difficulty",
+    "achievements": "Achievements",
+    "filterByClass": "Filter by Class",
+    "allClasses": "All Classes",
+    "noEntries": "No leaderboard entries yet. Be the first to play!"
+  },
+
+  "teacher": {
+    "dashboard": "Teacher Dashboard",
+    "analytics": "Analytics",
+    "claimModeration": "Claim Moderation",
+    "pendingClaims": "Pending Claims",
+    "approvedClaims": "Approved Claims",
+    "rejectedClaims": "Rejected Claims",
+    "approve": "Approve",
+    "reject": "Reject",
+    "rejectReason": "Rejection Reason",
+    "classPerformance": "Class Performance",
+    "subjectBreakdown": "Subject Breakdown",
+    "exportData": "Export Data",
+    "resetLeaderboard": "Reset Leaderboard",
+    "firebaseConfig": "Firebase Configuration",
+    "classCode": "Class Code",
+    "connectionStatus": "Connection Status",
+    "connected": "Connected",
+    "disconnected": "Disconnected"
+  },
+
+  "accessibility": {
+    "skipToContent": "Skip to main content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "toggleSound": "Toggle sound",
+    "togglePresentationMode": "Toggle presentation mode",
+    "keyboardShortcuts": "Keyboard Shortcuts",
+    "pressKey": "Press {{key}}"
+  },
+
+  "errors": {
+    "invalidTeamName": "Please enter a valid team name (2-50 characters)",
+    "noPlayersSelected": "Please add at least 1 player",
+    "noSubjectsSelected": "Please select at least one subject",
+    "loadingFailed": "Failed to load data. Please check your connection.",
+    "saveFailed": "Failed to save. Please try again.",
+    "connectionLost": "Connection lost. Playing in offline mode.",
+    "firebaseNotConfigured": "Firebase is not configured. Some features may be unavailable."
+  },
+
+  "settings": {
+    "language": "Language",
+    "sound": "Sound Effects",
+    "presentationMode": "Presentation Mode",
+    "analytics": "Analytics",
+    "analyticsDescription": "Track your progress locally (no personal data collected)",
+    "privacyPolicy": "Privacy Policy",
+    "about": "About Truth Hunters"
+  },
+
+  "about": {
+    "version": "Version {{version}}",
+    "license": "Licensed under MIT",
+    "researchBased": "Research-Based Design",
+    "researchCitations": {
+      "johnson": "Johnson & Johnson (2009) - Cooperative learning",
+      "wineburg": "Wineburg et al. (2022) - Lateral reading",
+      "barzilai": "Barzilai & Chinn (2018) - Epistemic education",
+      "lichtenstein": "Lichtenstein et al. - Calibration training"
+    },
+    "contribute": "Contribute on GitHub",
+    "reportIssue": "Report an Issue"
+  }
+}

@@ -2,9 +2,11 @@
  * ANALYTICS SERVICE
  * Tracks game events and learning progression locally
  * Designed to be privacy-friendly - no external tracking
+ * Users can opt-out via settings
  */
 
 const ANALYTICS_KEY = 'truthHunters_analytics';
+const ANALYTICS_ENABLED_KEY = 'truthHunters_analytics_enabled';
 
 /**
  * Analytics Event Types
@@ -24,6 +26,32 @@ export const AnalyticsEvents = {
  * Tracks game events locally for teacher insights
  */
 export const Analytics = {
+  /**
+   * Check if analytics is enabled (user has not opted out)
+   * @returns {boolean} True if analytics is enabled
+   */
+  isEnabled() {
+    try {
+      const setting = localStorage.getItem(ANALYTICS_ENABLED_KEY);
+      // Default to enabled if not set
+      return setting === null ? true : setting === 'true';
+    } catch (e) {
+      return true; // Default enabled if localStorage unavailable
+    }
+  },
+
+  /**
+   * Enable or disable analytics tracking
+   * @param {boolean} enabled - Whether to enable analytics
+   */
+  setEnabled(enabled) {
+    try {
+      localStorage.setItem(ANALYTICS_ENABLED_KEY, String(enabled));
+    } catch (e) {
+      console.warn('Failed to save analytics preference:', e);
+    }
+  },
+
   /**
    * Get all analytics data
    * @returns {Object} Analytics data
@@ -77,6 +105,11 @@ export const Analytics = {
    * @param {Object} eventData - Additional event data
    */
   track(eventType, eventData = {}) {
+    // Check if user has opted out of analytics
+    if (!this.isEnabled()) {
+      return; // Silently skip tracking if disabled
+    }
+
     const data = this.getData();
     const now = Date.now();
 

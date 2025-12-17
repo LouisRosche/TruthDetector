@@ -6,7 +6,7 @@
 import { useState } from 'react';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 
-export function Header({ score, round, totalRounds, phase, presentationMode, onTogglePresentationMode, onExitGame, soundEnabled, onToggleSound, onTogglePause, isPaused, onShowHelp }) {
+export function Header({ score, round, totalRounds, phase, presentationMode, onTogglePresentationMode, onExitGame, soundEnabled, onToggleSound, analyticsEnabled, onToggleAnalytics, onTogglePause, isPaused, onShowHelp }) {
   const isOnline = useOnlineStatus();
   const [showExitModal, setShowExitModal] = useState(false);
 
@@ -118,6 +118,32 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
             }}
           >
             <span style={{ fontSize: '1rem' }}>❓</span>
+          </button>
+        )}
+
+        {/* Analytics Toggle */}
+        {onToggleAnalytics && (
+          <button
+            onClick={onToggleAnalytics}
+            aria-pressed={analyticsEnabled}
+            title={analyticsEnabled ? 'Disable analytics (local tracking for insights)' : 'Enable analytics (local tracking for insights)'}
+            className="mono"
+            style={{
+              padding: '0.5rem 0.75rem',
+              background: analyticsEnabled ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+              border: `1px solid ${analyticsEnabled ? 'var(--accent-violet)' : 'var(--border)'}`,
+              borderRadius: '6px',
+              fontSize: '0.75rem',
+              color: analyticsEnabled ? 'var(--accent-violet)' : 'var(--text-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              transition: 'all 0.2s ease',
+              minHeight: '36px'
+            }}
+          >
+            <span style={{ fontSize: '1rem' }}>{analyticsEnabled ? '📊' : '🚫'}</span>
           </button>
         )}
 

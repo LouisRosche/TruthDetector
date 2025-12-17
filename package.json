@@ -10,15 +10,22 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:update": "playwright test --update-snapshots",
     "lint": "eslint src --ext .js,.jsx",
     "cms": "vite --config vite.cms.config.js"
   },
   "dependencies": {
     "firebase": "^12.6.0",
+    "i18next": "^24.0.0",
+    "i18next-browser-languagedetector": "^8.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-i18next": "^15.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.48.0",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
     "@vitejs/plugin-react": "^5.1.2",
@@ -27,7 +34,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^23.0.1",
-    "vite": "^7.2.7",
+    "vite": "^8.0.0",
     "vitest": "^4.0.15"
   },
   "keywords": [

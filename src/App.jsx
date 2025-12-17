@@ -68,6 +68,11 @@ export function App() {
     }
   });
 
+  // Analytics opt-in state
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(() => {
+    return Analytics.isEnabled();
+  });
+
   // Check for saved game on mount
   useEffect(() => {
     const summary = GameStateManager.getSummary();
@@ -109,6 +114,15 @@ export function App() {
       } catch {
         // Ignore localStorage errors
       }
+      return newValue;
+    });
+  }, []);
+
+  // Toggle analytics and persist preference
+  const toggleAnalytics = useCallback(() => {
+    setAnalyticsEnabled((prev) => {
+      const newValue = !prev;
+      Analytics.setEnabled(newValue);
       return newValue;
     });
   }, []);
@@ -568,6 +582,8 @@ export function App() {
         onExitGame={restartGame}
         soundEnabled={soundEnabled}
         onToggleSound={toggleSound}
+        analyticsEnabled={analyticsEnabled}
+        onToggleAnalytics={toggleAnalytics}
         isPaused={isPaused}
         onTogglePause={togglePause}
         onShowHelp={() => setShowHelp(true)}
