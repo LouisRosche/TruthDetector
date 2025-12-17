@@ -1,0 +1,72 @@
+# Dependabot configuration for automated dependency updates
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Enable version updates for npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "LouisRosche"
+    assignees:
+      - "LouisRosche"
+    labels:
+      - "dependencies"
+      - "automated"
+    # Group dependency updates to reduce PR noise
+    groups:
+      # Group all patch and minor React-related updates
+      react-ecosystem:
+        patterns:
+          - "react*"
+          - "@vitejs/*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group testing dependencies
+      testing:
+        patterns:
+          - "vitest*"
+          - "@vitest/*"
+          - "@testing-library/*"
+          - "jsdom"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group linting dependencies
+      linting:
+        patterns:
+          - "eslint*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Automatically merge minor and patch updates for dev dependencies
+    # (requires GitHub Actions workflow - see .github/workflows/auto-merge.yml)
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore(dev)"
+      include: "scope"
+
+  # Enable security updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "LouisRosche"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"

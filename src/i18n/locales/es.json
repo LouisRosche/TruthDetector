@@ -1,0 +1,168 @@
+{
+  "appName": "Cazadores de la Verdad",
+  "tagline": "Entrenamiento epistémico basado en investigación para estudiantes de secundaria",
+
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "submit": "Enviar",
+    "continue": "Continuar"
+  },
+
+  "setup": {
+    "title": "Configurar Tu Juego",
+    "teamName": "Nombre del Equipo",
+    "teamNamePlaceholder": "Ingresa el nombre de tu equipo",
+    "players": "Jugadores",
+    "addPlayer": "Agregar Jugador",
+    "playerName": "Nombre del Jugador",
+    "selectAvatar": "Seleccionar Avatar",
+    "difficulty": "Dificultad",
+    "difficultyLevels": {
+      "easy": "Fácil",
+      "medium": "Medio",
+      "hard": "Difícil",
+      "mixed": "Mixto"
+    },
+    "subjects": "Materias",
+    "selectSubjects": "Selecciona al menos una materia",
+    "rounds": "Número de Rondas",
+    "roundsLabel": "{{count}} ronda",
+    "roundsLabel_other": "{{count}} rondas",
+    "startGame": "Iniciar Juego",
+    "resumeGame": "Reanudar Juego",
+    "newGame": "Nuevo Juego"
+  },
+
+  "gameplay": {
+    "round": "Ronda",
+    "roundProgress": "Ronda {{current}} de {{total}}",
+    "score": "Puntuación",
+    "points": "{{count}} punto",
+    "points_other": "{{count}} puntos",
+    "verdict": "Veredicto",
+    "verdictOptions": {
+      "true": "VERDADERO",
+      "false": "FALSO",
+      "mixed": "MIXTO"
+    },
+    "confidence": "Confianza",
+    "confidenceLevels": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "hints": "Pistas",
+    "useHint": "Usar Pista",
+    "hintCost": "Costo: {{points}} punto",
+    "hintCost_other": "Costo: {{points}} puntos",
+    "submitAnswer": "Enviar Respuesta",
+    "nextRound": "Siguiente Ronda",
+    "correct": "¡Correcto!",
+    "incorrect": "Incorrecto",
+    "explanation": "Explicación",
+    "paused": "Juego Pausado",
+    "resume": "Reanudar Juego",
+    "exitGame": "Salir del Juego"
+  },
+
+  "debrief": {
+    "title": "¡Juego Completado!",
+    "finalScore": "Puntuación Final",
+    "accuracy": "Precisión",
+    "calibrationBonus": "Bonificación de Calibración",
+    "achievements": "Logros",
+    "roundBreakdown": "Ronda por Ronda",
+    "playAgain": "Jugar de Nuevo",
+    "viewLeaderboard": "Ver Tabla de Posiciones",
+    "reflection": "Reflexión del Equipo",
+    "reflectionPrompt": "¿Qué aprendió tu equipo?",
+    "submitReflection": "Enviar Reflexión"
+  },
+
+  "leaderboard": {
+    "title": "Tabla de Posiciones",
+    "teamName": "Equipo",
+    "score": "Puntuación",
+    "accuracy": "Precisión",
+    "difficulty": "Dificultad",
+    "achievements": "Logros",
+    "filterByClass": "Filtrar por Clase",
+    "allClasses": "Todas las Clases",
+    "noEntries": "Aún no hay entradas en la tabla. ¡Sé el primero en jugar!"
+  },
+
+  "teacher": {
+    "dashboard": "Panel del Profesor",
+    "analytics": "Analíticas",
+    "claimModeration": "Moderación de Afirmaciones",
+    "pendingClaims": "Afirmaciones Pendientes",
+    "approvedClaims": "Afirmaciones Aprobadas",
+    "rejectedClaims": "Afirmaciones Rechazadas",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "rejectReason": "Motivo de Rechazo",
+    "classPerformance": "Rendimiento de la Clase",
+    "subjectBreakdown": "Desglose por Materia",
+    "exportData": "Exportar Datos",
+    "resetLeaderboard": "Restablecer Tabla de Posiciones",
+    "firebaseConfig": "Configuración de Firebase",
+    "classCode": "Código de Clase",
+    "connectionStatus": "Estado de Conexión",
+    "connected": "Conectado",
+    "disconnected": "Desconectado"
+  },
+
+  "accessibility": {
+    "skipToContent": "Saltar al contenido principal",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "toggleSound": "Activar/desactivar sonido",
+    "togglePresentationMode": "Activar/desactivar modo de presentación",
+    "keyboardShortcuts": "Atajos de Teclado",
+    "pressKey": "Presiona {{key}}"
+  },
+
+  "errors": {
+    "invalidTeamName": "Por favor ingresa un nombre de equipo válido (2-50 caracteres)",
+    "noPlayersSelected": "Por favor agrega al menos 1 jugador",
+    "noSubjectsSelected": "Por favor selecciona al menos una materia",
+    "loadingFailed": "Error al cargar datos. Por favor verifica tu conexión.",
+    "saveFailed": "Error al guardar. Por favor intenta de nuevo.",
+    "connectionLost": "Conexión perdida. Jugando en modo sin conexión.",
+    "firebaseNotConfigured": "Firebase no está configurado. Algunas funciones pueden no estar disponibles."
+  },
+
+  "settings": {
+    "language": "Idioma",
+    "sound": "Efectos de Sonido",
+    "presentationMode": "Modo de Presentación",
+    "analytics": "Analíticas",
+    "analyticsDescription": "Rastrea tu progreso localmente (no se recopilan datos personales)",
+    "privacyPolicy": "Política de Privacidad",
+    "about": "Acerca de Cazadores de la Verdad"
+  },
+
+  "about": {
+    "version": "Versión {{version}}",
+    "license": "Licenciado bajo MIT",
+    "researchBased": "Diseño Basado en Investigación",
+    "researchCitations": {
+      "johnson": "Johnson & Johnson (2009) - Aprendizaje cooperativo",
+      "wineburg": "Wineburg et al. (2022) - Lectura lateral",
+      "barzilai": "Barzilai & Chinn (2018) - Educación epistémica",
+      "lichtenstein": "Lichtenstein et al. - Entrenamiento de calibración"
+    },
+    "contribute": "Contribuir en GitHub",
+    "reportIssue": "Reportar un Problema"
+  }
+}
