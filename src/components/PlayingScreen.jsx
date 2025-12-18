@@ -317,15 +317,15 @@ export function PlayingScreen({
   const isLastRound = round >= totalRounds;
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '1.25rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0.75rem' }}>
       {/* Progress Bar */}
       <div
         style={{
           width: '100%',
-          height: '4px',
+          height: '3px',
           background: 'var(--bg-elevated)',
           borderRadius: '2px',
-          marginBottom: '0.75rem',
+          marginBottom: '0.5rem',
           overflow: 'hidden'
         }}
       >
@@ -345,7 +345,7 @@ export function PlayingScreen({
         style={{
           display: 'flex',
           justifyContent: 'center',
-          marginBottom: '0.75rem'
+          marginBottom: '0.5rem'
         }}
       >
         <div
@@ -353,11 +353,11 @@ export function PlayingScreen({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.75rem',
-            padding: '0.375rem 0.75rem',
+            gap: '0.5rem',
+            padding: '0.25rem 0.5rem',
             background: 'var(--bg-elevated)',
-            borderRadius: '6px',
-            fontSize: '0.6875rem'
+            borderRadius: '4px',
+            fontSize: '0.625rem'
           }}
         >
           <span style={{ color: 'var(--text-muted)' }}>
@@ -391,23 +391,17 @@ export function PlayingScreen({
         <div
           className="animate-shake"
           style={{
-            marginBottom: '0.75rem',
-            padding: '0.75rem 1rem',
+            marginBottom: '0.5rem',
+            padding: '0.5rem 0.75rem',
             background: 'rgba(239, 68, 68, 0.2)',
-            border: '3px solid var(--incorrect)',
-            borderRadius: '8px',
+            border: '2px solid var(--incorrect)',
+            borderRadius: '6px',
             textAlign: 'center',
-            boxShadow: '0 0 20px rgba(239, 68, 68, 0.3)'
+            boxShadow: '0 0 15px rgba(239, 68, 68, 0.3)'
           }}
         >
-          <div className="mono" style={{ fontSize: '1rem', color: 'var(--incorrect)', fontWeight: 700 }}>
-            🚫 TAB SWITCH DETECTED!
-          </div>
-          <div style={{ fontSize: '0.8125rem', color: 'var(--text-primary)', marginTop: '0.375rem', fontWeight: 600 }}>
-            ROUND FORFEITED - {ANTI_CHEAT.FORFEIT_PENALTY} POINTS
-          </div>
-          <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', marginTop: '0.25rem', fontStyle: 'italic' }}>
-            Zero tolerance policy: No tab switching allowed during gameplay
+          <div className="mono" style={{ fontSize: '0.8125rem', color: 'var(--incorrect)', fontWeight: 700 }}>
+            🚫 TAB SWITCH - ROUND FORFEITED ({ANTI_CHEAT.FORFEIT_PENALTY} PTS)
           </div>
         </div>
       )}
@@ -599,37 +593,37 @@ export function PlayingScreen({
         <div
           className="animate-in"
           style={{
-            marginTop: '1rem',
-            padding: '1rem',
+            marginTop: '0.75rem',
+            padding: '0.75rem',
             background: 'rgba(167, 139, 250, 0.1)',
             border: '1px solid var(--accent-violet)',
-            borderRadius: '8px'
+            borderRadius: '6px'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', marginBottom: '0.375rem' }}>
             <span>{activeHint.icon}</span>
-            <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--accent-violet)' }}>
+            <span className="mono" style={{ fontSize: '0.6875rem', color: 'var(--accent-violet)' }}>
               {activeHint.name}
             </span>
           </div>
-          <div style={{ fontSize: '0.9375rem', color: 'var(--text-primary)' }}>{activeHint.content}</div>
+          <div style={{ fontSize: '0.875rem', color: 'var(--text-primary)' }}>{activeHint.content}</div>
         </div>
       )}
 
       {/* Voting Section - shown when not viewing result */}
       {!showResult && (
-        <div className="animate-in" style={{ marginTop: '1.25rem' }}>
+        <div className="animate-in" style={{ marginTop: '0.75rem' }}>
           {/* Verdict Selection */}
           <div
             style={{
               background: 'var(--bg-card)',
               border: '1px solid var(--border)',
-              borderRadius: '12px',
-              padding: '1rem',
-              marginBottom: '0.75rem'
+              borderRadius: '8px',
+              padding: '0.75rem',
+              marginBottom: '0.5rem'
             }}
           >
-            <h3 className="mono" style={{ fontSize: '0.8125rem', color: 'var(--accent-amber)', marginBottom: '0.75rem' }}>
+            <h3 className="mono" style={{ fontSize: '0.75rem', color: 'var(--accent-amber)', marginBottom: '0.5rem' }}>
               VERDICT
             </h3>
             <VerdictSelector value={verdict} onChange={setVerdict} />
@@ -640,12 +634,12 @@ export function PlayingScreen({
             style={{
               background: 'var(--bg-card)',
               border: '1px solid var(--border)',
-              borderRadius: '12px',
-              padding: '1rem',
-              marginBottom: '0.75rem'
+              borderRadius: '8px',
+              padding: '0.75rem',
+              marginBottom: '0.5rem'
             }}
           >
-            <h3 className="mono" style={{ fontSize: '0.8125rem', color: 'var(--accent-amber)', marginBottom: '0.75rem' }}>
+            <h3 className="mono" style={{ fontSize: '0.75rem', color: 'var(--accent-amber)', marginBottom: '0.5rem' }}>
               CONFIDENCE
             </h3>
             <ConfidenceSelector value={confidence} onChange={setConfidence} />
@@ -656,14 +650,14 @@ export function PlayingScreen({
             style={{
               background: 'var(--bg-card)',
               border: '1px solid var(--border)',
-              borderRadius: '12px',
-              padding: '1rem',
-              marginBottom: '0.75rem'
+              borderRadius: '8px',
+              padding: '0.75rem',
+              marginBottom: '0.5rem'
             }}
           >
             <label
               className="mono"
-              style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.375rem' }}
+              style={{ display: 'block', fontSize: '0.625rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}
             >
               WHY? (optional)
             </label>
@@ -676,12 +670,12 @@ export function PlayingScreen({
               aria-label="Explain your reasoning"
               style={{
                 width: '100%',
-                padding: '0.625rem',
+                padding: '0.5rem',
                 background: 'var(--bg-elevated)',
                 border: '1px solid var(--border)',
                 borderRadius: '6px',
                 color: 'var(--text-primary)',
-                fontSize: '0.875rem',
+                fontSize: '0.8125rem',
                 fontFamily: 'var(--font-serif)',
                 resize: 'none'
               }}
@@ -693,34 +687,34 @@ export function PlayingScreen({
             style={{
               background: 'var(--bg-card)',
               border: '1px solid var(--border)',
-              borderRadius: '12px',
-              padding: '1rem',
-              marginBottom: '1rem'
+              borderRadius: '8px',
+              padding: '0.75rem',
+              marginBottom: '0.75rem'
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
               <h3
                 className="mono"
-                style={{ fontSize: '0.8125rem', color: 'var(--accent-violet)', margin: 0 }}
+                style={{ fontSize: '0.75rem', color: 'var(--accent-violet)', margin: 0 }}
               >
-                💡 NEED A HINT? (costs points)
+                💡 HINTS
               </h3>
               {hintCostTotal > 0 && (
                 <span
                   className="mono"
                   style={{
-                    fontSize: '0.75rem',
+                    fontSize: '0.625rem',
                     color: 'var(--incorrect)',
-                    padding: '0.25rem 0.5rem',
+                    padding: '0.125rem 0.375rem',
                     background: 'rgba(239, 68, 68, 0.1)',
-                    borderRadius: '4px'
+                    borderRadius: '3px'
                   }}
                 >
-                  Hints used: -{hintCostTotal} pts
+                  -{hintCostTotal} pts
                 </span>
               )}
             </div>
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap' }}>
               {HINT_TYPES.map((hint) => {
                 const isUsed = usedHints.includes(hint.id);
                 return (
@@ -730,18 +724,18 @@ export function PlayingScreen({
                     disabled={isUsed}
                     className="mono"
                     style={{
-                      padding: '0.5rem 0.75rem',
+                      padding: '0.375rem 0.5rem',
                       background: isUsed ? 'var(--accent-violet)' : 'var(--bg-elevated)',
                       color: isUsed ? 'white' : 'var(--text-secondary)',
                       border: '1px solid var(--border)',
-                      borderRadius: '6px',
-                      fontSize: '0.75rem',
+                      borderRadius: '4px',
+                      fontSize: '0.6875rem',
                       cursor: isUsed ? 'default' : 'pointer',
                       opacity: isUsed ? 0.7 : 1,
                       textDecoration: isUsed ? 'line-through' : 'none'
                     }}
                   >
-                    {hint.icon} {hint.name} (-{hint.cost}pts)
+                    {hint.icon} {hint.name} (-{hint.cost})
                   </button>
                 );
               })}
@@ -759,22 +753,22 @@ export function PlayingScreen({
         <div
           className={`animate-in ${resultData.correct ? 'animate-celebrate' : 'animate-shake'}`}
           style={{
-            marginTop: '1.25rem',
+            marginTop: '0.75rem',
             background: resultData.correct ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
             border: `2px solid ${resultData.correct ? 'var(--correct)' : 'var(--incorrect)'}`,
-            borderRadius: '12px',
-            padding: '1.5rem',
+            borderRadius: '8px',
+            padding: '1rem',
             textAlign: 'center'
           }}
         >
-          <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>{resultData.correct ? '✓' : '✗'}</div>
+          <div style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{resultData.correct ? '✓' : '✗'}</div>
           <div
             className="mono"
             style={{
-              fontSize: '1.375rem',
+              fontSize: '1.125rem',
               fontWeight: 700,
               color: resultData.correct ? 'var(--correct)' : 'var(--incorrect)',
-              marginBottom: '0.375rem'
+              marginBottom: '0.25rem'
             }}
           >
             {resultData.correct ? 'CORRECT!' : 'INCORRECT'}
@@ -782,58 +776,56 @@ export function PlayingScreen({
           <div
             className="mono"
             style={{
-              fontSize: '1.125rem',
+              fontSize: '1rem',
               color: resultData.points >= 0 ? 'var(--correct)' : 'var(--incorrect)',
-              marginBottom: '0.5rem'
+              marginBottom: resultData.speedBonus || integrity.penalty < 0 ? '0.375rem' : '0.5rem'
             }}
           >
             {resultData.points >= 0 ? '+' : ''}
             {resultData.points} points
           </div>
 
-          {/* Speed Bonus Display */}
-          {resultData.speedBonus && (
-            <div
-              className="animate-celebrate"
-              style={{
-                marginTop: '0.5rem',
-                padding: '0.5rem 0.75rem',
-                background: resultData.speedBonus.tier === 'ultra-lightning'
-                  ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.35) 0%, rgba(245, 158, 11, 0.3) 100%)'
-                  : resultData.speedBonus.tier === 'lightning'
-                  ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.25) 0%, rgba(245, 158, 11, 0.2) 100%)'
-                  : 'rgba(251, 191, 36, 0.15)',
-                border: `2px solid ${resultData.speedBonus.tier === 'ultra-lightning' ? 'var(--accent-amber)' : 'var(--accent-amber)'}`,
-                borderRadius: '6px',
-                display: 'inline-block',
-                boxShadow: resultData.speedBonus.tier === 'ultra-lightning' ? '0 0 15px rgba(251, 191, 36, 0.4)' : 'none'
-              }}
-            >
-              <span className="mono" style={{
-                fontSize: resultData.speedBonus.tier === 'ultra-lightning' ? '1rem' : '0.875rem',
-                color: 'var(--accent-amber)',
-                fontWeight: 600
-              }}>
-                {resultData.speedBonus.icon} {resultData.speedBonus.label} +{resultData.speedBonus.bonus}
-              </span>
-            </div>
-          )}
-
-          {/* Anti-Cheat Penalty Display */}
-          {integrity.penalty < 0 && (
-            <div
-              style={{
-                marginTop: '0.5rem',
-                padding: '0.5rem 0.75rem',
-                background: 'rgba(239, 68, 68, 0.15)',
-                border: '1px solid var(--incorrect)',
-                borderRadius: '6px',
-                display: 'inline-block'
-              }}
-            >
-              <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--incorrect)' }}>
-                ⚠️ Tab Switch Penalty: {integrity.penalty} pts
-              </span>
+          {/* Speed Bonus & Penalty - Combined inline */}
+          {(resultData.speedBonus || integrity.penalty < 0) && (
+            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '0.375rem' }}>
+              {resultData.speedBonus && (
+                <div
+                  className="animate-celebrate"
+                  style={{
+                    padding: '0.375rem 0.625rem',
+                    background: resultData.speedBonus.tier === 'ultra-lightning'
+                      ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.35) 0%, rgba(245, 158, 11, 0.3) 100%)'
+                      : resultData.speedBonus.tier === 'lightning'
+                      ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.25) 0%, rgba(245, 158, 11, 0.2) 100%)'
+                      : 'rgba(251, 191, 36, 0.15)',
+                    border: `1px solid var(--accent-amber)`,
+                    borderRadius: '4px',
+                    boxShadow: resultData.speedBonus.tier === 'ultra-lightning' ? '0 0 10px rgba(251, 191, 36, 0.4)' : 'none'
+                  }}
+                >
+                  <span className="mono" style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--accent-amber)',
+                    fontWeight: 600
+                  }}>
+                    {resultData.speedBonus.icon} {resultData.speedBonus.label} +{resultData.speedBonus.bonus}
+                  </span>
+                </div>
+              )}
+              {integrity.penalty < 0 && (
+                <div
+                  style={{
+                    padding: '0.375rem 0.625rem',
+                    background: 'rgba(239, 68, 68, 0.15)',
+                    border: '1px solid var(--incorrect)',
+                    borderRadius: '4px'
+                  }}
+                >
+                  <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--incorrect)' }}>
+                    ⚠️ Tab: {integrity.penalty} pts
+                  </span>
+                </div>
+              )}
             </div>
           )}
 
@@ -841,23 +833,22 @@ export function PlayingScreen({
             <div
               className={currentStreak >= 5 ? 'animate-celebrate' : ''}
               style={{
-                marginTop: '0.5rem',
-                padding: currentStreak >= 5 ? '0.625rem 1rem' : '0.375rem 0.75rem',
+                marginBottom: '0.375rem',
+                padding: '0.375rem 0.625rem',
                 background: currentStreak >= 5
                   ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.25) 0%, rgba(167, 139, 250, 0.2) 100%)'
                   : 'rgba(251, 191, 36, 0.15)',
-                borderRadius: currentStreak >= 5 ? '8px' : '4px',
+                borderRadius: '4px',
                 display: 'inline-block',
-                border: currentStreak >= 5 ? '2px solid var(--accent-amber)' : 'none',
-                boxShadow: currentStreak >= 5 ? '0 0 20px rgba(251, 191, 36, 0.3)' : 'none'
+                border: currentStreak >= 5 ? '1px solid var(--accent-amber)' : 'none'
               }}
             >
               <span
                 className="mono"
                 style={{
-                  fontSize: currentStreak >= 5 ? '1rem' : '0.8125rem',
+                  fontSize: '0.75rem',
                   color: 'var(--accent-amber)',
-                  fontWeight: currentStreak >= 5 ? 700 : 400
+                  fontWeight: 600
                 }}
               >
                 {currentStreak >= 5 && '⭐ '}
@@ -868,26 +859,24 @@ export function PlayingScreen({
             </div>
           )}
 
-          <div style={{ marginTop: '0.75rem', fontSize: '0.9375rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+          <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontStyle: 'italic', marginBottom: '0.375rem' }}>
             {encouragement}
           </div>
 
-          <div style={{ marginTop: '0.75rem', fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-            You said <strong>{resultData.verdict}</strong> with{' '}
-            <strong aria-label={`${resultData.confidence} out of 3`}>{'●'.repeat(resultData.confidence)}</strong>{' '}
-            confidence
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: calibrationTip ? '0.5rem' : '0.75rem' }}>
+            {resultData.verdict} · {'●'.repeat(resultData.confidence)} confidence
           </div>
 
-          {/* Calibration Tip */}
+          {/* Calibration Tip - Compact */}
           {calibrationTip && (
             <div
               style={{
-                marginTop: '1rem',
-                padding: '0.75rem 1rem',
-                background: 'rgba(167, 139, 250, 0.1)',
-                border: '1px solid var(--accent-violet)',
-                borderRadius: '8px',
-                fontSize: '0.8125rem',
+                marginBottom: '0.75rem',
+                padding: '0.5rem 0.75rem',
+                background: 'rgba(167, 139, 250, 0.08)',
+                border: '1px solid rgba(167, 139, 250, 0.3)',
+                borderRadius: '6px',
+                fontSize: '0.75rem',
                 color: 'var(--accent-violet)',
                 textAlign: 'left'
               }}
@@ -897,11 +886,9 @@ export function PlayingScreen({
           )}
 
           {/* Next Round Button */}
-          <div style={{ marginTop: '1.25rem' }}>
-            <Button onClick={handleNextRound} fullWidth>
-              {isLastRound ? '📊 See Final Results' : '➡️ Next Round'}
-            </Button>
-          </div>
+          <Button onClick={handleNextRound} fullWidth>
+            {isLastRound ? '📊 Results' : '➡️ Next'}
+          </Button>
         </div>
       )}
     </div>
