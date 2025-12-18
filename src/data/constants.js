@@ -93,6 +93,33 @@ export const STORAGE_CONFIG = {
   ERROR_RETENTION_DAYS: 7
 };
 
+// Speed Bonus Configuration
+export const SPEED_BONUS = {
+  ENABLED: true,
+  // Time thresholds (percentage of total time)
+  LIGHTNING_THRESHOLD: 0.25, // First 25% of time
+  FAST_THRESHOLD: 0.50,      // First 50% of time
+  // Bonus multipliers
+  LIGHTNING_MULTIPLIER: 1.5, // 50% bonus
+  FAST_MULTIPLIER: 1.25,     // 25% bonus
+  // Icons
+  LIGHTNING_ICON: '⚡',
+  FAST_ICON: '🔥'
+};
+
+// Anti-Cheating Configuration
+export const ANTI_CHEAT = {
+  ENABLED: true,
+  TAB_VISIBILITY_TRACKING: true,
+  // Penalties
+  TAB_SWITCH_PENALTY: -2,           // Points deducted per tab switch
+  MAX_TAB_SWITCHES_PER_ROUND: 2,    // After this, round is forfeited
+  FORFEIT_PENALTY: -5,               // Points deducted for forfeiting
+  // Warning messages
+  WARN_ON_TAB_SWITCH: true,
+  PAUSE_ON_TAB_SWITCH: true
+};
+
 /**
  * Difficulty configuration
  */

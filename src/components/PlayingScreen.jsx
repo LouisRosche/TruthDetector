@@ -3,16 +3,17 @@
  * Main gameplay component - single unified screen for claim evaluation
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { Button } from './Button';
 import { ClaimCard } from './ClaimCard';
 import { ConfidenceSelector } from './ConfidenceSelector';
 import { VerdictSelector } from './VerdictSelector';
 import { LiveClassLeaderboard } from './LiveClassLeaderboard';
-import { DIFFICULTY_CONFIG, DIFFICULTY_BG_COLORS, HINT_TYPES, ENCOURAGEMENTS } from '../data/constants';
+import { DIFFICULTY_CONFIG, DIFFICULTY_BG_COLORS, HINT_TYPES, ENCOURAGEMENTS, ANTI_CHEAT } from '../data/constants';
 import { calculatePoints } from '../utils/scoring';
 import { getRandomItem, getHintContent } from '../utils/helpers';
 import { SoundManager } from '../services/sound';
+import { useGameIntegrity } from '../hooks/useGameIntegrity';
 
 // Calibration-based tips that rotate based on performance
 const CALIBRATION_TIPS = {
@@ -65,6 +66,35 @@ export function PlayingScreen({
   const [pendingSubmit, setPendingSubmit] = useState(false);
   const [pendingNext, setPendingNext] = useState(false);
   const [showPreviousRounds, setShowPreviousRounds] = useState(false);
+  const [tabSwitchWarning, setTabSwitchWarning] = useState(null);
+  const [timeRemaining, setTimeRemaining] = useState(null);
+
+  const roundStartTimeRef = useRef(null);
+  const timerIntervalRef = useRef(null);
+
+  // Get time limits from difficulty config
+  const totalTimeAllowed = DIFFICULTY_CONFIG[_difficulty]?.discussTime || 120;
+
+  // Anti-cheat integrity tracking
+  const integrity = useGameIntegrity(
+    !showResult, // Active when not showing result
+    (switchCount) => {
+      // Show warning on tab switch
+      setTabSwitchWarning(switchCount);
+      SoundManager.play('incorrect'); // Play warning sound
+      setTimeout(() => setTabSwitchWarning(null), 3000);
+    },
+    () => {
+      // Auto-forfeit on max switches exceeded
+      if (!showResult) {
+        // Force submit with forfeit penalty
+        const correct = false;
+        const points = ANTI_CHEAT.FORFEIT_PENALTY;
+        setResultData({ correct, points, confidence, verdict: 'FORFEITED', forfeited: true });
+        setShowResult(true);
+      }
+    }
+  );
 
   // Keyboard shortcuts for faster gameplay
   // Memoize the handler to prevent memory leaks from stale closures
@@ -118,13 +148,63 @@ export function PlayingScreen({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]); // Now depends on the memoized handler
 
+  // Timer effect - starts when claim loads, resets when showResult changes
+  useEffect(() => {
+    if (!showResult && claim) {
+      // Start timer
+      roundStartTimeRef.current = Date.now();
+      setTimeRemaining(totalTimeAllowed);
+
+      // Update timer every second
+      timerIntervalRef.current = setInterval(() => {
+        if (roundStartTimeRef.current) {
+          const elapsed = Math.floor((Date.now() - roundStartTimeRef.current) / 1000);
+          const remaining = Math.max(0, totalTimeAllowed - elapsed);
+          setTimeRemaining(remaining);
+
+          // Auto-submit when time runs out
+          if (remaining === 0 && verdict) {
+            setPendingSubmit(true);
+          }
+        }
+      }, 1000);
+    } else {
+      // Clear timer when showing result
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
+    }
+
+    return () => {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+      }
+    };
+  }, [showResult, claim, totalTimeAllowed, verdict]);
+
   // Handle pending keyboard actions (to avoid circular dependencies)
   useEffect(() => {
     if (pendingSubmit && verdict && claim) {
       setPendingSubmit(false);
       // Trigger submit logic inline
       const correct = verdict === claim.answer;
-      const points = calculatePoints(correct, confidence, _difficulty);
+
+      // Calculate time elapsed for speed bonus
+      const timeElapsed = roundStartTimeRef.current
+        ? Math.floor((Date.now() - roundStartTimeRef.current) / 1000)
+        : totalTimeAllowed;
+
+      // Calculate points with speed bonus and integrity penalties
+      const pointsResult = calculatePoints(correct, confidence, _difficulty, {
+        timeElapsed,
+        totalTime: totalTimeAllowed,
+        integrityPenalty: integrity.penalty
+      });
+
+      const points = typeof pointsResult === 'number' ? pointsResult : pointsResult.points;
+      const speedBonus = typeof pointsResult === 'object' ? pointsResult.speedBonus : null;
+
       SoundManager.play(correct ? 'correct' : 'incorrect');
       const msgs = correct ? ENCOURAGEMENTS.correct : ENCOURAGEMENTS.incorrect;
       setEncouragement(getRandomItem(msgs) || (correct ? 'Nice work!' : 'Keep trying!'));
@@ -132,10 +212,10 @@ export function PlayingScreen({
       if (correct && confidence === 1) calibrationType = 'underconfident';
       else if (!correct && confidence === 3) calibrationType = 'overconfident';
       setCalibrationTip(getRandomItem(CALIBRATION_TIPS[calibrationType]) || null);
-      setResultData({ correct, points, confidence, verdict });
+      setResultData({ correct, points, confidence, verdict, speedBonus, timeElapsed });
       setShowResult(true);
     }
-  }, [pendingSubmit, verdict, claim, confidence]);
+  }, [pendingSubmit, verdict, claim, confidence, _difficulty, totalTimeAllowed, integrity.penalty]);
 
   useEffect(() => {
     if (pendingNext && resultData) {
@@ -158,14 +238,29 @@ export function PlayingScreen({
       setUsedHints([]);
       setHintCostTotal(0);
       setCalibrationTip(null);
+      integrity.reset(); // Reset anti-cheat tracking
     }
-  }, [pendingNext, resultData, claim, reasoning, onSubmit]);
+  }, [pendingNext, resultData, claim, reasoning, onSubmit, integrity]);
 
   const handleSubmitVerdict = useCallback(() => {
     if (!verdict || !claim) return;
 
     const correct = verdict === claim.answer;
-    const points = calculatePoints(correct, confidence, _difficulty);
+
+    // Calculate time elapsed for speed bonus
+    const timeElapsed = roundStartTimeRef.current
+      ? Math.floor((Date.now() - roundStartTimeRef.current) / 1000)
+      : totalTimeAllowed;
+
+    // Calculate points with speed bonus and integrity penalties
+    const pointsResult = calculatePoints(correct, confidence, _difficulty, {
+      timeElapsed,
+      totalTime: totalTimeAllowed,
+      integrityPenalty: integrity.penalty
+    });
+
+    const points = typeof pointsResult === 'number' ? pointsResult : pointsResult.points;
+    const speedBonus = typeof pointsResult === 'object' ? pointsResult.speedBonus : null;
 
     SoundManager.play(correct ? 'correct' : 'incorrect');
 
@@ -180,9 +275,9 @@ export function PlayingScreen({
     else if (!correct && confidence === 1) calibrationType = 'calibrated';
 
     setCalibrationTip(getRandomItem(CALIBRATION_TIPS[calibrationType]) || null);
-    setResultData({ correct, points, confidence, verdict });
+    setResultData({ correct, points, confidence, verdict, speedBonus, timeElapsed });
     setShowResult(true);
-  }, [verdict, confidence, claim]);
+  }, [verdict, confidence, claim, _difficulty, totalTimeAllowed, integrity.penalty]);
 
   const handleNextRound = useCallback(() => {
     onSubmit({
@@ -204,7 +299,8 @@ export function PlayingScreen({
     setUsedHints([]);
     setHintCostTotal(0);
     setCalibrationTip(null);
-  }, [claim, resultData, reasoning, onSubmit]);
+    integrity.reset(); // Reset anti-cheat tracking
+  }, [claim, resultData, reasoning, onSubmit, integrity]);
 
   const handleHintRequest = (hintType) => {
     const hint = HINT_TYPES.find((h) => h.id === hintType);
@@ -290,7 +386,31 @@ export function PlayingScreen({
         />
       )}
 
-      {/* Top Bar: Round + Streak + Quick Actions */}
+      {/* Tab Switch Warning */}
+      {tabSwitchWarning !== null && ANTI_CHEAT.ENABLED && (
+        <div
+          className="animate-shake"
+          style={{
+            marginBottom: '0.75rem',
+            padding: '0.75rem 1rem',
+            background: 'rgba(239, 68, 68, 0.15)',
+            border: '2px solid var(--incorrect)',
+            borderRadius: '8px',
+            textAlign: 'center'
+          }}
+        >
+          <div className="mono" style={{ fontSize: '0.875rem', color: 'var(--incorrect)', fontWeight: 600 }}>
+            ⚠️ TAB SWITCH DETECTED!
+          </div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+            {tabSwitchWarning >= ANTI_CHEAT.MAX_TAB_SWITCHES_PER_ROUND
+              ? 'Round forfeited for excessive tab switching'
+              : `Warning ${tabSwitchWarning}/${ANTI_CHEAT.MAX_TAB_SWITCHES_PER_ROUND} - ${ANTI_CHEAT.TAB_SWITCH_PENALTY} points penalty`}
+          </div>
+        </div>
+      )}
+
+      {/* Top Bar: Round + Timer + Streak + Quick Actions */}
       <div
         style={{
           display: 'flex',
@@ -312,6 +432,23 @@ export function PlayingScreen({
           >
             {round}/{totalRounds}
           </div>
+          {/* Timer Display */}
+          {!showResult && timeRemaining !== null && (
+            <div
+              className="mono"
+              style={{
+                padding: '0.25rem 0.5rem',
+                fontSize: '0.6875rem',
+                background: timeRemaining <= 10 ? 'rgba(239, 68, 68, 0.15)' : 'var(--bg-elevated)',
+                border: timeRemaining <= 10 ? '1px solid var(--incorrect)' : 'none',
+                borderRadius: '4px',
+                color: timeRemaining <= 10 ? 'var(--incorrect)' : 'var(--accent-cyan)',
+                fontWeight: timeRemaining <= 10 ? 600 : 400
+              }}
+            >
+              ⏱️ {Math.floor(timeRemaining / 60)}:{String(timeRemaining % 60).padStart(2, '0')}
+            </div>
+          )}
           {previousResults.length > 0 && (
             <button
               onClick={() => setShowPreviousRounds(!showPreviousRounds)}
@@ -651,6 +788,45 @@ export function PlayingScreen({
             {resultData.points >= 0 ? '+' : ''}
             {resultData.points} points
           </div>
+
+          {/* Speed Bonus Display */}
+          {resultData.speedBonus && (
+            <div
+              className="animate-celebrate"
+              style={{
+                marginTop: '0.5rem',
+                padding: '0.5rem 0.75rem',
+                background: resultData.speedBonus.tier === 'lightning'
+                  ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.25) 0%, rgba(245, 158, 11, 0.2) 100%)'
+                  : 'rgba(251, 191, 36, 0.15)',
+                border: `1px solid var(--accent-amber)`,
+                borderRadius: '6px',
+                display: 'inline-block'
+              }}
+            >
+              <span className="mono" style={{ fontSize: '0.875rem', color: 'var(--accent-amber)', fontWeight: 600 }}>
+                {resultData.speedBonus.icon} {resultData.speedBonus.tier === 'lightning' ? 'LIGHTNING FAST!' : 'SPEED BONUS!'} +{resultData.speedBonus.bonus}
+              </span>
+            </div>
+          )}
+
+          {/* Anti-Cheat Penalty Display */}
+          {integrity.penalty < 0 && (
+            <div
+              style={{
+                marginTop: '0.5rem',
+                padding: '0.5rem 0.75rem',
+                background: 'rgba(239, 68, 68, 0.15)',
+                border: '1px solid var(--incorrect)',
+                borderRadius: '6px',
+                display: 'inline-block'
+              }}
+            >
+              <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--incorrect)' }}>
+                ⚠️ Tab Switch Penalty: {integrity.penalty} pts
+              </span>
+            </div>
+          )}
 
           {resultData.correct && currentStreak >= 2 && (
             <div
