@@ -4,6 +4,8 @@
  * Tracks lifetime stats, achievements, and learning progress
  */
 
+import { logger } from '../utils/logger';
+
 const STORAGE_KEY = 'truthHunters_playerProfile';
 const PROFILE_VERSION = 1;
 

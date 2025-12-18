@@ -3,6 +3,8 @@
  * Handles mid-game state persistence to localStorage for crash recovery
  */
 
+import { logger } from '../utils/logger';
+
 const STORAGE_KEY = 'truthHunters_savedGame';
 
 /**
