@@ -93,6 +93,32 @@ export const STORAGE_CONFIG = {
   ERROR_RETENTION_DAYS: 7
 };
 
+// Speed Bonus Configuration - Granular tier system
+export const SPEED_BONUS = {
+  ENABLED: true,
+  // Granular tiers (percentage of time used, checked in order)
+  TIERS: [
+    { threshold: 0.10, multiplier: 2.0,  tier: 'ultra-lightning', icon: '⚡⚡', label: 'ULTRA LIGHTNING!' },
+    { threshold: 0.20, multiplier: 1.75, tier: 'lightning',       icon: '⚡',   label: 'LIGHTNING FAST!' },
+    { threshold: 0.35, multiplier: 1.5,  tier: 'very-fast',       icon: '🔥',   label: 'VERY FAST!' },
+    { threshold: 0.50, multiplier: 1.25, tier: 'fast',            icon: '💨',   label: 'FAST!' },
+    { threshold: 0.75, multiplier: 1.1,  tier: 'quick',           icon: '⏱️',  label: 'QUICK!' }
+  ]
+};
+
+// Anti-Cheating Configuration - ZERO TOLERANCE
+export const ANTI_CHEAT = {
+  ENABLED: true,
+  TAB_VISIBILITY_TRACKING: true,
+  // Penalties (STRICT MODE: Any tab switch = forfeit)
+  TAB_SWITCH_PENALTY: 0,            // No incremental penalty (immediate forfeit instead)
+  MAX_TAB_SWITCHES_PER_ROUND: 0,    // ANY tab switch forfeits the round
+  FORFEIT_PENALTY: -10,              // Harsh penalty for forfeiting
+  // Warning messages
+  WARN_ON_TAB_SWITCH: true,
+  PAUSE_ON_TAB_SWITCH: true
+};
+
 /**
  * Difficulty configuration
  */
