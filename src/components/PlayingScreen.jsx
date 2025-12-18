@@ -613,36 +613,37 @@ export function PlayingScreen({
       {/* Voting Section - shown when not viewing result */}
       {!showResult && (
         <div className="animate-in" style={{ marginTop: '0.75rem' }}>
-          {/* Verdict Selection */}
-          <div
-            style={{
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border)',
-              borderRadius: '8px',
-              padding: '0.75rem',
-              marginBottom: '0.5rem'
-            }}
-          >
-            <h3 className="mono" style={{ fontSize: '0.75rem', color: 'var(--accent-amber)', marginBottom: '0.5rem' }}>
-              VERDICT
-            </h3>
-            <VerdictSelector value={verdict} onChange={setVerdict} />
-          </div>
+          {/* Verdict & Confidence side-by-side to save vertical space */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            {/* Verdict Selection */}
+            <div
+              style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: '8px',
+                padding: '0.75rem'
+              }}
+            >
+              <h3 className="mono" style={{ fontSize: '0.75rem', color: 'var(--accent-amber)', marginBottom: '0.5rem' }}>
+                VERDICT
+              </h3>
+              <VerdictSelector value={verdict} onChange={setVerdict} />
+            </div>
 
-          {/* Confidence Selection */}
-          <div
-            style={{
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border)',
-              borderRadius: '8px',
-              padding: '0.75rem',
-              marginBottom: '0.5rem'
-            }}
-          >
-            <h3 className="mono" style={{ fontSize: '0.75rem', color: 'var(--accent-amber)', marginBottom: '0.5rem' }}>
-              CONFIDENCE
-            </h3>
-            <ConfidenceSelector value={confidence} onChange={setConfidence} />
+            {/* Confidence Selection */}
+            <div
+              style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: '8px',
+                padding: '0.75rem'
+              }}
+            >
+              <h3 className="mono" style={{ fontSize: '0.75rem', color: 'var(--accent-amber)', marginBottom: '0.5rem' }}>
+                CONFIDENCE
+              </h3>
+              <ConfidenceSelector value={confidence} onChange={setConfidence} />
+            </div>
           </div>
 
           {/* Reasoning (optional) */}
