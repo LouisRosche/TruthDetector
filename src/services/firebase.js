@@ -772,6 +772,11 @@ export const FirebaseBackend = {
       return () => {};
     }
 
+    // Unsubscribe from existing listener to prevent memory leaks
+    if (this._listeners['pendingClaims']) {
+      this._listeners['pendingClaims']();
+    }
+
     try {
       const filterClass = classFilter || this.getClassCode();
       const claimsRef = collection(this.db, 'pendingClaims');
@@ -822,6 +827,11 @@ export const FirebaseBackend = {
   subscribeToClassAchievements(callback, classFilter = null) {
     if (!this.initialized || !this.db) {
       return () => {};
+    }
+
+    // Unsubscribe from existing listener to prevent memory leaks
+    if (this._listeners['classAchievements']) {
+      this._listeners['classAchievements']();
     }
 
     try {
@@ -939,6 +949,11 @@ export const FirebaseBackend = {
     if (!this.initialized || !this.db) {
       console.warn('Firebase not initialized for live leaderboard');
       return () => {};
+    }
+
+    // Unsubscribe from existing listener to prevent memory leaks
+    if (this._listeners['liveLeaderboard']) {
+      this._listeners['liveLeaderboard']();
     }
 
     try {
@@ -1318,6 +1333,8 @@ export const FirebaseBackend = {
     // Aggregate by player
     const playerStats = {};
     achievements.forEach(a => {
+      // Skip achievements with missing player name
+      if (!a.playerName) return;
       const key = a.playerName.toLowerCase();
       if (!playerStats[key]) {
         playerStats[key] = {
