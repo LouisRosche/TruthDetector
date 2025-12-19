@@ -72,7 +72,7 @@ describe('PlayingScreen', () => {
 
   it('disables submit button when no verdict selected', () => {
     render(<PlayingScreen {...defaultProps} />);
-    const submitButton = screen.getByRole('button', { name: /lock in/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     expect(submitButton).toBeDisabled();
   });
 
@@ -83,7 +83,7 @@ describe('PlayingScreen', () => {
     const trueButton = screen.getByText('TRUE');
     fireEvent.click(trueButton);
 
-    const submitButton = screen.getByRole('button', { name: /lock in/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     expect(submitButton).not.toBeDisabled();
   });
 
@@ -127,7 +127,7 @@ describe('PlayingScreen', () => {
     fireEvent.click(trueButton);
 
     // Submit
-    const submitButton = screen.getByRole('button', { name: /lock in/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     fireEvent.click(submitButton);
 
     // Should show result
@@ -142,7 +142,7 @@ describe('PlayingScreen', () => {
     fireEvent.click(falseButton);
 
     // Submit
-    const submitButton = screen.getByRole('button', { name: /lock in/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     fireEvent.click(submitButton);
 
     // Should show incorrect
@@ -156,7 +156,7 @@ describe('PlayingScreen', () => {
     const trueButton = screen.getByText('TRUE');
     fireEvent.click(trueButton);
 
-    const submitButton = screen.getByRole('button', { name: /lock in/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     fireEvent.click(submitButton);
 
     // Should show final results button
@@ -170,7 +170,7 @@ describe('PlayingScreen', () => {
     const trueButton = screen.getByText('TRUE');
     fireEvent.click(trueButton);
 
-    const submitButton = screen.getByRole('button', { name: /lock in/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     fireEvent.click(submitButton);
 
     // Should show next round button
@@ -185,7 +185,7 @@ describe('PlayingScreen', () => {
     fireEvent.click(trueButton);
 
     // Submit
-    const submitButton = screen.getByRole('button', { name: /lock in/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     fireEvent.click(submitButton);
 
     // Click next round

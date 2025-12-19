@@ -183,7 +183,7 @@ export function VotingSection({
       </div>
 
       <Button onClick={onSubmit} fullWidth disabled={!verdict || disabled}>
-        {teamAvatar?.emoji || '🔒'} Lock In Answer
+        {teamAvatar?.emoji || '✓'} Submit Answer
       </Button>
     </div>
   );

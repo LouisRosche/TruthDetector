@@ -5,9 +5,9 @@
 
 export function ConfidenceSelector({ value, onChange, disabled }) {
   const levels = [
-    { value: 1, label: 'We think so', risk: '+1 / -1', color: 'var(--confidence-1)', levelText: 'Low' },
-    { value: 2, label: 'Pretty sure', risk: '+3 / -3', color: 'var(--confidence-2)', levelText: 'Medium' },
-    { value: 3, label: 'Certain', risk: '+5 / -6', color: 'var(--confidence-3)', levelText: 'High' }
+    { value: 1, label: 'Not sure', risk: 'Right +1 · Wrong -1', color: 'var(--confidence-1)', levelText: 'Safe' },
+    { value: 2, label: 'Pretty sure', risk: 'Right +3 · Wrong -3', color: 'var(--confidence-2)', levelText: 'Medium' },
+    { value: 3, label: 'Certain!', risk: 'Right +5 · Wrong -6', color: 'var(--confidence-3)', levelText: 'Risky' }
   ];
 
   const handleKeyDown = (e, levelValue) => {

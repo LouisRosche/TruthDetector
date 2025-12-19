@@ -134,14 +134,14 @@ export function ResultPhase({
 
       <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontStyle: 'italic', marginBottom: '0.375rem' }}>
         {resultData.forfeited
-          ? (resultData.forfeitReason === 'tab-switch' ? '🚫 Round forfeited for tab switching' : '⏰ Time ran out - no verdict submitted')
+          ? (resultData.forfeitReason === 'tab-switch' ? '🚫 Round skipped - you left the tab' : '⏰ Time ran out before you answered')
           : encouragement
         }
       </div>
 
       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: calibrationTip ? '0.5rem' : '0.75rem' }}>
         {resultData.forfeited
-          ? `No verdict submitted · Time: ${resultData.timeElapsed || 0}s`
+          ? `No answer submitted · Time: ${resultData.timeElapsed || 0}s`
           : `${resultData.verdict} · ${'●'.repeat(resultData.confidence)} confidence${resultData.timeElapsed ? ` · ⏱️ ${resultData.timeElapsed}s` : ''}`
         }
       </div>
