@@ -486,6 +486,16 @@ export function SetupScreen({ onStart, isLoading = false }) {
         <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
           👥 TEAM MEMBERS (for leaderboard)
         </label>
+        {/* Column headers for clarity */}
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.25rem', paddingLeft: '1.5rem' }}>
+          <span className="mono" style={{ flex: 1, fontSize: '0.5625rem', color: 'var(--text-muted)' }}>
+            First Name
+          </span>
+          <span className="mono" style={{ width: '3rem', fontSize: '0.5625rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+            Last Initial
+          </span>
+          <span style={{ width: '2rem' }}></span>
+        </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {players.map((player, index) => (
             <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -496,7 +506,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
                 type="text"
                 value={player.firstName}
                 onChange={(e) => updatePlayer(index, 'firstName', e.target.value)}
-                placeholder="First Name"
+                placeholder="Emma"
                 maxLength={15}
                 autoComplete="off"
                 aria-label={`Player ${index + 1} first name`}
@@ -515,7 +525,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
                 type="text"
                 value={player.lastInitial}
                 onChange={(e) => updatePlayer(index, 'lastInitial', e.target.value.charAt(0).toUpperCase())}
-                placeholder="?"
+                placeholder="S"
                 title="Last name initial (e.g., S for Smith)"
                 maxLength={1}
                 autoComplete="off"

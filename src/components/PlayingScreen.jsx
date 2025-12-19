@@ -495,11 +495,11 @@ export function PlayingScreen({
           }}
         >
           <div className="mono" style={{ fontSize: '1rem', color: 'var(--incorrect)', fontWeight: 700, marginBottom: '0.5rem' }}>
-            🚫 TAB SWITCH DETECTED!
+            🚫 YOU LEFT THIS TAB!
           </div>
           <div style={{ fontSize: '0.875rem', color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
-            This round has been forfeited.<br />
-            <strong>{ANTI_CHEAT.FORFEIT_PENALTY} points penalty</strong>
+            Switching tabs ends your round automatically.<br />
+            <strong>Penalty: {ANTI_CHEAT.FORFEIT_PENALTY} points</strong>
           </div>
           <Button
             onClick={() => {
