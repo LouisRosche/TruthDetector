@@ -12,6 +12,7 @@ import {
   getDoc,
   setDoc,
   deleteDoc,
+  updateDoc,
   query,
   where,
   orderBy,
@@ -569,7 +570,6 @@ export const FirebaseBackend = {
     }
 
     try {
-      const { doc, updateDoc } = await import('firebase/firestore');
       const claimRef = doc(this.db, 'pendingClaims', claimId);
 
       await updateDoc(claimRef, {
