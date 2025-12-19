@@ -422,7 +422,7 @@ export function PlayingScreen({
       >
         <div
           style={{
-            width: `${(round / totalRounds) * 100}%`,
+            width: `${((round + 1) / totalRounds) * 100}%`,
             height: '100%',
             background: 'linear-gradient(90deg, var(--accent-cyan) 0%, var(--accent-violet) 100%)',
             borderRadius: '2px',
@@ -530,7 +530,7 @@ export function PlayingScreen({
               color: 'var(--text-secondary)'
             }}
           >
-            {round}/{totalRounds}
+            {round + 1}/{totalRounds}
           </div>
           {/* Timer Display with speed bonus zones */}
           {!showResult && timeRemaining !== null && (
