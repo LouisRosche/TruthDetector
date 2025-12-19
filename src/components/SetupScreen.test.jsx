@@ -139,9 +139,9 @@ describe('SetupScreen', () => {
     expect(screen.getByText(/Read claims together/i)).toBeInTheDocument();
   });
 
-  it('renders sound toggle button', () => {
+  it('renders sound toggle switch', () => {
     render(<SetupScreen onStart={mockOnStart} />);
-    expect(screen.getByRole('button', { name: /🔊|🔇/i })).toBeInTheDocument();
+    expect(screen.getByRole('switch', { name: /sound/i })).toBeInTheDocument();
   });
 
   it('renders subjects filter', () => {
