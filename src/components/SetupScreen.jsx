@@ -259,8 +259,8 @@ export function SetupScreen({ onStart, isLoading = false }) {
         <ScrollingLeaderboard onViewFull={() => setShowLeaderboard(true)} />
       </div>
 
-      {/* Main Setup Form */}
-      <div style={{ maxWidth: '640px', width: '100%' }}>
+      {/* Main Setup Form - wider for better content fit */}
+      <div style={{ maxWidth: '720px', width: '100%' }}>
       {/* Header */}
       <div className="animate-in" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🔍</div>
@@ -490,7 +490,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
         }}
       >
         <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-          👥 TEAM MEMBERS (for leaderboard)
+          👥 WHO&apos;S PLAYING?
         </label>
         {/* Column headers aligned with inputs below */}
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.25rem' }}>
@@ -751,23 +751,49 @@ export function SetupScreen({ onStart, isLoading = false }) {
         </div>
       </div>
 
-      {/* Sound + Start */}
-      <div className="animate-in" style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
-        <button
-          onClick={handleSoundToggle}
-          className="mono"
-          style={{
-            padding: '0.75rem',
-            background: 'var(--bg-elevated)',
-            border: '1px solid var(--border)',
-            borderRadius: '6px',
-            color: 'var(--text-secondary)',
-            fontSize: '1rem',
-            cursor: 'pointer'
-          }}
-        >
-          {soundEnabled ? '🔊' : '🔇'}
-        </button>
+      {/* Sound Toggle + Start */}
+      <div className="animate-in" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '1rem' }}>
+        {/* iOS-style toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span className="mono" style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>SOUND</span>
+          <button
+            onClick={handleSoundToggle}
+            role="switch"
+            aria-checked={soundEnabled}
+            aria-label={soundEnabled ? 'Sound on' : 'Sound off'}
+            style={{
+              width: '44px',
+              height: '24px',
+              borderRadius: '12px',
+              border: 'none',
+              background: soundEnabled ? 'var(--accent-cyan)' : 'var(--bg-elevated)',
+              cursor: 'pointer',
+              position: 'relative',
+              transition: 'background 0.2s ease',
+              boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)'
+            }}
+          >
+            <span style={{
+              position: 'absolute',
+              top: '2px',
+              left: soundEnabled ? '22px' : '2px',
+              width: '20px',
+              height: '20px',
+              borderRadius: '50%',
+              background: 'white',
+              transition: 'left 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.625rem',
+              fontWeight: 700,
+              color: soundEnabled ? 'var(--accent-cyan)' : 'var(--text-muted)',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
+            }}>
+              {soundEnabled ? 'I' : 'O'}
+            </span>
+          </button>
+        </div>
         <Button onClick={handleStartGame} fullWidth size="lg" disabled={!teamName.trim() || isLoading}>
           {isLoading ? '⏳ Preparing Mission...' : `${selectedAvatar.emoji} START MISSION →`}
         </Button>
