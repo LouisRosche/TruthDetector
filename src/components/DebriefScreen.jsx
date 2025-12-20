@@ -173,7 +173,97 @@ Play Truth Hunters and test your fact-checking skills!`;
   const aiCatchRate = aiClaims.length > 0 ? Math.round((aiCorrectCount / aiClaims.length) * 100) : 0;
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '1.5rem' }}>
+    <div className="viewport-container" style={{ maxWidth: '800px', margin: '0 auto', padding: '1.5rem' }}>
+      {/* Chromebook compact CSS */}
+      <style>{`
+        @media (max-width: 1366px) and (max-height: 768px) {
+          .viewport-container {
+            padding: 0.5rem !important;
+            height: 100vh;
+            overflow-y: auto;
+          }
+
+          /* Compact final score */
+          .viewport-container > div:first-child {
+            padding: 1rem !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          .viewport-container > div:first-child .mono[style*="4rem"] {
+            font-size: 2.5rem !important;
+          }
+
+          /* Compact stats grid */
+          .viewport-container [style*="grid-template-columns"] {
+            gap: 0.375rem !important;
+          }
+
+          .viewport-container [style*="grid-template-columns"] > div {
+            padding: 0.5rem !important;
+          }
+
+          .viewport-container [style*="grid-template-columns"] .mono {
+            font-size: 1rem !important;
+          }
+
+          /* Collapse achievements by default */
+          .viewport-container [style*="ACHIEVEMENTS"] {
+            margin-bottom: 0.5rem !important;
+            padding: 0.75rem !important;
+          }
+
+          /* Compact round breakdown */
+          .viewport-container [style*="ROUND BREAKDOWN"] {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 0.75rem !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          .viewport-container [style*="ROUND BREAKDOWN"] > div > div {
+            padding: 0.375rem !important;
+            margin-bottom: 0.25rem !important;
+          }
+
+          /* Collapse AI patterns by default */
+          .viewport-container [style*="AI ERROR PATTERNS"] {
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 0.75rem !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          /* Compact reflection section */
+          .viewport-container [style*="TEAM REFLECTION"] {
+            padding: 0.75rem !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          .viewport-container textarea {
+            min-height: 40px !important;
+            font-size: 0.75rem !important;
+            padding: 0.375rem !important;
+          }
+
+          /* Compact buttons */
+          .viewport-container button {
+            min-height: 32px !important;
+            padding: 0.375rem 0.625rem !important;
+            font-size: 0.75rem !important;
+          }
+
+          /* Compact actions */
+          .viewport-container .no-print {
+            gap: 0.375rem !important;
+          }
+
+          /* Hide research attribution */
+          .viewport-container > div:last-child {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       {/* Final Score */}
       <div
         className="animate-in"

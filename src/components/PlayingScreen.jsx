@@ -394,12 +394,119 @@ export function PlayingScreen({
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0.75rem' }}>
-      {/* Mobile responsive CSS */}
+    <div className="viewport-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+      {/* Chromebook no-scroll optimization CSS */}
       <style>{`
         @media (max-width: 700px) {
           .voting-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+
+        /* AGGRESSIVE NO-SCROLL MODE - Chromebook 1366x768 */
+        @media (max-width: 1366px) and (max-height: 768px) {
+          /* Force viewport height lock */
+          .viewport-container > div:first-child {
+            max-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+          }
+
+          /* Reduce ALL margins and padding */
+          .viewport-container * {
+            margin-bottom: 0.25rem !important;
+          }
+
+          .viewport-container > div {
+            padding: 0.375rem !important;
+          }
+
+          /* Progress bar - make tiny */
+          .viewport-container > div > div:first-child {
+            height: 2px !important;
+            margin-bottom: 0.25rem !important;
+          }
+
+          /* Hide less critical elements */
+          .viewport-container .animate-shake,
+          .viewport-container [style*="keyboard"],
+          .viewport-container [style*="Previous rounds"] {
+            display: none !important;
+          }
+
+          /* Compact calibration tracker */
+          .viewport-container .mono[style*="Predicted"] {
+            font-size: 0.5625rem !important;
+            padding: 0.125rem 0.375rem !important;
+          }
+
+          /* Compact timer and round display */
+          .viewport-container .mono[style*="Time remaining"],
+          .viewport-container .mono[role="timer"] {
+            font-size: 0.5625rem !important;
+            padding: 0.125rem 0.375rem !important;
+          }
+
+          /* Make claim card scrollable with fixed height */
+          .viewport-container [style*="claim"] {
+            max-height: 150px !important;
+            overflow-y: auto !important;
+            padding: 0.5rem !important;
+            margin-bottom: 0.375rem !important;
+            font-size: 0.875rem !important;
+          }
+
+          /* Compact buttons */
+          .viewport-container button {
+            min-height: 32px !important;
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.75rem !important;
+          }
+
+          /* Ultra-compact voting section */
+          .voting-grid {
+            gap: 0.25rem !important;
+          }
+
+          /* Compact result phase */
+          .viewport-container [style*="result"] {
+            padding: 0.5rem !important;
+            margin-bottom: 0.375rem !important;
+          }
+
+          /* Hide live leaderboard in compact mode */
+          .viewport-container [style*="Live Class Leaderboard"],
+          .viewport-container [style*="leaderboard"] {
+            max-height: 80px !important;
+            overflow-y: auto !important;
+          }
+
+          /* Compact difficulty badge */
+          .viewport-container .mono[style*="difficulty"] {
+            font-size: 0.5625rem !important;
+            padding: 0.125rem 0.375rem !important;
+          }
+
+          /* Hide hints in compact mode */
+          .viewport-container [style*="hint"] {
+            max-height: 60px !important;
+            overflow-y: auto !important;
+            font-size: 0.75rem !important;
+            padding: 0.375rem !important;
+          }
+
+          /* Make textarea compact */
+          .viewport-container textarea {
+            min-height: 40px !important;
+            font-size: 0.75rem !important;
+            padding: 0.375rem !important;
+          }
+
+          /* Compact streak display */
+          .viewport-container .mono[aria-label*="correct answers"] {
+            font-size: 0.625rem !important;
+            padding: 0.125rem 0.375rem !important;
           }
         }
       `}</style>

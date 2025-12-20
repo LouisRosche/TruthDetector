@@ -249,7 +249,92 @@ export function SetupScreen({ onStart, isLoading = false }) {
 
   // Main Setup View - with scrolling leaderboard on left for larger screens
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', padding: '1.5rem' }}>
+    <div className="viewport-container" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', padding: '1.5rem' }}>
+      {/* Chromebook compact CSS */}
+      <style>{`
+        @media (max-width: 1366px) and (max-height: 768px) {
+          .viewport-container {
+            padding: 0.5rem !important;
+            gap: 0.5rem !important;
+            height: 100vh;
+            overflow: hidden;
+          }
+
+          /* Make setup form scrollable */
+          .setup-form-container {
+            height: 100vh;
+            overflow-y: auto;
+            padding: 0.5rem;
+          }
+
+          /* Ultra-compact all cards */
+          .setup-form-container > div {
+            padding: 0.5rem !important;
+            margin-bottom: 0.375rem !important;
+          }
+
+          /* Compact header */
+          .setup-form-container h1 {
+            font-size: 1.25rem !important;
+            margin-bottom: 0.25rem !important;
+          }
+
+          .setup-form-container h2 {
+            font-size: 0.75rem !important;
+          }
+
+          /* Compact inputs */
+          .setup-form-container input,
+          .setup-form-container select,
+          .setup-form-container textarea {
+            min-height: 32px !important;
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.8125rem !important;
+            margin-bottom: 0.375rem !important;
+          }
+
+          /* Compact buttons */
+          .setup-form-container button {
+            min-height: 32px !important;
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.75rem !important;
+          }
+
+          /* Compact grid layouts */
+          .setup-form-container [style*="grid"] {
+            gap: 0.25rem !important;
+          }
+
+          /* Hide welcome banner on small screens */
+          .setup-form-container > div:nth-child(2) {
+            padding: 0.5rem !important;
+            margin-bottom: 0.375rem !important;
+          }
+
+          /* Collapse how to play by default */
+          .setup-form-container [style*="HOW TO PLAY"] {
+            font-size: 0.6875rem !important;
+          }
+
+          /* Ultra-compact player inputs */
+          .setup-form-container [aria-label*="Player"] {
+            padding: 0.375rem !important;
+            font-size: 0.75rem !important;
+          }
+
+          /* Compact mascot grid */
+          .setup-form-container [title*="mascot"] {
+            padding: 0.25rem !important;
+          }
+
+          /* Hide emoji mascot on compact */
+          .setup-form-container > div:first-child > div:first-child {
+            font-size: 2rem !important;
+            margin-bottom: 0.25rem !important;
+          }
+        }
+      `}</style>
+
       {/* Scrolling Leaderboard - hidden on mobile, shown on larger screens */}
       <div className="leaderboard-sidebar" style={{
         display: 'none',
@@ -260,7 +345,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
       </div>
 
       {/* Main Setup Form - wider for better content fit */}
-      <div style={{ maxWidth: '720px', width: '100%' }}>
+      <div className="setup-form-container" style={{ maxWidth: '720px', width: '100%' }}>
       {/* Header */}
       <div className="animate-in" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🔍</div>

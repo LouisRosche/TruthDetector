@@ -245,7 +245,7 @@ body {
 }
 
 /* ============================================================
-   CHROMEBOOK OPTIMIZATIONS
+   CHROMEBOOK OPTIMIZATIONS - NO-SCROLL VIEWPORT MODE
    ============================================================ */
 
 @media (max-width: 1024px) and (min-resolution: 1dppx) {
@@ -265,14 +265,43 @@ body {
   }
 }
 
-/* Small screen (typical Chromebook) */
+/* Small screen (typical Chromebook) - AGGRESSIVE NO-SCROLL MODE */
 @media (max-width: 1366px) and (max-height: 768px) {
   :root {
-    --base-font-size: 15px;
+    --base-font-size: 13px; /* Reduced from 15px */
+    --spacing-xs: 0.125rem; /* 2px */
+    --spacing-sm: 0.25rem;  /* 4px */
+    --spacing-md: 0.375rem; /* 6px */
+    --spacing-lg: 0.5rem;   /* 8px */
+    --spacing-xl: 0.75rem;  /* 12px */
   }
 
+  /* NO SCROLL - Lock to viewport height */
+  #root {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Compact all spacing */
   .confidence-grid {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
+
+  .verdict-grid {
+    gap: 0.25rem;
+  }
+
+  /* Reduce padding globally for compact fit */
+  .compact-mode {
+    padding: 0.375rem !important;
+    margin-bottom: 0.375rem !important;
+  }
+
+  /* Make cards more compact */
+  .card-compact {
+    padding: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
   }
 }
 
@@ -366,6 +395,111 @@ textarea:focus-visible,
 
 .print-only {
   display: none;
+}
+
+/* ============================================================
+   NO-SCROLL VIEWPORT LAYOUTS - Chromebook Optimized
+   ============================================================ */
+
+/* Viewport-locked container for all screens */
+.viewport-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Scrollable content area within viewport */
+.scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0; /* Critical for flex scroll */
+}
+
+/* Grid layout that fits within viewport */
+.viewport-grid {
+  display: grid;
+  height: 100%;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+}
+
+/* Compact header for Chromebook */
+@media (max-width: 1366px) and (max-height: 768px) {
+  .viewport-header {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .viewport-content {
+    padding: 0.5rem;
+    overflow-y: auto;
+  }
+
+  .viewport-footer {
+    padding: 0.5rem;
+  }
+
+  /* Ultra-compact spacing */
+  .ultra-compact {
+    padding: 0.25rem !important;
+    margin: 0.25rem 0 !important;
+    gap: 0.25rem !important;
+  }
+
+  /* Compact buttons */
+  button, .button {
+    min-height: 36px !important;
+    padding: 0.375rem 0.625rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  /* Compact inputs */
+  input, textarea, select {
+    min-height: 36px !important;
+    padding: 0.375rem 0.5rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  /* Reduce card padding */
+  [style*="padding: 1rem"],
+  [style*="padding:1rem"] {
+    padding: 0.5rem !important;
+  }
+
+  [style*="padding: 1.5rem"],
+  [style*="padding:1.5rem"] {
+    padding: 0.75rem !important;
+  }
+
+  [style*="padding: 2rem"],
+  [style*="padding:2rem"] {
+    padding: 1rem !important;
+  }
+
+  /* Reduce margins */
+  [style*="margin-bottom: 1rem"],
+  [style*="marginBottom: 1rem"] {
+    margin-bottom: 0.5rem !important;
+  }
+
+  [style*="margin-bottom: 1.5rem"],
+  [style*="marginBottom: 1.5rem"] {
+    margin-bottom: 0.75rem !important;
+  }
+
+  /* Grid with compact gaps */
+  .compact-grid {
+    gap: 0.375rem !important;
+  }
+
+  /* Two-column layout for better space usage */
+  .two-col-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
 }
 
 /* ============================================================

@@ -8,17 +8,45 @@ import PropTypes from 'prop-types';
 
 function ClaimCardComponent({ claim, showAnswer = false }) {
   return (
-    <div
-      className="animate-in"
-      style={{
-        background: 'var(--bg-card)',
-        border: '1px solid var(--border)',
-        borderRadius: '8px',
-        padding: '1rem',
-        position: 'relative',
-        overflow: 'hidden'
-      }}
-    >
+    <>
+      {/* Chromebook compact CSS */}
+      <style>{`
+        @media (max-width: 1366px) and (max-height: 768px) {
+          .claim-card-compact {
+            padding: 0.5rem !important;
+            margin-bottom: 0.375rem !important;
+            max-height: 180px;
+            overflow-y: auto;
+          }
+
+          .claim-card-compact .claim-text {
+            font-size: 0.875rem !important;
+            line-height: 1.4 !important;
+          }
+
+          .claim-card-compact .mono {
+            font-size: 0.5625rem !important;
+            padding: 0.125rem 0.25rem !important;
+          }
+
+          .claim-card-compact [style*="explanation"] {
+            font-size: 0.75rem !important;
+            padding: 0.375rem !important;
+          }
+        }
+      `}</style>
+
+      <div
+        className="animate-in claim-card-compact"
+        style={{
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border)',
+          borderRadius: '8px',
+          padding: '1rem',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
       {/* Top accent bar */}
       <div
         style={{
@@ -162,6 +190,7 @@ function ClaimCardComponent({ claim, showAnswer = false }) {
         </div>
       )}
     </div>
+    </>
   );
 }
 
