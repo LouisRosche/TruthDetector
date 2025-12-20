@@ -11,22 +11,49 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
   const [showExitModal, setShowExitModal] = useState(false);
 
   return (
-    <header
-      role="banner"
-      aria-label="Game status"
-      style={{
-        padding: '1rem 1.5rem',
-        borderBottom: '1px solid var(--border)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        background: 'rgba(17, 24, 39, 0.8)',
-        backdropFilter: 'blur(8px)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100
-      }}
-    >
+    <>
+      {/* Chromebook compact CSS */}
+      <style>{`
+        @media (max-width: 1366px) and (max-height: 768px) {
+          header[role="banner"] {
+            padding: 0.375rem 0.5rem !important;
+          }
+
+          header[role="banner"] h1 {
+            font-size: 0.875rem !important;
+          }
+
+          header[role="banner"] button {
+            padding: 0.125rem 0.25rem !important;
+            font-size: 0.6875rem !important;
+          }
+
+          header[role="banner"] span[style*="1.5rem"] {
+            font-size: 1rem !important;
+          }
+
+          header[role="banner"] > div {
+            gap: 0.375rem !important;
+          }
+        }
+      `}</style>
+
+      <header
+        role="banner"
+        aria-label="Game status"
+        style={{
+          padding: '1rem 1.5rem',
+          borderBottom: '1px solid var(--border)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          background: 'rgba(17, 24, 39, 0.8)',
+          backdropFilter: 'blur(8px)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100
+        }}
+      >
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         <button
           onClick={() => {
@@ -379,5 +406,6 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
         </div>
       )}
     </header>
+    </>
   );
 }

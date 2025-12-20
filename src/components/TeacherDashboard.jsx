@@ -340,7 +340,78 @@ export function TeacherDashboard({ onBack }) {
   }, [claimFilter, pendingClaims, reviewedClaims]);
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '1.5rem' }}>
+    <div className="viewport-container" style={{ maxWidth: '900px', margin: '0 auto', padding: '1.5rem' }}>
+      {/* Chromebook compact CSS */}
+      <style>{`
+        @media (max-width: 1366px) and (max-height: 768px) {
+          .viewport-container {
+            padding: 0.5rem !important;
+            height: 100vh;
+            overflow-y: auto;
+          }
+
+          /* Compact header */
+          .viewport-container h1 {
+            font-size: 1rem !important;
+            margin-bottom: 0.125rem !important;
+          }
+
+          .viewport-container > div:first-child {
+            margin-bottom: 0.5rem !important;
+          }
+
+          /* Compact tabs */
+          .viewport-container [role="tablist"] button {
+            padding: 0.375rem 0.625rem !important;
+            font-size: 0.6875rem !important;
+          }
+
+          /* Compact cards */
+          .viewport-container > div > div {
+            padding: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          /* Compact inputs */
+          .viewport-container input,
+          .viewport-container select,
+          .viewport-container textarea {
+            min-height: 32px !important;
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.75rem !important;
+          }
+
+          /* Compact buttons */
+          .viewport-container button {
+            min-height: 32px !important;
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.75rem !important;
+          }
+
+          /* Compact grid layouts */
+          .viewport-container [style*="grid"] {
+            gap: 0.375rem !important;
+          }
+
+          /* Compact table/list views */
+          .viewport-container [style*="flex-direction: column"] {
+            gap: 0.25rem !important;
+          }
+
+          /* Compact reflection cards */
+          .viewport-container [style*="reflection"] {
+            padding: 0.5rem !important;
+            margin-bottom: 0.375rem !important;
+          }
+
+          /* Compact achievement badges */
+          .viewport-container [style*="achievement"] {
+            padding: 0.375rem !important;
+            font-size: 0.75rem !important;
+          }
+        }
+      `}</style>
+
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
