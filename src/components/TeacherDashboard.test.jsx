@@ -85,6 +85,18 @@ vi.mock('../services/firebase', () => ({
     getClassAchievements: vi.fn(() => Promise.resolve(mockClassAchievements)),
     updateClassSettings: vi.fn(() => Promise.resolve(true)),
     reviewClaim: vi.fn(() => Promise.resolve(true)),
+    subscribeToPendingClaims: vi.fn((callback) => {
+      // Immediately call with mock data
+      callback(mockPendingClaims);
+      // Return unsubscribe function
+      return vi.fn();
+    }),
+    subscribeToClassAchievements: vi.fn((callback) => {
+      // Immediately call with mock data
+      callback(mockClassAchievements);
+      // Return unsubscribe function
+      return vi.fn();
+    }),
     _getDefaultClassSettings: vi.fn(() => ({
       allowedDifficulties: ['easy', 'medium', 'hard'],
       allowedSubjects: [],
@@ -474,14 +486,17 @@ describe('TeacherDashboard', () => {
   describe('Export Functionality', () => {
     it('allows exporting reflections to CSV', async () => {
       // Mock createObjectURL and click
-      global.URL.createObjectURL = vi.fn(() => 'blob:url');
-      global.URL.revokeObjectURL = vi.fn();
+      globalThis.URL.createObjectURL = vi.fn(() => 'blob:url');
+      globalThis.URL.revokeObjectURL = vi.fn();
       const mockClick = vi.fn();
-      vi.spyOn(document, 'createElement').mockImplementation((tag) => {
+
+      // Store original createElement
+      const originalCreateElement = document.createElement;
+      document.createElement = vi.fn((tag) => {
         if (tag === 'a') {
           return { click: mockClick, href: '', download: '' };
         }
-        return document.createElement(tag);
+        return originalCreateElement.call(document, tag);
       });
 
       render(<TeacherDashboard onBack={mockOnBack} />);
@@ -499,17 +514,23 @@ describe('TeacherDashboard', () => {
       });
 
       expect(mockClick).toHaveBeenCalled();
+
+      // Restore original createElement
+      document.createElement = originalCreateElement;
     });
 
     it('allows exporting game data to CSV', async () => {
-      global.URL.createObjectURL = vi.fn(() => 'blob:url');
-      global.URL.revokeObjectURL = vi.fn();
+      globalThis.URL.createObjectURL = vi.fn(() => 'blob:url');
+      globalThis.URL.revokeObjectURL = vi.fn();
       const mockClick = vi.fn();
-      vi.spyOn(document, 'createElement').mockImplementation((tag) => {
+
+      // Store original createElement
+      const originalCreateElement = document.createElement;
+      document.createElement = vi.fn((tag) => {
         if (tag === 'a') {
           return { click: mockClick, href: '', download: '' };
         }
-        return document.createElement(tag);
+        return originalCreateElement.call(document, tag);
       });
 
       render(<TeacherDashboard onBack={mockOnBack} />);
@@ -527,6 +548,9 @@ describe('TeacherDashboard', () => {
       });
 
       expect(mockClick).toHaveBeenCalled();
+
+      // Restore original createElement
+      document.createElement = originalCreateElement;
     });
   });
 
