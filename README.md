@@ -1,6 +1,6 @@
 # Truth Hunters: The Calibration Game
 
-[![CI/CD](https://github.com/LouisRosche/TruthDetector/actions/workflows/ci.yml/badge.svg)](https://github.com/LouisRosche/TruthDetector/actions/workflows/ci.yml)
+[![CI/CD](https://github.com/LouisRosche/Truth-Hunters/actions/workflows/ci.yml/badge.svg)](https://github.com/LouisRosche/Truth-Hunters/actions/workflows/ci.yml)
 
 A research-backed educational game for middle schoolers to develop epistemic skills, AI error detection, and confidence calibration.
 
@@ -15,7 +15,7 @@ Truth Hunters helps students learn to:
 
 ## Features
 
-- **726 curated claims** across 22 subjects (Biology, History, Physics, Media Literacy, and more)
+- **734 curated claims** across 22 subjects (Biology, History, Physics, Media Literacy, and more)
 - **Progressive difficulty** system (easy, medium, hard, or mixed)
 - **Calibration-based tips** that help students learn from their confidence patterns
 - **Confidence staking** with risk/reward scoring
@@ -53,8 +53,8 @@ This game is informed by educational research including:
 
 ```bash
 # Clone the repository
-git clone https://github.com/LouisRosche/TruthDetector.git
-cd TruthDetector
+git clone https://github.com/LouisRosche/Truth-Hunters.git
+cd Truth-Hunters
 
 # Install dependencies
 npm install
@@ -83,7 +83,7 @@ npm run test:run  # Single run
 ## Project Structure
 
 ```
-TruthDetector/
+Truth-Hunters/
 ├── src/
 │   ├── components/     # React components
 │   │   ├── SetupScreen.jsx
@@ -217,11 +217,11 @@ The repository includes CI/CD that automatically deploys to GitHub Pages on ever
 
 1. Enable GitHub Pages in your repository settings (Settings → Pages → Source: GitHub Actions)
 2. Push to `main` branch
-3. Your site will be live at `https://[username].github.io/TruthDetector/`
+3. Your site will be live at `https://[username].github.io/Truth-Hunters/`
 
 ### Netlify (One-Click)
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/LouisRosche/TruthDetector)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/LouisRosche/Truth-Hunters)
 
 Or manually:
 1. Connect your repository to Netlify
@@ -230,7 +230,7 @@ Or manually:
 
 ### Vercel (One-Click)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/LouisRosche/TruthDetector)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/LouisRosche/Truth-Hunters)
 
 Or manually:
 1. Import your repository in Vercel
