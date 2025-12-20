@@ -1,7 +1,7 @@
 # Repository Audit Report: Truth Hunters
 
-**Audit Date:** December 17, 2025
-**Repository:** [LouisRosche/TruthDetector](https://github.com/LouisRosche/TruthDetector)
+**Audit Date:** December 17, 2024
+**Repository:** [LouisRosche/Truth-Hunters](https://github.com/LouisRosche/Truth-Hunters)
 **Audit Framework:** [Universal GitHub Repository Audit Framework v1.0](AUDIT_FRAMEWORK.md)
 **Auditor:** Automated analysis via Claude Code
 
@@ -303,6 +303,6 @@ The minor improvements suggested are truly incremental—this project has no cri
 
 ---
 
-**Audit Report Generated:** December 17, 2025
+**Audit Report Generated:** December 17, 2024
 **Framework:** Universal GitHub Repository Audit Framework v1.0
 **Report Version:** 1.0

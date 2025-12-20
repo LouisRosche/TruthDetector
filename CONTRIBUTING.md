@@ -23,15 +23,16 @@ Thank you for your interest in contributing to Truth Hunters! This educational g
 
 ## Code of Conduct
 
-Truth Hunters is an educational project designed for middle school students. We maintain a respectful, inclusive, and welcoming environment for all contributors. By participating, you agree to:
+This project adheres to a Code of Conduct that all contributors are expected to follow. Please read the full [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
 
-- **Be respectful** of differing viewpoints and experiences
-- **Use welcoming and inclusive language**
-- **Focus on what is best for the community and students**
-- **Show empathy toward other community members**
-- **Respect educational and pedagogical expertise**
+**Key principles:**
+- Be respectful of differing viewpoints and experiences
+- Use welcoming and inclusive language
+- Focus on what is best for the community and students
+- Show empathy toward other community members
+- Respect educational and pedagogical expertise
 
-Unacceptable behavior includes harassment, trolling, insulting/derogatory comments, personal attacks, or other unprofessional conduct.
+By participating in this project, you agree to abide by our Code of Conduct. Violations may result in temporary or permanent exclusion from the project.
 
 ---
 

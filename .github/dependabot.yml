@@ -19,6 +19,11 @@ updates:
     labels:
       - "dependencies"
       - "automated"
+    # Allow Dependabot to access private registries if needed
+    allow:
+      - dependency-type: "all"
+    # Increase version requirements for security updates
+    versioning-strategy: increase
     # Group dependency updates to reduce PR noise
     groups:
       # Group all patch and minor React-related updates
@@ -43,6 +48,14 @@ updates:
       linting:
         patterns:
           - "eslint*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group Firebase and security-critical dependencies
+      firebase-security:
+        patterns:
+          - "firebase*"
+          - "dompurify"
         update-types:
           - "minor"
           - "patch"

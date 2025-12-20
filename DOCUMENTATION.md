@@ -92,13 +92,18 @@ All documentation in this repository follows these principles:
 
 ## 📝 Documentation Changelog
 
-**December 20, 2025**
+**December 20, 2024**
+- Added missing LICENSE file (MIT)
+- Added SECURITY.md for vulnerability disclosure
+- Extracted standalone CODE_OF_CONDUCT.md
+- Fixed repository naming inconsistency (TruthDetector → Truth-Hunters)
+- Fixed claims count in README (726 → 734)
 - Removed outdated IMPLEMENTATION_STATUS.md (contained incorrect Vite 8 reference)
 - Fixed Vite version reference in AUDIT_REPORT.md (Vite 7 → Vite 6)
 - Created DOCUMENTATION.md for centralized documentation index
 - Consolidated audit framework documentation organization
 
-**December 17, 2025**
+**December 17, 2024**
 - Added Universal GitHub Repository Audit Framework
 - Created comprehensive audit implementation tracking
 - Added internationalization guide (i18n)
