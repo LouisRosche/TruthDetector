@@ -110,7 +110,7 @@ export const VerdictSelector = memo(function VerdictSelector({ value, onChange, 
                   background: 'rgba(251, 191, 36, 0.2)',
                   border: '2px solid var(--accent-amber)',
                   color: 'var(--accent-amber)',
-                  fontSize: '0.6875rem',
+                  fontSize: '0.75rem',
                   fontWeight: 600,
                   cursor: 'pointer',
                   whiteSpace: 'nowrap'

@@ -349,7 +349,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
               📊 My Stats
             </button>
           </div>
-          <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
             {existingProfile.stats.totalGames} games played • {existingProfile.stats.totalCorrect} correct answers
             {existingProfile.stats.currentDayStreak > 1 && (
               <span style={{ color: 'var(--accent-amber)' }}> • 🔥 {existingProfile.stats.currentDayStreak} day streak</span>
@@ -362,7 +362,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
               padding: '0.375rem 0.75rem',
               background: 'rgba(52, 211, 153, 0.1)',
               borderRadius: '6px',
-              fontSize: '0.6875rem',
+              fontSize: '0.75rem',
               color: 'var(--accent-emerald)'
             }}>
               🆕 {unseenStats.unseen} new claims waiting for you!
@@ -374,7 +374,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
               padding: '0.375rem 0.75rem',
               background: 'rgba(167, 139, 250, 0.1)',
               borderRadius: '6px',
-              fontSize: '0.6875rem',
+              fontSize: '0.75rem',
               color: 'var(--accent-violet)'
             }}>
               🌟 You&apos;ve seen all {unseenStats.total} claims! Ready for a fresh challenge?
@@ -457,7 +457,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
           marginBottom: '0.75rem'
         }}
       >
-        <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.375rem' }}>
+        <label className="mono" style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.375rem' }}>
           TEAM NAME *
         </label>
         <input
@@ -481,7 +481,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
           }}
         />
 
-        <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.375rem' }}>
+        <label className="mono" style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.375rem' }}>
           MASCOT
         </label>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.375rem' }}>
@@ -518,7 +518,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
           marginBottom: '0.75rem'
         }}
       >
-        <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+        <label className="mono" style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
           👥 WHO&apos;S PLAYING?
         </label>
         {/* Column headers aligned with inputs below */}
@@ -535,7 +535,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {players.map((player, index) => (
             <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-              <span className="mono" style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', width: '1rem' }}>
+              <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', width: '1rem' }}>
                 {index + 1}.
               </span>
               <input
@@ -631,7 +631,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
             <span>+</span> Add another player
           </button>
         )}
-        <div style={{ marginTop: '0.375rem', fontSize: '0.625rem', color: 'var(--text-muted)' }}>
+        <div style={{ marginTop: '0.375rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
           {players.length === 1 ? 'Playing solo? That works too!' : `${players.length} players on team`}
         </div>
       </div>
@@ -647,7 +647,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
           marginBottom: '0.75rem'
         }}
       >
-        <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+        <label className="mono" style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
           DIFFICULTY
         </label>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.375rem' }}>
@@ -693,7 +693,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
           marginBottom: '0.75rem'
         }}
       >
-        <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+        <label className="mono" style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
           📚 SUBJECTS {selectedSubjects.length > 0 ? `(${selectedSubjects.length} selected)` : '(all)'}
         </label>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
@@ -709,7 +709,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
                   border: `1px solid ${selectedSubjects.includes(subject) ? 'var(--accent-cyan)' : 'var(--border)'}`,
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  fontSize: '0.6875rem',
+                  fontSize: '0.75rem',
                   color: isSelected ? 'var(--text-primary)' : 'var(--text-muted)',
                   opacity: selectedSubjects.length > 0 && !selectedSubjects.includes(subject) ? 0.5 : 1
                 }}
@@ -719,7 +719,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
             );
           })}
         </div>
-        <div style={{ marginTop: '0.375rem', fontSize: '0.625rem', color: 'var(--text-muted)' }}>
+        <div style={{ marginTop: '0.375rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
           Click subjects to focus on specific areas, or leave empty for all
         </div>
         {/* Warning if not enough claims for selected subjects */}
@@ -730,7 +730,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
             background: 'rgba(251, 191, 36, 0.15)',
             border: '1px solid var(--accent-amber)',
             borderRadius: '6px',
-            fontSize: '0.6875rem',
+            fontSize: '0.75rem',
             color: 'var(--accent-amber)'
           }}>
             ⚠️ Only {subjectClaimStats.total} claims available for selected subjects. {rounds > subjectClaimStats.total ? `Other subjects will be mixed in to reach ${rounds} rounds.` : ''}
@@ -749,7 +749,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
           marginBottom: '0.75rem'
         }}
       >
-        <label className="mono" style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+        <label className="mono" style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
           ROUNDS
         </label>
         <div style={{ display: 'flex', gap: '0.375rem' }}>
@@ -774,7 +774,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
             </button>
           ))}
         </div>
-        <div style={{ marginTop: '0.375rem', fontSize: '0.6875rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+        <div style={{ marginTop: '0.375rem', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center' }}>
           ~{Math.ceil((rounds * (DIFFICULTY_CONFIG[difficulty]?.discussTime + DIFFICULTY_CONFIG[difficulty]?.stakeTime || 180)) / 60)}{' '}
           min
         </div>
@@ -784,7 +784,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
       <div className="animate-in" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '1rem' }}>
         {/* iOS-style toggle */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span className="mono" style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>SOUND</span>
+          <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>SOUND</span>
           <button
             onClick={handleSoundToggle}
             role="switch"
@@ -814,7 +814,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '0.625rem',
+              fontSize: '0.75rem',
               fontWeight: 700,
               color: soundEnabled ? 'var(--accent-cyan)' : 'var(--text-muted)',
               boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
@@ -871,7 +871,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
             border: '1px solid var(--accent-amber)',
             borderRadius: '5px',
             color: 'var(--accent-amber)',
-            fontSize: '0.625rem',
+            fontSize: '0.75rem',
             cursor: 'pointer'
           }}
         >
@@ -887,7 +887,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
               border: '1px solid var(--border)',
               borderRadius: '5px',
               color: 'var(--text-muted)',
-              fontSize: '0.625rem',
+              fontSize: '0.75rem',
               cursor: 'pointer'
             }}
           >
@@ -903,7 +903,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
             border: '1px solid var(--accent-violet)',
             borderRadius: '5px',
             color: 'var(--accent-violet)',
-            fontSize: '0.625rem',
+            fontSize: '0.75rem',
             cursor: 'pointer'
           }}
         >
@@ -918,7 +918,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
             border: '1px solid var(--border)',
             borderRadius: '5px',
             color: 'var(--text-muted)',
-            fontSize: '0.625rem',
+            fontSize: '0.75rem',
             cursor: 'pointer'
           }}
         >
@@ -936,7 +936,7 @@ export function SetupScreen({ onStart, isLoading = false }) {
           textAlign: 'center'
         }}
       >
-        <div style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>
+        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
           💡 {getRandomItem(EDUCATIONAL_TIPS).tip}
         </div>
       </div>

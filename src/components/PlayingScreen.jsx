@@ -463,7 +463,7 @@ export function PlayingScreen({
             padding: '0.25rem 0.5rem',
             background: 'var(--bg-elevated)',
             borderRadius: '4px',
-            fontSize: '0.625rem'
+            fontSize: '0.75rem'
           }}
         >
           <span style={{ color: 'var(--text-muted)' }}>
@@ -539,7 +539,7 @@ export function PlayingScreen({
             className="mono"
             style={{
               padding: '0.25rem 0.5rem',
-              fontSize: '0.6875rem',
+              fontSize: '0.75rem',
               background: 'var(--bg-elevated)',
               borderRadius: '4px',
               color: 'var(--text-secondary)'
@@ -563,7 +563,7 @@ export function PlayingScreen({
                 title={inBonusZone ? 'Answer quickly for bonus points!' : 'Time remaining'}
                 style={{
                   padding: '0.25rem 0.5rem',
-                  fontSize: '0.6875rem',
+                  fontSize: '0.75rem',
                   background: (() => {
                     if (timeRemaining <= 10) return 'rgba(239, 68, 68, 0.15)';
                     if (pct <= 0.10) return 'rgba(251, 191, 36, 0.25)';
@@ -590,7 +590,7 @@ export function PlayingScreen({
               className="mono"
               style={{
                 padding: '0.25rem 0.375rem',
-                fontSize: '0.625rem',
+                fontSize: '0.75rem',
                 background: showPreviousRounds ? 'var(--accent-emerald)' : 'transparent',
                 color: showPreviousRounds ? 'white' : 'var(--text-muted)',
                 border: `1px solid ${showPreviousRounds ? 'var(--accent-emerald)' : 'var(--border)'}`,
@@ -607,7 +607,7 @@ export function PlayingScreen({
             className="mono"
             style={{
               padding: '0.25rem 0.375rem',
-              fontSize: '0.625rem',
+              fontSize: '0.75rem',
               background: showKeyboardHint ? 'var(--accent-violet)' : 'transparent',
               color: showKeyboardHint ? 'white' : 'var(--text-muted)',
               border: `1px solid ${showKeyboardHint ? 'var(--accent-violet)' : 'var(--border)'}`,
@@ -652,7 +652,7 @@ export function PlayingScreen({
             background: 'rgba(167, 139, 250, 0.08)',
             border: '1px solid rgba(167, 139, 250, 0.3)',
             borderRadius: '6px',
-            fontSize: '0.6875rem',
+            fontSize: '0.75rem',
             color: 'var(--text-muted)',
             textAlign: 'center'
           }}
@@ -691,7 +691,7 @@ export function PlayingScreen({
                   background: result.correct ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
                   border: `1px solid ${result.correct ? 'var(--correct)' : 'var(--incorrect)'}`,
                   borderRadius: '4px',
-                  fontSize: '0.625rem',
+                  fontSize: '0.75rem',
                   color: result.correct ? 'var(--correct)' : 'var(--incorrect)',
                   cursor: 'help'
                 }}
@@ -710,7 +710,7 @@ export function PlayingScreen({
             className="mono"
             style={{
               padding: '0.25rem 0.5rem',
-              fontSize: '0.625rem',
+              fontSize: '0.75rem',
               background: DIFFICULTY_BG_COLORS[claim.difficulty] || 'rgba(167, 139, 250, 0.2)',
               color: DIFFICULTY_CONFIG[claim.difficulty]?.color,
               borderRadius: '4px',
@@ -740,7 +740,7 @@ export function PlayingScreen({
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', marginBottom: '0.375rem' }}>
             <span>{activeHint.icon}</span>
-            <span className="mono" style={{ fontSize: '0.6875rem', color: 'var(--accent-violet)' }}>
+            <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--accent-violet)' }}>
               {activeHint.name}
             </span>
           </div>

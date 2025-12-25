@@ -936,7 +936,7 @@ export function TeacherDashboard({ onBack }) {
                     <div className="mono" style={{ fontSize: '1.25rem', fontWeight: 700, color: item.color }}>
                       {calibrationStats[item.key]}
                     </div>
-                    <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>{item.label}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{item.label}</div>
                   </div>
                 ))}
               </div>
@@ -1033,7 +1033,7 @@ export function TeacherDashboard({ onBack }) {
                       <div className="mono" style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>
                         {game.score}
                       </div>
-                      <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                         {game.accuracy}% acc
                       </div>
                     </div>
@@ -1045,7 +1045,7 @@ export function TeacherDashboard({ onBack }) {
                         padding: '0.125rem 0.375rem',
                         background: 'var(--bg-elevated)',
                         borderRadius: '4px',
-                        fontSize: '0.6875rem',
+                        fontSize: '0.75rem',
                         color: 'var(--text-muted)'
                       }}
                     >
@@ -1057,13 +1057,13 @@ export function TeacherDashboard({ onBack }) {
                         padding: '0.125rem 0.375rem',
                         background: 'var(--bg-elevated)',
                         borderRadius: '4px',
-                        fontSize: '0.6875rem',
+                        fontSize: '0.75rem',
                         color: 'var(--text-muted)'
                       }}
                     >
                       {game.rounds} rounds
                     </span>
-                    <span style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                       {formatDate(game.timestamp)}
                     </span>
                   </div>
@@ -1118,7 +1118,7 @@ export function TeacherDashboard({ onBack }) {
                         Score: {reflection.gameScore} | Predicted: {reflection.predictedScore} | Accuracy: {reflection.accuracy}%
                       </div>
                     </div>
-                    <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                       {formatDate(reflection.timestamp)}
                     </div>
                   </div>
@@ -1603,7 +1603,7 @@ export function TeacherDashboard({ onBack }) {
                         color: isSelected ? 'var(--bg-deep)' : 'var(--text-muted)',
                         border: `1px solid ${isSelected ? 'var(--accent-cyan)' : 'var(--border)'}`,
                         borderRadius: '4px',
-                        fontSize: '0.6875rem',
+                        fontSize: '0.75rem',
                         cursor: 'pointer'
                       }}
                     >

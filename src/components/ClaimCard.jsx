@@ -65,7 +65,7 @@ function ClaimCardComponent({ claim, showAnswer = false }) {
         <span
           className="mono"
           style={{
-            fontSize: '0.6875rem',
+            fontSize: '0.75rem',
             padding: '0.1875rem 0.4375rem',
             background: 'var(--bg-elevated)',
             borderRadius: '3px',
@@ -79,7 +79,7 @@ function ClaimCardComponent({ claim, showAnswer = false }) {
           <span
             className="mono"
             style={{
-              fontSize: '0.6875rem',
+              fontSize: '0.75rem',
               padding: '0.1875rem 0.4375rem',
               background:
                 claim.source === 'student-contributed'

@@ -111,7 +111,7 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
             aria-label="Offline mode"
             className="mono"
             style={{
-              fontSize: '0.625rem',
+              fontSize: '0.75rem',
               padding: '0.25rem 0.5rem',
               background: 'rgba(251, 191, 36, 0.2)',
               border: '1px solid var(--accent-amber)',
@@ -144,7 +144,7 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
               alignItems: 'center',
               gap: '0.375rem',
               transition: 'all 0.2s ease',
-              minHeight: '36px'
+              minHeight: '44px'
             }}
           >
             <span aria-hidden="true" style={{ fontSize: '1rem' }}>❓</span>
@@ -171,7 +171,7 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
               alignItems: 'center',
               gap: '0.375rem',
               transition: 'all 0.2s ease',
-              minHeight: '36px'
+              minHeight: '44px'
             }}
           >
             <span aria-hidden="true" style={{ fontSize: '1rem' }}>{analyticsEnabled ? '📊' : '🚫'}</span>
@@ -198,7 +198,7 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
               alignItems: 'center',
               gap: '0.375rem',
               transition: 'all 0.2s ease',
-              minHeight: '36px'
+              minHeight: '44px'
             }}
           >
             <span aria-hidden="true" style={{ fontSize: '1rem' }}>{soundEnabled ? '🔊' : '🔇'}</span>
@@ -225,7 +225,7 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
               alignItems: 'center',
               gap: '0.375rem',
               transition: 'all 0.2s ease',
-              minHeight: '36px'
+              minHeight: '44px'
             }}
           >
             <span aria-hidden="true" style={{ fontSize: '1rem' }}>{isPaused ? '▶️' : '⏸️'}</span>
@@ -251,7 +251,7 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
               alignItems: 'center',
               gap: '0.375rem',
               transition: 'all 0.2s ease',
-              minHeight: '36px'
+              minHeight: '44px'
             }}
           >
             <span aria-hidden="true" style={{ fontSize: '1rem' }}>✕</span>
@@ -271,7 +271,7 @@ export function Header({ score, round, totalRounds, phase, presentationMode, onT
             background: presentationMode ? 'rgba(34, 211, 238, 0.2)' : 'transparent',
             border: `1px solid ${presentationMode ? 'var(--accent-cyan)' : 'var(--border)'}`,
             borderRadius: '6px',
-            fontSize: '0.6875rem',
+            fontSize: '0.75rem',
             color: presentationMode ? 'var(--accent-cyan)' : 'var(--text-muted)',
             cursor: 'pointer',
             display: 'flex',

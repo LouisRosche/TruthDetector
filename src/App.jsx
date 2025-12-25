@@ -327,6 +327,31 @@ export function App() {
   const startGame = useCallback(async (settings) => {
     const { teamName, rounds, difficulty, avatar, soundEnabled, players, subjects } = settings;
 
+    // Validation before starting game
+    if (!teamName || teamName.trim().length === 0) {
+      logger.error('Cannot start game: Team name is required');
+      alert('Please enter a team name before starting the game.');
+      return;
+    }
+
+    if (!rounds || rounds < 1 || rounds > 20) {
+      logger.error('Cannot start game: Invalid rounds value', { rounds });
+      alert('Please select a valid number of rounds (1-20).');
+      return;
+    }
+
+    if (!difficulty || !['easy', 'medium', 'hard', 'mixed'].includes(difficulty)) {
+      logger.error('Cannot start game: Invalid difficulty', { difficulty });
+      alert('Please select a valid difficulty level.');
+      return;
+    }
+
+    if (!avatar) {
+      logger.error('Cannot start game: Avatar is required');
+      alert('Please select a team avatar.');
+      return;
+    }
+
     setIsPreparingGame(true);
 
     try {
@@ -368,6 +393,18 @@ export function App() {
         classSettings
       );
 
+      // Validate that we have enough claims to start the game
+      if (!selectedClaims || selectedClaims.length === 0) {
+        logger.error('Cannot start game: No claims available');
+        alert('Unable to load game content. Please check your internet connection and try again.');
+        return;
+      }
+
+      if (selectedClaims.length < rounds) {
+        logger.warn('Not enough claims for requested rounds', { available: selectedClaims.length, requested: rounds });
+        alert(`Only ${selectedClaims.length} claims available. Starting game with ${selectedClaims.length} rounds instead of ${rounds}.`);
+      }
+
       // Track game start in analytics
       Analytics.track(AnalyticsEvents.GAME_STARTED, { difficulty, rounds });
 
@@ -377,13 +414,16 @@ export function App() {
       // Store pending settings and show prediction modal
       setPendingGameSettings({
         claims: selectedClaims,
-        rounds,
+        rounds: Math.min(rounds, selectedClaims.length), // Adjust rounds if needed
         difficulty,
         teamName,
         avatar,
         players: players || []
       });
       setShowPrediction(true);
+    } catch (error) {
+      logger.error('Failed to start game', error);
+      alert('An error occurred while starting the game. Please try again.');
     } finally {
       setIsPreparingGame(false);
     }
@@ -1124,7 +1164,7 @@ export function App() {
         <p
           className="mono"
           style={{
-            fontSize: '0.6875rem',
+            fontSize: '0.75rem',
             color: 'var(--text-muted)',
             marginBottom: '0.375rem'
           }}
