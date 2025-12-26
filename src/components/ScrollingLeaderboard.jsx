@@ -25,7 +25,7 @@ function ScrollingLeaderboardComponent({ onViewFull }) {
         height: '100%'
       }}>
         <h3 className="mono" style={{
-          fontSize: '0.6875rem',
+          fontSize: '0.75rem',
           color: 'var(--accent-amber)',
           marginBottom: '0.75rem'
         }}>
@@ -53,7 +53,7 @@ function ScrollingLeaderboardComponent({ onViewFull }) {
         height: '100%'
       }}>
         <h3 className="mono" style={{
-          fontSize: '0.6875rem',
+          fontSize: '0.75rem',
           color: 'var(--accent-amber)',
           marginBottom: '0.75rem'
         }}>
@@ -84,14 +84,14 @@ function ScrollingLeaderboardComponent({ onViewFull }) {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
         <h3 className="mono" style={{
-          fontSize: '0.6875rem',
+          fontSize: '0.75rem',
           color: 'var(--accent-amber)',
           margin: 0
         }}>
           🏆 TOP TEAMS
         </h3>
         {error && (
-          <span style={{ fontSize: '0.625rem', color: 'var(--incorrect)' }} title={error}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--incorrect)' }} title={error}>
             ⚠️
           </span>
         )}
@@ -183,7 +183,7 @@ function ScrollingLeaderboardComponent({ onViewFull }) {
 
             {/* Difficulty badge */}
             <div className="mono" style={{
-              fontSize: '0.625rem',
+              fontSize: '0.75rem',
               padding: '0.125rem 0.25rem',
               borderRadius: '4px',
               background: entry.difficulty === 'hard' ? 'rgba(239, 68, 68, 0.2)'
@@ -229,7 +229,7 @@ function ScrollingLeaderboardComponent({ onViewFull }) {
             border: '1px solid var(--border)',
             borderRadius: '6px',
             color: 'var(--accent-amber)',
-            fontSize: '0.625rem',
+            fontSize: '0.75rem',
             cursor: 'pointer',
             transition: 'all 0.2s ease'
           }}

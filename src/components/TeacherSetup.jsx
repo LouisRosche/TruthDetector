@@ -370,7 +370,7 @@ export function TeacherSetup({ onBack }) {
               borderRadius: '6px',
               color: 'var(--text-primary)',
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.6875rem',
+              fontSize: '0.75rem',
               resize: 'vertical'
             }}
           />
@@ -447,7 +447,7 @@ export function TeacherSetup({ onBack }) {
           </label>
           <div
             style={{
-              fontSize: '0.6875rem',
+              fontSize: '0.75rem',
               color: 'var(--text-muted)',
               fontStyle: 'italic',
               maxWidth: '60%',

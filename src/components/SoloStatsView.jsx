@@ -208,7 +208,7 @@ function SoloStatsViewComponent({ onBack, onQuickStart }) {
                   {stat.value}
                 </div>
                 <div className="mono" style={{
-                  fontSize: '0.625rem',
+                  fontSize: '0.75rem',
                   color: 'var(--text-muted)',
                   textTransform: 'uppercase'
                 }}>
@@ -536,14 +536,14 @@ function SoloStatsViewComponent({ onBack, onQuickStart }) {
                       {achievement.earned ? achievement.icon : '🔒'}
                     </div>
                     <div className="mono" style={{
-                      fontSize: '0.6875rem',
+                      fontSize: '0.75rem',
                       fontWeight: 600,
                       color: achievement.earned ? 'var(--accent-amber)' : 'var(--text-muted)',
                       marginBottom: '0.125rem'
                     }}>
                       {achievement.name}
                     </div>
-                    <div style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                       {achievement.description}
                     </div>
                   </div>

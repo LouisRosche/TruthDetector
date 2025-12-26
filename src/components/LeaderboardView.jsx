@@ -131,7 +131,7 @@ function LeaderboardViewComponent({ onBack }) {
                 padding: '0.625rem 0.875rem',
                 background: 'var(--bg-elevated)',
                 borderBottom: '1px solid var(--border)',
-                fontSize: '0.625rem',
+                fontSize: '0.75rem',
                 fontWeight: 700,
                 color: 'var(--text-muted)',
                 textTransform: 'uppercase',
@@ -202,7 +202,7 @@ function LeaderboardViewComponent({ onBack }) {
 
                   {/* Players (Teams Only) */}
                   {leaderboardTab === 'teams' && (
-                    <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {item.players?.map((p) => formatPlayerName(p.firstName, p.lastInitial)).join(', ') || 'Anonymous'}
                     </div>
                   )}

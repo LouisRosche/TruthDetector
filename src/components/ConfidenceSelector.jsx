@@ -78,7 +78,7 @@ export const ConfidenceSelector = memo(function ConfidenceSelector({ value, onCh
             <span
               className="mono"
               style={{
-                fontSize: '0.6875rem',
+                fontSize: '0.75rem',
                 padding: '0.25rem 0.5rem',
                 background: value === level.value ? level.color : 'var(--bg-card)',
                 color: value === level.value ? 'var(--bg-deep)' : 'var(--text-muted)',

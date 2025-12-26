@@ -53,7 +53,7 @@ function LiveClassLeaderboardComponent({ currentSessionId, isMinimized = false, 
           background: 'var(--bg-elevated)',
           border: '1px solid var(--border)',
           borderRadius: '6px',
-          fontSize: '0.625rem',
+          fontSize: '0.75rem',
           color: 'var(--accent-amber)',
           cursor: 'pointer',
           display: 'flex',
@@ -91,7 +91,7 @@ function LiveClassLeaderboardComponent({ currentSessionId, isMinimized = false, 
         marginBottom: '0.5rem'
       }}>
         <h3 className="mono" style={{
-          fontSize: '0.625rem',
+          fontSize: '0.75rem',
           color: 'var(--accent-amber)',
           margin: 0,
           display: 'flex',
@@ -144,7 +144,7 @@ function LiveClassLeaderboardComponent({ currentSessionId, isMinimized = false, 
               border: '1px solid var(--border)',
               borderRadius: '4px',
               color: 'var(--text-primary)',
-              fontSize: '0.6875rem',
+              fontSize: '0.75rem',
               fontFamily: 'inherit'
             }}
           />
@@ -156,7 +156,7 @@ function LiveClassLeaderboardComponent({ currentSessionId, isMinimized = false, 
               alignItems: 'center',
               gap: '0.375rem',
               cursor: 'pointer',
-              fontSize: '0.6875rem',
+              fontSize: '0.75rem',
               color: 'var(--text-secondary)'
             }}>
               <input
@@ -173,21 +173,21 @@ function LiveClassLeaderboardComponent({ currentSessionId, isMinimized = false, 
 
       {/* Loading state */}
       {isLoading && (
-        <div style={{ textAlign: 'center', padding: '0.5rem', color: 'var(--text-muted)', fontSize: '0.6875rem' }}>
+        <div style={{ textAlign: 'center', padding: '0.5rem', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
           Loading...
         </div>
       )}
 
       {/* Empty state */}
       {!isLoading && sessions.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '0.5rem', color: 'var(--text-muted)', fontSize: '0.6875rem' }}>
+        <div style={{ textAlign: 'center', padding: '0.5rem', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
           No other teams playing yet
         </div>
       )}
 
       {/* No results state */}
       {!isLoading && sessions.length > 0 && filteredSessions.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '0.5rem', color: 'var(--text-muted)', fontSize: '0.6875rem' }}>
+        <div style={{ textAlign: 'center', padding: '0.5rem', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
           No teams match your search
         </div>
       )}
@@ -216,7 +216,7 @@ function LiveClassLeaderboardComponent({ currentSessionId, isMinimized = false, 
                   className="mono"
                   style={{
                     textAlign: 'center',
-                    fontSize: '0.625rem',
+                    fontSize: '0.75rem',
                     fontWeight: 700,
                     color: index === 0 ? '#ffd700' : index === 1 ? '#c0c0c0' : index === 2 ? '#cd7f32' : 'var(--text-muted)'
                   }}
@@ -232,7 +232,7 @@ function LiveClassLeaderboardComponent({ currentSessionId, isMinimized = false, 
                 {/* Team info */}
                 <div style={{ minWidth: 0 }}>
                   <div style={{
-                    fontSize: '0.6875rem',
+                    fontSize: '0.75rem',
                     fontWeight: isCurrentTeam ? 600 : 500,
                     color: isCurrentTeam ? 'var(--accent-violet)' : 'var(--text-primary)',
                     whiteSpace: 'nowrap',
@@ -249,7 +249,7 @@ function LiveClassLeaderboardComponent({ currentSessionId, isMinimized = false, 
 
                 {/* Accuracy badge */}
                 <div className="mono" style={{
-                  fontSize: '0.625rem',
+                  fontSize: '0.75rem',
                   padding: '0.125rem 0.25rem',
                   borderRadius: '4px',
                   background: session.accuracy >= 80 ? 'rgba(16, 185, 129, 0.2)'
